@@ -1,0 +1,8 @@
+{
+  "name": "the-black-signal",
+  "version": "0.4.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node server/server.mjs", "test": "node server/selftest.mjs" },
+  "dependencies": { "ws": "^8.18.0" }
+}
