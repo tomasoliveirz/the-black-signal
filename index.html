@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Black Signal</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --canvas:#E7DDC7; --forest:#536957; --amber:#C58A4C; --night:#263646; --ink:#282C2C; --danger:#AA5A4D; --mono:'IBM Plex Mono', monospace; --serif:'Fraunces', serif; }
+  html, body { margin:0; height:100%; background:#1c2026; overflow:hidden; font-family:'IBM Plex Sans', system-ui, sans-serif; color:var(--canvas); user-select:none; }
+  canvas#view { position:fixed; inset:0; width:100%; height:100%; display:block; }
+  .vignette { position:fixed; inset:0; pointer-events:none; background:radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(20,16,12,.42) 100%); transition:box-shadow .25s; }
+  .vignette.hurt { box-shadow:inset 0 0 160px rgba(170,60,50,.75); }
+  [hidden] { display:none !important; }
+  body.menu-open :is(.hud, #chat) { visibility:hidden; }
+  #menu {
+    --gold:#f3c98c;
+    --muted:#c7baa4;
+    --line:rgba(231,221,199,.24);
+    position:fixed; inset:0; overflow:auto; color-scheme:dark; scrollbar-color:var(--amber) #1c1a17;
+    background:linear-gradient(90deg, #171614f5 0%, #171614de 27%, #16151283 59%, #17161475 100%),
+               linear-gradient(0deg, #171614e8 0%, transparent 78%);
+  }
+  .menu-layout {
+    display:grid; grid-template-columns:minmax(260px, .76fr) minmax(0,1.65fr); align-content:center; align-items:center;
+    gap:clamp(28px,6vw,100px); width:min(1320px, 100%); min-height:100%; margin:auto; padding:clamp(24px,4vh,56px) clamp(28px,5vw,76px);
+    box-sizing:border-box;
+  }
+  #menu button, #menu input, #menu select { font:inherit; }
+  #menu :focus-visible { outline:2px solid var(--gold); outline-offset:3px; }
+  #menu ::selection { background:var(--gold); color:#201912; }
+  .identity h1 {
+    font:400 clamp(3.4rem, 5.8vw, 6rem)/.94 var(--serif); margin:0; letter-spacing:-.035em;
+    font-variation-settings:'SOFT' 85;
+  }
+  .tag { font:italic clamp(16px, 1.6vw, 21px)/1.45 var(--serif); color:var(--muted); margin:17px 0 32px; }
+  #entry { display:grid; gap:10px; }
+  #entry label, .setting label, .map-count, .net, .seat-number, .seat-tag {
+    font:500 11px/1.4 var(--mono); letter-spacing:.09em;
+  }
+  #menu #name, .setting select {
+    box-sizing:border-box; min-width:0; border:1px solid var(--line); border-radius:4px; background:#1a1916; color:var(--canvas);
+    padding:10px 12px; min-height:42px; user-select:text; caret-color:var(--gold);
+  }
+  #name::placeholder { color:var(--muted); }
+  #menu .primary {
+    min-height:44px; border:1px solid transparent; border-radius:4px; padding:10px 14px; cursor:pointer;
+    color:#231a11; background:var(--gold); font:600 13px 'IBM Plex Sans', sans-serif; letter-spacing:.085em;
+  }
+  #menu .primary:not(:disabled):hover { background:#ffdeb1; }
+  #menu .primary:disabled { cursor:default; opacity:.56; }
+  .net { margin:12px 0 22px; color:var(--muted); display:flex; align-items:center; gap:8px; }
+  .net::before { content:''; width:7px; height:7px; border-radius:50%; background:var(--amber); flex:none; }
+  .net[data-state="online"]::before { background:#a8bc83; }
+  .net[data-state="offline"]::before { background:#d07a66; }
+  .settings { border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .settings summary { cursor:pointer; color:var(--canvas); font-weight:500; padding:12px 0; }
+  .settings-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .setting { display:grid; gap:5px; }
+  .setting label { color:var(--muted); }
+  #menu .setting select { width:100%; font-size:13px; padding:8px; }
+  .controls { display:grid; grid-template-columns:max-content 1fr; column-gap:12px; row-gap:4px; font-size:13px; margin:0 0 14px; }
+  .controls dt { color:var(--gold); font-family:var(--mono); font-size:11px; align-self:center; }
+  .controls dd { margin:0; }
+  .settings .controls-heading { font:500 18px var(--serif); margin:15px 0 7px; }
+  .menu-heading { display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:12px; }
+  .menu-heading h2 { font:400 clamp(26px,3vw,39px)/1.12 var(--serif); margin:0; }
+  .map-count { color:var(--muted); text-align:right; }
+  .maps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+  .map-card {
+    min-width:0; padding:0; text-align:left; display:grid; align-content:start; position:relative; overflow:hidden;
+    background:#211f1b; color:var(--canvas); border:1px solid var(--line); border-radius:12px; cursor:pointer;
+  }
+  .map-card img { display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; }
+  .map-card:hover:not(:disabled) { border-color:var(--muted); }
+  .map-card[aria-pressed="true"] { border-color:var(--gold); background:#382c20; }
+  .map-card[aria-pressed="true"]::before {
+    content:''; position:absolute; inset:0; border:1px solid var(--gold); border-radius:inherit; pointer-events:none;
+  }
+  .map-card:disabled { cursor:default; }
+  .map-card:disabled:not([aria-pressed="true"]) img { filter:brightness(.64); }
+  .map-caption { display:grid; gap:2px; padding:9px 10px 10px; }
+  .map-caption strong { font:500 clamp(16px,1.6vw,23px)/1.1 var(--serif); }
+  .map-caption small { font-size:12px; color:var(--muted); }
+  #selection { margin:10px 0 0; font-size:13px; color:var(--canvas); }
+  .room { margin-top:22px; padding-top:16px; border-top:1px solid var(--line); }
+  #result { margin-bottom:22px; padding-bottom:14px; border-bottom:1px solid var(--line); }
+  .room .menu-heading h2, #result h2 { font-size:27px; }
+  #lobby { list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px 10px; }
+  .seat {
+    display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:9px;
+    min-height:42px; padding:5px 8px; border:1px solid var(--line); border-radius:4px; background:#211e19;
+  }
+  .seat.mine { border-color:var(--amber); }
+  .seat.free { background:#1c1a17; color:var(--muted); }
+  .seat-number, .seat-character { color:var(--muted); }
+  .seat-character, .seat-player { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .seat-player { font-size:14px; line-height:1.2; font-weight:600; }
+  .seat-character { font-size:12px; line-height:1.25; }
+  .seat-tag { color:var(--gold); font-size:10px; }
+  .room-actions { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:10px; }
+  #room-status { margin:0; font-size:13px; color:var(--muted); }
+  #result h2 { margin:0; color:var(--gold); font-family:var(--serif); font-weight:400; }
+  #result p { color:var(--muted); margin:4px 0 0; font-size:13px; }
+  #result details { margin-top:6px; font-size:13px; }
+  #result summary { cursor:pointer; }
+  #result-roles { list-style:none; padding:0; margin:5px 0 0; line-height:1.7; }
+  #result-roles .echo { color:#ff9a86; }
+  @media (max-width:1000px) {
+    .menu-layout { padding:28px; gap:24px; grid-template-columns:minmax(230px, .72fr) minmax(0,1.5fr); }
+  }
+  @media (max-width:760px) {
+    .menu-layout { grid-template-columns:minmax(0,1fr); width:min(100%,600px); align-content:start; }
+    .identity h1 { font-size:clamp(3.25rem,9vw,5rem); }
+    .tag { margin-bottom:20px; }
+  }
+  @media (max-width:450px) {
+    .menu-layout { padding:22px 16px; }
+    .maps, #lobby { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .room-actions { align-items:stretch; flex-direction:column; }
+  }
+  .hud { position:fixed; pointer-events:none; font-family:var(--mono); letter-spacing:.06em; text-shadow:0 1px 6px rgba(0,0,0,.7); }
+  #stats { left:18px; top:14px; font-size:11px; line-height:1.6; opacity:.6; white-space:pre; }
+  #top { top:16px; left:50%; transform:translateX(-50%); text-align:center; }
+  #phase { font-family:var(--serif); font-size:22px; letter-spacing:.03em; }
+  #timer { font-size:13px; opacity:.85; margin-top:2px; }
+  #objective { font:500 13px 'IBM Plex Sans', sans-serif; letter-spacing:.04em; margin-top:6px; opacity:.92; max-width:520px; }
+  #txrow { margin-top:8px; display:flex; gap:7px; justify-content:center; }
+  #txrow i { width:11px; height:11px; border-radius:50%; background:#aa5a4d; display:block; box-shadow:0 0 0 1px rgba(0,0,0,.4); }
+  #txrow i.fuse { background:#e0a040; } #txrow i.on { background:#7fd89a; } #txrow i.gap { background:none; box-shadow:none; width:4px; }
+  #role { right:18px; top:16px; text-align:right; font-size:12px; line-height:1.7; background:rgba(24,26,26,.5); padding:8px 12px; border-right:2px solid var(--amber); }
+  #role b { font:500 17px var(--serif); letter-spacing:.03em; display:block; }
+  #role.echo { border-color:var(--danger); } #role.echo b { color:#ff9a86; }
+  #vitals { left:18px; bottom:16px; font-size:12px; line-height:1.8; background:rgba(24,26,26,.5); padding:10px 14px; border-left:2px solid var(--amber); min-width:230px; }
+  .bar { height:7px; background:rgba(231,221,199,.16); margin:3px 0 7px; } .bar i { display:block; height:100%; background:var(--canvas); transition:width .12s; }
+  #hp i { background:#d07a66; } #energy i { background:#b08ad8; }
+  #inv span { margin-right:14px; } #inv b { color:#f3c98c; font-weight:500; }
+  #keys { right:18px; bottom:14px; font-size:11px; line-height:1.8; text-align:right; opacity:.7; }
+  #prompt { left:50%; bottom:23%; transform:translateX(-50%); font:500 14px 'IBM Plex Sans', sans-serif; letter-spacing:.06em; background:rgba(24,26,26,.6); padding:7px 14px; display:none; }
+  #progress { left:50%; bottom:19%; transform:translateX(-50%); width:220px; display:none; } #progress .bar { margin:0; }
+  #cross { left:50%; top:50%; width:6px; height:6px; margin:-3px; border-radius:50%; border:1px solid rgba(231,221,199,.85); box-shadow:0 0 0 1px rgba(0,0,0,.35); display:none; }
+  #feed { left:18px; bottom:150px; font-size:12px; line-height:1.7; max-width:440px; }
+  #feed div { background:rgba(24,26,26,.45); padding:1px 8px; margin-top:3px; width:fit-content; } #feed .echo { color:#ff9a86; } #feed .dead { opacity:.6; } #feed .sys { color:#f3c98c; }
+  #chat { position:fixed; left:18px; bottom:116px; width:380px; background:rgba(24,26,26,.8); border:0; border-left:2px solid var(--amber); color:var(--canvas); font:13px var(--mono); padding:7px 10px; outline:none; display:none; user-select:text; }
+  #toast { top:26%; left:50%; transform:translateX(-50%); font-family:var(--serif); font-style:italic; font-size:26px; opacity:0; transition:opacity .7s; text-align:center; }
+  #toast { width:max-content; max-width:85vw; }
+  #toast span { display:block; margin-top:4px; font:500 13px var(--mono); color:#f3c98c; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body class="menu-open">
+<canvas id="view"></canvas>
+<div class="vignette" id="vignette"></div>
+<div class="hud" id="stats"></div>
+<div class="hud" id="top"><div id="phase"></div><div id="timer"></div><div id="objective"></div><div id="txrow"></div></div>
+<div class="hud" id="role" style="display:none"></div>
+<div class="hud" id="vitals" style="display:none">
+  <div>VIDA <span id="hpn"></span></div><div class="bar" id="hp"><i></i></div>
+  <div>FÔLEGO</div><div class="bar" id="stam"><i></i></div>
+  <div id="energyRow" style="display:none"><div>ENERGIA DO SINAL <span id="enn"></span></div><div class="bar" id="energy"><i></i></div></div>
+  <div id="inv"></div>
+</div>
+<div class="hud" id="feed"></div>
+<input id="chat" maxlength="140" autocomplete="off">
+<div class="hud" id="prompt"></div>
+<div class="hud" id="progress"><div class="bar"><i></i></div></div>
+<div class="hud" id="cross"></div>
+<div class="hud" id="toast"></div>
+<div class="hud" id="keys">WASD mover · SHIFT correr · C agachar · ESPAÇO saltar · E interagir<br>CLIQUE disparar/atacar · Q curar · G sinalizador · F transformar (Echo)<br>ENTER voz de proximidade (texto) · T canal Echo · V visual · 1–4 qualidade</div>
+<main id="menu" aria-labelledby="title">
+  <div class="menu-layout">
+    <div class="identity">
+      <h1 id="title">The Black<br>Signal</h1>
+      <p class="tag">Há vozes a que nunca se deve responder.</p>
+      <form id="entry">
+        <label for="name">NOME DO JOGADOR</label>
+        <input id="name" maxlength="16" placeholder="Jogador" autocomplete="nickname">
+        <button class="primary" id="play" type="submit" disabled>ENTRAR NA SALA</button>
+      </form>
+      <p class="net" id="net" role="status">A LIGAR AO SERVIDOR…</p>
+      <details class="settings" id="settings">
+        <summary>Definições e controlos</summary>
+        <div class="settings-grid">
+          <div class="setting">
+            <label for="visual">VISUAL</label>
+            <select id="visual"><option value="normal">Normal</option><option value="paint">Pintura</option></select>
+          </div>
+          <div class="setting">
+            <label for="quality">QUALIDADE</label>
+            <select id="quality"><option value="0">1 · Baixa</option><option value="1">2 · Média</option><option value="2">3 · Alta</option><option value="3">4 · Ultra</option></select>
+          </div>
+        </div>
+        <h2 class="controls-heading">Controlos</h2>
+        <dl class="controls">
+          <dt>WASD</dt><dd>Mover</dd>
+          <dt>Rato / roda</dt><dd>Olhar / aproximar a câmara</dd>
+          <dt>Shift / C / Espaço</dt><dd>Correr / agachar / saltar</dd>
+          <dt>E / clique</dt><dd>Interagir / disparar ou atacar</dd>
+          <dt>Q / G / F</dt><dd>Curar / sinalizador / transformar (Echo)</dd>
+          <dt>Enter / T</dt><dd>Chat de proximidade / canal Echo</dd>
+          <dt>V / 1–4 / Esc</dt><dd>Visual / qualidade / menu</dd>
+        </dl>
+      </details>
+    </div>
+    <div>
+      <section id="result" aria-labelledby="endTitle" aria-live="polite" hidden>
+        <h2 id="endTitle"></h2>
+        <p id="result-map"></p>
+        <details>
+          <summary>Ver papéis da última partida</summary>
+          <ul id="result-roles"></ul>
+        </details>
+      </section>
+      <section aria-labelledby="maps-heading">
+        <div class="menu-heading">
+          <h2 id="maps-heading">Escolher mapa</h2>
+          <span class="map-count" id="map-count"></span>
+        </div>
+        <div class="maps" id="maps"></div>
+        <p id="selection" role="status"></p>
+      </section>
+      <section class="room" id="room" aria-labelledby="room-heading" hidden>
+        <div class="menu-heading">
+          <h2 id="room-heading">Sala</h2>
+          <span class="map-count" id="room-count"></span>
+        </div>
+        <ol id="lobby"></ol>
+        <div class="room-actions">
+          <p id="room-status" role="status"></p>
+          <button class="primary" type="button" id="start">COMEÇAR PARTIDA</button>
+          <button class="primary" type="button" id="resume" hidden>VOLTAR À PARTIDA</button>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
