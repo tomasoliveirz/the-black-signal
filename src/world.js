@@ -1,13 +1,15 @@
 // Amberwood visuals, built from the shared layout: terrain, forest, cabin, lanterns, mast, props, sky.
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { DabSet, FLAG, SUN, TEX, PALETTE, dabMaterial, underMaterial, stdMaterial, styledMesh, uniforms, isNormal, pruneDetached } from './paint.js';
+import { DabSet, FLAG, TEX, PALETTE, dabMaterial, underMaterial, stdMaterial, styledMesh, uniforms, isNormal, pruneDetached } from './paint.js';
 import { LAYOUT, MAP, BOXES, CABIN, MAST, EXTRACT, STRUCTS, height, pathX, pathDist, rng } from '../shared/layout.js';
 import { buildStatic, styledClone, R2R } from './models.js';
+import { buildEnvironment, colorGround } from './environment.js';
 
 export function buildWorld(parent) {
   const scene = new THREE.Group(); parent.add(scene);
   const bd = MAP.data?.bounds;
+  const environment = buildEnvironment(scene);
   const theme = MAP.theme || {}, indoor = MAP.kind === 'factory' || MAP.kind === 'mesh';
   const rnd = rng(77), rr = (a, b) => a + rnd() * (b - a);
   const flora = new DabSet(), solid = new DabSet(), ground = new DabSet(), far = new DabSet();
@@ -21,7 +23,8 @@ export function buildWorld(parent) {
 
   // ---------- trees
   for (const t of LAYOUT.trees) {
-    const { x, z, y, th, tr } = t;
+    const { x, z, y, tr } = t;
+    const shape = t.seed % 6, th = t.th * [1.15, 1, .85, 1.23, 1.02, .91][shape];
     const trunk = place(cyl, x, y + th / 2 - 0.2, z, tr, th + 0.4, tr, rnd() * 6, rr(-0.05, 0.05), rr(-0.05, 0.05));
     put(trunk, 5); solid.add(trunk, { count: Math.round(70 * th / 4), pal: 5, size: [0.16, 0.3] });
     if (t.dead) { // bare tree: a few crooked branches, no canopy
@@ -32,16 +35,18 @@ export function buildWorld(parent) {
       }
     } else if (t.pine) {
       for (let k = 0; k < 4; k++) {
-        const r2 = 2.3 - k * 0.45, cy = y + th * 0.75 + k * 1.5;
+        const r2 = (2.24 - k * 0.42) * (shape % 2 ? .88 : 1.08), cy = y + th * 0.78 + k * (shape % 3 === 0 ? 1.75 : 1.35);
         put(place(cone, x, cy, z, r2 * 0.7, 2.1, r2 * 0.7), 4);
         flora.add(place(cone, x, cy, z, r2, 2.6, r2, rnd() * 6), { count: 260, pal: 4, size: [0.3, 0.52], flag: FLAG.FOLIAGE, lift: 0.25 });
         canopies.push({ x, y: cy, z, r: r2 * 0.8 });
       }
     } else {
-      const palA = rnd() < 0.62 ? 2 : 3, blobs = 3 + Math.floor(rnd() * 3);
+      const palA = rnd() < 0.62 ? 2 : 3, blobs = [4, 3, 5, 4, 6, 3][shape];
       for (let k = 0; k < blobs; k++) {
-        const r = rr(1.5, 2.5), bx = x + rr(-1.5, 1.5), by = y + th + rr(-0.2, 1.9), bz = z + rr(-1.5, 1.5);
-        put(place(ico, bx, by, bz, r * 0.7, r * 0.55, r * 0.7), palA);
+        const spread = [1.3,.7,1.5,1.04,1.28,.8][shape];
+        const loft = [.8,1.23,.64,1.13,.9,1.22][shape];
+        const r = rr(1.45, 2.55), bx = x + rr(-spread, spread), by = y + th + rr(-.16, 1.84) * loft, bz = z + rr(-spread, spread);
+        put(place(ico, bx, by, bz, r * .7, r * .61 * loft, r * .7, rr(-.6,.6)), palA);
         const palB = rnd() < 0.25 ? (palA === 2 ? 3 : 2) : palA;
         flora.add(place(ico, bx, by, bz, r, r * rr(0.7, 0.9), r, rnd() * 6), { count: Math.round(170 * r), pal: () => (rnd() < 0.82 ? palA : palB), size: [0.3, 0.56], flag: FLAG.FOLIAGE, lift: 0.4 });
         canopies.push({ x: bx, y: by, z: bz, r: r * 0.92 });
@@ -98,20 +103,11 @@ export function buildWorld(parent) {
   if (MAP.kind !== 'mesh') { const hut = place(box, MAST.x + 3.2, my + 1.1, MAST.z, 2.6, 2.2, 2.6); put(hut, indoor ? 22 : 6); solid.add(hut, { count: 700, pal: indoor ? 22 : 6, size: [0.2, 0.36] }); }
   const mastTop = new THREE.Vector3(MAST.x, my + MH + 0.3, MAST.z);
 
-  // ---------- factory hall: walls, machines, pillars and open roof trusses
+  // Structural walls retain the shared collision footprint.
   for (const b of BOXES) {
-    if (!b.kind) continue;
-    const pal = b.kind === 'wall' ? 8 : 22, g = place(box, b.x, b.h / 2 - 0.05, b.z, b.w, b.h + 0.1, b.d);
-    put(g, pal); solid.add(g, { count: Math.min(16000, Math.round((b.w + b.d) * 2 * b.h * 16 + b.w * b.d * 8)), pal, size: b.kind === 'wall' ? [0.3, 0.55] : [0.22, 0.4] });
-    if (b.kind === 'machine') { // hopper and pipe on top so machines do not read as plain crates
-      const top = place(cyl, b.x, b.h + 0.6, b.z, Math.min(b.w, b.d) * 0.3, 1.2, Math.min(b.w, b.d) * 0.3), pipe = place(cyl, b.x + b.w * 0.3, b.h + 1.6, b.z - b.d * 0.3, 0.22, 3.2, 0.22);
-      put(top, 12); put(pipe, 12); solid.add(top, { count: 200, pal: 12, size: [0.18, 0.3] }).add(pipe, { count: 90, pal: 12, size: [0.14, 0.24] });
-    }
-  }
-  for (const p of LAYOUT.pillars) { const g = place(box, p.x, 3.6, p.z, 0.7, 7.2, 0.7); put(g, 8); solid.add(g, { count: 260, pal: 8, size: [0.2, 0.36] }); }
-  if (MAP.kind === 'factory') {
-    for (let z = 6; z >= -80; z -= 8.6) { const g = place(box, 0, 7.4, z, 53, 0.35, 0.3); put(g, 12); solid.add(g, { count: 420, pal: 12, size: [0.2, 0.36] }); }
-    for (const x of [-13, 13]) { const g = place(box, x, 7.15, -36, 0.3, 0.3, 93); put(g, 12); solid.add(g, { count: 700, pal: 12, size: [0.2, 0.36] }); }
+    if (b.kind !== 'wall') continue;
+    const wall = place(box, b.x, b.h / 2, b.z, b.w, b.h, b.d);
+    put(wall, 22); solid.add(wall, { count: Math.min(6000, Math.round((b.w + b.d) * b.h * 22)), pal:22, size:[.22,.42] });
   }
 
   // ---------- transmitters (console + antenna; the status lamp is separate)
@@ -125,35 +121,25 @@ export function buildWorld(parent) {
 
   // ---------- terrain
   const N = 150, SIZE = 200, tg = new THREE.PlaneGeometry(SIZE, SIZE, N, N); tg.rotateX(-Math.PI / 2);
-  const tp = tg.attributes.position, tc = new Float32Array(tp.count * 3);
-  const cGrass = new THREE.Color(theme.grass ?? '#85783c'), cPath = new THREE.Color(theme.path ?? '#8c6848'), c = new THREE.Color();
-  for (let i = 0; i < tp.count; i++) {
-    const x = tp.getX(i), z = tp.getZ(i);
-    tp.setY(i, height(x, z) - (bd ? 0.07 : 0));
-    c.copy(cGrass).lerp(cPath, 1 - THREE.MathUtils.smoothstep(pathDist(x, z), 0.9, 2.2));
-    tc.set([c.r, c.g, c.b], i * 3);
-  }
-  tg.setAttribute('color', new THREE.BufferAttribute(tc, 3)); tg.computeVertexNormals();
-  const terrainPaint = new THREE.MeshBasicMaterial({ vertexColors: true });
-  const terrain = styledMesh(tg, terrainPaint, new THREE.MeshStandardMaterial({ vertexColors: true, map: TEX.noise(70, 205, 80), roughness: 1 }), false);
+  const tp = tg.attributes.position;
+  for (let i = 0; i < tp.count; i++) tp.setY(i, height(tp.getX(i), tp.getZ(i)) - (bd ? .09 : 0));
+  colorGround(tg);
+  tg.computeVertexNormals();
+  const terrainPaint = new THREE.MeshBasicMaterial({ color:0xffffff, vertexColors:true });
+  const terrain = styledMesh(tg, terrainPaint, new THREE.MeshStandardMaterial({ vertexColors:true, roughness:.96 }), false);
+  terrain.receiveShadow = true;
   scene.add(terrain);
 
-  const shade = (p) => { // baked canopy shadow toward the sun
-    let s = 0;
-    for (const k of canopies) {
-      const ox = k.x - p.x, oy = k.y - p.y, oz = k.z - p.z, t = ox * SUN.x + oy * SUN.y + oz * SUN.z;
-      if (t < 0) continue;
-      const d2 = ox * ox + oy * oy + oz * oz - t * t, r2 = k.r * k.r;
-      if (d2 < r2) { s = Math.max(s, Math.min(1, (1 - d2 / r2) * 2.2)); if (s >= 1) break; }
-    }
-    return s;
-  };
-  const inMap = bd ? (p) => p.x > bd.minX - 3 && p.x < bd.maxX + 3 && p.z > bd.minZ - 3 && p.z < bd.maxZ + 3 : (p) => p.x * p.x + p.z * p.z < 96 * 96;
-  ground.add(tg, { count: bd ? 0 : 330000, pal: (p) => (pathDist(p.x, p.z) + (rnd() - 0.5) * 1.1 < 1.5 ? 1 : rnd() < (theme.litter ?? 0.07) ? 15 : 0), size: (p) => 0.42 + rnd() * 0.3 + Math.hypot(p.x, p.z) * 0.004, flag: FLAG.GROUND, shade, lift: 0.05, filter: inMap });
-  ground.add(tg, {
-    count: 60000, pal: () => (rnd() < 0.5 ? 2 : rnd() < 0.5 ? 3 : 15), size: [0.1, 0.2], flag: FLAG.GROUND, lift: 0.08, shade,
-    filter: (p) => canopies.some((k) => (k.x - p.x) ** 2 + (k.z - p.z) ** 2 < k.r * k.r * 2.2) && rnd() < 0.8,
-  });
+  if (MAP.kind === 'wild' && !theme.snow) {
+    ground.add(tg, {
+      count:46000, pal:() => rnd() < .64 ? 0 : 2, size:[.08,.16], flag:FLAG.GROUND, lift:.032,
+      filter: p => {
+        const density = Math.sin(p.x * .46 + Math.sin(p.z * .42)) * Math.cos(p.z * .35);
+        return density > .28 && Math.hypot(p.x,p.z) < 68 && pathDist(p.x,p.z) > 3.6
+          && canopies.some(k => (k.x-p.x)**2 + (k.z-p.z)**2 < k.r*k.r*1.4);
+      },
+    });
+  }
 
   // ---------- distant mountains
   const mgeo = [];
@@ -179,17 +165,17 @@ export function buildWorld(parent) {
   if (peaks) scene.add(styledMesh(mergeGeometries(mgeo), mountainMat, new THREE.MeshLambertMaterial({ vertexColors: true, flatShading: true, fog: false }), false));
 
   // ---------- merged static meshes, one per palette
-  const texFor = { 5: TEX.bark(3), 6: TEX.planks(2), 7: TEX.planks(4), 8: TEX.noise(2), 12: TEX.noise(2, 190, 40), 22: TEX.noise(1, 200, 50) };
+  const texFor = { 5: TEX.bark(3), 6: TEX.planks(2), 7: TEX.planks(4) };
   for (const k of Object.keys(under)) {
     const foliage = k === '2' || k === '3' || k === '4';
-    const normal = stdMaterial(+k, { key: 'world', map: texFor[k], tone: foliage ? 0.1 : 0.5, flatShading: k === '8', metalness: k === '22' || k === '12' ? 0.35 : 0, roughness: k === '22' ? 0.6 : 0.92 });
+    const normal = stdMaterial(+k, { key: 'world', ...(texFor[k] && { map:texFor[k] }), tone: foliage ? 0.1 : 0.5, flatShading: k === '8', metalness: k === '22' || k === '12' ? 0.35 : 0, roughness: k === '22' ? 0.6 : 0.92 });
     scene.add(styledMesh(mergeGeometries(under[k]), underMaterial(+k, 2, foliage ? 0.8 : 0.85), normal));
   }
   const litMat = new THREE.MeshBasicMaterial({ color: 0xffd070 });
   scene.add(new THREE.Mesh(mergeGeometries(litGeo), litMat));
 
   const mat = dabMaterial();
-  const meshes = [ground.build(mat, true), solid.build(mat), flora.build(mat, true), far.build(dabMaterial(0.42))];
+  const meshes = [ground.build(mat), solid.build(mat), flora.build(mat, true), far.build(dabMaterial(0.42))];
   const litDabs = lit.build(mat);
   meshes[3].userData.fixed = true;
   for (const m of [...meshes, litDabs]) scene.add(m);
@@ -267,6 +253,7 @@ export function buildWorld(parent) {
 
   const TXCOL = [new THREE.Color(0xff4030), new THREE.Color(0xffb040), new THREE.Color(0x60ff90)];
   function update(dt, t, night, state) {
+    environment.update(night);
     // power: path lanterns and windows die in a blackout
     const power = 1 - night;
     litMat.color.setRGB(1 * (0.12 + 0.88 * power), 0.82 * (0.1 + 0.9 * power), 0.44 * (0.1 + 0.9 * power));
@@ -290,11 +277,12 @@ export function buildWorld(parent) {
   }
   const powerLights = lampPos;
   const dispose = () => {
+    environment.dispose();
     parent.remove(scene);
     scene.traverse((o) => { o.geometry?.dispose(); });
     pruneDetached();
   };
-  return { dispose, meshes, ready, litDabs, glow, tracer, update, powerLights, terrain, terrainPaint, mountainMat, dabCount: meshes.reduce((s, m) => s + m.userData.fullCount, 0) };
+  return { dispose, meshes, ready, practicals:environment.practicals, litDabs, glow, tracer, update, powerLights, terrain, terrainPaint, mountainMat, dabCount: meshes.reduce((s, m) => s + m.userData.fullCount, 0) };
 }
 
 // ---------- sky (painted bands in paint mode, smooth gradient in normal mode)
@@ -326,7 +314,7 @@ export function buildSky(scene) {
         night += step(.9975, h(floor(vec2(az*130., el*130.)))) * smoothstep(.05,.3,el) * vec3(.9,.92,1.);
         float band = sin(az*2.2 + n(vec2(az*1.5, uTime*.04))*4. + uTime*.03);
         float au = smoothstep(.45, 1., band) * smoothstep(.12,.3,el) * smoothstep(.85,.4,el) * (.5 + .5*strokes(p*vec2(6.,.6)+uTime*.02));
-        night += vec3(.16,.62,.42) * au * .75 + vec3(.7,.75,.9) * smoothstep(.9982,.9988,sd);
+        night += vec3(.12,.34,.40) * au * .40 + vec3(.7,.75,.9) * smoothstep(.9982,.9988,sd);
         gl_FragColor = vec4(mix(day, night, uNight), 1.);
       }`,
   });

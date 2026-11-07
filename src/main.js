@@ -3,6 +3,7 @@ import { uniforms, updateUnder, setStyle, isNormal, applyTheme, NLIGHTS, SUN } f
 import { buildWorld, buildSky } from './world.js';
 import { createGame } from './game.js';
 import { createMenu } from './menu.js';
+import { createAmbience } from './ambience.js';
 import { height, setMap, MAP, MAP_ID, MAPS, BOXES } from '../shared/layout.js';
 import '../shared/maps/index.js';
 
@@ -15,6 +16,7 @@ renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+const qp = new URLSearchParams(location.search);
 const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(0xe9c48e, 18, 150);
 const camera = new THREE.PerspectiveCamera(72, 1, 0.1, 900);
@@ -29,7 +31,7 @@ const points = Array.from({ length: NLIGHTS }, () => { const l = new THREE.Point
 
 buildSky(scene);
 const world = {};
-setMap(new URLSearchParams(location.search).get('map') || 'amberwood'); applyTheme(MAP.theme);
+setMap(qp.get('map') || 'amberwood'); applyTheme(MAP.theme);
 Object.assign(world, buildWorld(scene));
 const keys = new Set();
 const view = { yaw: 2.6, pitch: 0.22, dist: 4.4 };
@@ -39,8 +41,9 @@ function changeMap(id) { // tear the world down and build the other environment
   Object.assign(world, buildWorld(scene));
   setQuality(quality);
 }
+const ambience = createAmbience();
 const game = createGame({
-  scene, world, view, keys, changeMap,
+  scene, world, view, keys, changeMap, ambience,
   menu: {
     connection: status => menu.connection(status),
     joined: () => menu.joined(),
@@ -77,7 +80,10 @@ function enter(lock) {
   active = true;
   menuScreen.hidden = true;
   document.body.classList.remove('menu-open');
-  if (lock) canvas.requestPointerLock?.();
+  if (lock) {
+    ambience.wake();
+    canvas.requestPointerLock?.();
+  }
 }
 function openMenu() {
   active = false;
@@ -89,9 +95,16 @@ function openMenu() {
   document.exitPointerLock?.();
 }
 const menu = createMenu({ game, enter, openMenu, applyStyle, setQuality });
+const sound = $('ambience');
+try { sound.checked = localStorage.getItem('bs.ambience') !== 'off'; } catch {}
+if (!sound.checked) ambience.setEnabled(false);
+sound.addEventListener('change', () => {
+  ambience.setEnabled(sound.checked);
+  try { localStorage.setItem('bs.ambience', sound.checked ? 'on' : 'off'); } catch {}
+});
 canvas.addEventListener('mousedown', (e) => {
   if (!active || e.button !== 0) return;
-  if (document.pointerLockElement !== canvas) { canvas.requestPointerLock?.(); return; }
+  if (document.pointerLockElement !== canvas) { ambience.wake(); canvas.requestPointerLock?.(); return; }
   if (game.me.st >= 2 || game.me.spectator) game.nextSpectate(); else game.act('primary', camera);
 });
 addEventListener('keydown', (e) => {
@@ -129,7 +142,10 @@ canvas.addEventListener('contextmenu', (e) => { if (active) e.preventDefault(); 
 // ---------- frame loop
 const clock = new THREE.Clock();
 const fogC = new THREE.Color(), camTarget = new THREE.Vector3(), camPos = new THREE.Vector3(), lightList = [];
-const sunDay = new THREE.Color(0xffe2b8), sunNight = new THREE.Color(0x8fa8e0), tDay = new THREE.Color(1, 1, 1), tNight = new THREE.Color(0.26, 0.38, 0.56), mDay = new THREE.Color(), mNight = new THREE.Color();
+const sunDay = new THREE.Color(0xffead1), sunNight = new THREE.Color(0xa0bedf);
+const hemiDay = new THREE.Color(0xd4dcdf), hemiNight = new THREE.Color(0x5b769f);
+const tDay = new THREE.Color(1, 1, 1), tNight = new THREE.Color(.37,.47,.63);
+const moon = new THREE.Vector3(-.49,.51,.43).normalize();
 const stats = { acc: 0, n: 0, worst: 0 };
 let autoStart = false, camReach = 1;
 
@@ -140,6 +156,7 @@ function frame() {
   u.uTime.value = t;
   u.uNight.value += (Math.max(g.night, MAP.theme.minNight ?? 0) - u.uNight.value) * (1 - Math.exp(-1.6 * dt));
   const night = u.uNight.value, normal = isNormal();
+  u.uSun.value.copy(SUN).lerp(moon, night).normalize();
 
   // camera: over-the-shoulder orbit around the focus
   const preview = !active && !game.state;
@@ -164,6 +181,7 @@ function frame() {
   // lights: nearest eight of carried lanterns, flares and (while powered) path lanterns
   lightList.length = 0; game.lights(lightList);
   if (night < 0.6) for (const p of world.powerLights) lightList.push({ p, r: 10 * (1 - night), c: 0xffb060 });
+  for (const source of world.practicals) if (source.r > 2) lightList.push(source);
   lightList.sort((a, b) => a.p.distanceToSquared(camPos) - b.p.distanceToSquared(camPos));
   const flick = 1 + Math.sin(t * 11) * 0.03 + Math.sin(t * 23.7) * 0.02;
   for (let i = 0; i < NLIGHTS; i++) {
@@ -176,16 +194,20 @@ function frame() {
   fogC.copy(u.uFogDay.value).lerp(u.uFogNight.value, night);
   scene.fog.color.copy(fogC);
   const [fogNear, fogFar] = MAP.theme.fog ?? [18, 150];
-  u.uFog.value.set(fogNear * (1 - night * 0.45), fogFar * (1 - night * 0.5));
+  const sheltered = MAP.kind === 'factory' || MAP.kind === 'mesh';
+  ambience.update(dt, active && game.playing(), Boolean(g.night), sheltered, g.speed);
+  u.uFog.value.set(fogNear * (1 - night * .23), fogFar * (1 - night * (sheltered ? .27 : .37)));
   scene.fog.near = u.uFog.value.x; scene.fog.far = u.uFog.value.y;
   updateUnder(night);
   world.terrainPaint.color.copy(tDay).lerp(tNight, night);
   world.update(dt, t, night, game.state && game.state.phase !== 'lobby' ? game.state : null);
   if (normal) {
-    sun.color.copy(sunDay).lerp(sunNight, night); sun.intensity = 2.3 - 2.0 * night;
-    hemi.intensity = 1.15 - 0.72 * night;
+    sun.color.copy(sunDay).lerp(sunNight, night);
+    sun.intensity = (sheltered ? 1.62 : 1.98) - .92 * night;
+    hemi.color.copy(hemiDay).lerp(hemiNight, night);
+    hemi.intensity = .98 - .48 * night;
     sun.target.position.set(Math.round(g.focus.x), g.focus.y, Math.round(g.focus.z));
-    sun.position.copy(sun.target.position).addScaledVector(SUN, 80);
+    sun.position.copy(sun.target.position).addScaledVector(u.uSun.value, 80);
   }
 
   renderer.render(scene, camera);
@@ -200,7 +222,6 @@ function frame() {
 }
 
 // debug/benchmark URL params: ?auto (join + start with bots) &style=paint|normal &night &yaw= &pitch= &dist= &q=
-const qp = new URLSearchParams(location.search);
 let style = 'normal'; try { style = localStorage.getItem('bs.style') || 'normal'; } catch {}
 applyStyle((qp.get('style') || style) !== 'paint');
 setQuality(qp.has('q') ? +qp.get('q') : 3);
@@ -211,7 +232,7 @@ if (qp.has('yaw')) view.yaw = +qp.get('yaw');
 if (qp.has('pitch')) view.pitch = +qp.get('pitch');
 if (qp.has('dist')) view.dist = +qp.get('dist');
 if (qp.has('px')) { game.me.s.x = +qp.get('px'); game.me.s.z = +qp.get('pz'); game.me.s.y = height(game.me.s.x, game.me.s.z); }
-window.__bs = { game, view, keys, setQuality, applyStyle, camera };
+window.__bs = { game, view, keys, setQuality, applyStyle, camera, world, renderer };
 if (qp.has('knocker')) { // debug: stand a Knocker next to the player
   const { buildEcho } = await import('./figures.js');
   const k = buildEcho(scene), x = game.me.s.x + (qp.has('kclose') ? 1.3 : 2.2), z = game.me.s.z + (qp.has('kclose') ? 0.4 : 3.5);

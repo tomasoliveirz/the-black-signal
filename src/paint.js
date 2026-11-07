@@ -114,7 +114,7 @@ const detailAtlas = () => atlas((g, cell, S) => {
 export const uniforms = {
   uBrush: { value: null }, uDetail: { value: null },
   uPal: { value: palTex },
-  uSun: { value: SUN },
+  uSun: { value: SUN.clone() },
   uTime: { value: 0 }, uNight: { value: 0 }, uSizeMul: { value: 1 }, uStyle: { value: 0 }, uTuft: { value: 1 },
   uZenith: { value: new THREE.Color('#70a0cc') },
   uFogDay: { value: new THREE.Color('#e9c48e') }, uFogNight: { value: new THREE.Color('#141c2a') },
