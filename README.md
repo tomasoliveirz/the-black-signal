@@ -4,6 +4,12 @@ A browser-based social survival game: six players, four Operatives, two hidden E
 
 **Current build: 0.5.** English is the initial interface language; European Portuguese can be selected in the menu and persists between visits. This is a review build, with unfinished human balance and account-recovery/moderation workflows.
 
+Live review: https://black-signal.51-38-190-126.sslip.io/black-signal/review/
+
+Playable build: https://black-signal.51-38-190-126.sslip.io/black-signal/
+
+The intended tomasoliveira.xyz routes are prepared on the VPS; DNS cutover is still required.
+
 ## Run locally
 
 Requires Node.js 24 or later.
