@@ -1,0 +1,18 @@
+{
+  "samePlayer": true,
+  "sameRole": true,
+  "phase": "prep",
+  "sessionPointerKeys": [
+    "room",
+    "player"
+  ],
+  "identityCookie": {
+    "httpOnly": true,
+    "sameSite": "Strict",
+    "session": true
+  },
+  "javascriptCookieUnreadable": true,
+  "leaveClearsPointer": true,
+  "errors": [],
+  "failedRequests": []
+}
