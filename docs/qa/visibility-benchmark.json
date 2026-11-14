@@ -1,0 +1,67 @@
+{
+  "node": "v24.18.0",
+  "cpu": "AMD Ryzen 9 7940HS w/ Radeon 780M Graphics",
+  "note": "Snapshot construction + JSON for six moving simulated recipients; not network/human/browser performance",
+  "result": [
+    {
+      "map": "amberwood",
+      "recipients": 6,
+      "movingOrigins": true,
+      "samples": 300,
+      "p50": 2.8434460000000854,
+      "p95": 3.095039999999983,
+      "p99": 3.685208999999986,
+      "bytes": 2177277
+    },
+    {
+      "map": "hollow",
+      "recipients": 6,
+      "movingOrigins": true,
+      "samples": 300,
+      "p50": 2.294464000000062,
+      "p95": 2.5091379999998935,
+      "p99": 3.6277410000000145,
+      "bytes": 2177277
+    },
+    {
+      "map": "frost",
+      "recipients": 6,
+      "movingOrigins": true,
+      "samples": 300,
+      "p50": 1.6896970000000238,
+      "p95": 1.9118949999999586,
+      "p99": 1.9783889999998792,
+      "bytes": 2177277
+    },
+    {
+      "map": "ashfall",
+      "recipients": 6,
+      "movingOrigins": true,
+      "samples": 300,
+      "p50": 1.3757669999999962,
+      "p95": 1.6021019999998316,
+      "p99": 1.6582579999999325,
+      "bytes": 2190277
+    },
+    {
+      "map": "foundry",
+      "recipients": 6,
+      "movingOrigins": true,
+      "samples": 300,
+      "p50": 0.31071499999961816,
+      "p95": 0.4659959999999046,
+      "p99": 0.49119400000017777,
+      "bytes": 2177277
+    },
+    {
+      "map": "mall",
+      "recipients": 6,
+      "movingOrigins": true,
+      "samples": 300,
+      "p50": 1.693112999999812,
+      "p95": 1.8088410000000295,
+      "p99": 1.9034489999999096,
+      "bytes": 2188419
+    }
+  ]
+}

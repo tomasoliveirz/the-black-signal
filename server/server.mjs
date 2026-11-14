@@ -75,7 +75,8 @@ server.on('upgrade',(req,socket,head)=>{
 });
 const number=n=>Number.isFinite(n)?Math.max(-1,Math.min(1,n)):0;
 wss.on('connection',(ws,req)=>{
-  let membership=null,budget=90,updated=performance.now(),voiceBudget=6,voiceAt=updated,chatAt=-1000,lastAuthAt=0;
+  let membership=null,budget=90,updated=performance.now(),voiceBudget=6,voiceAt=updated,chatAt=-1000,lastAuthAt=0,watchAt=-1000;
+  const voicePositions=new Map();
   ws.alive=true;ws.on('pong',()=>{ws.alive=true;});
   const failure=message=>ws.readyState===1&&ws.send(JSON.stringify({t:'error',message}));
   ws.on('message',(raw,binary)=>{
@@ -86,14 +87,20 @@ wss.on('connection',(ws,req)=>{
     }
     if(binary){
       const current=membership;if(!current)return;
-      const {player:p,room}=current;
+      const {player:p,room}=current;room.game.activate();
       if(p.spectator||p.st>=2||!room.game.running||raw.length!==VOICE_SAMPLES*2)return;
       voiceBudget=Math.min(6,voiceBudget+(now-voiceAt)*.028);voiceAt=now;
       if(voiceBudget<1)return;voiceBudget--;
       const recipients=[...room.game.players.values()].filter(q=>q!==p&&!q.bot&&!q.spectator&&q.st<2&&q.conn?.readyState===1&&q.conn.bufferedAmount<16384&&Math.hypot(q.s.x-p.s.x,q.s.z-p.s.z)<VOICE_RANGE);
       if(!recipients.length)return;
       const frame=Buffer.allocUnsafe(raw.length+4);frame.writeUInt32LE(p.id);raw.copy(frame,4);
-      for(const q of recipients)q.conn.send(frame);
+      for(const q of recipients){
+        if(now-(voicePositions.get(q.id)??-1000)>=100){
+          voicePositions.set(q.id,now);
+          send(q,{t:'ev',k:'voice-position',id:p.id,...room.game.soundPoint({...p.s,y:p.s.y+1.4})});
+        }
+        q.conn.send(frame);
+      }
       return;
     }
     budget=Math.min(90,budget+(now-updated)*.06);updated=now;
@@ -111,9 +118,13 @@ wss.on('connection',(ws,req)=>{
       if(m.t==='start')g.start();else g.setMap(String(m.id));
     }else if(m.t==='leave'){
       rooms.leave(room,p);membership=null;ws.send(JSON.stringify({t:'left'}));
+    }else if(m.t==='watch'){
+      const target=g.players.get(m.id);
+      if((p.spectator||p.st>=2)&&target&&!target.spectator&&target.st<2&&now-watchAt>=1000){p.watch=target.id;watchAt=now;}
     }else if(m.t==='in'){
       const target=m.target&&Number.isSafeInteger(m.target.id)&&['player','item','tx','blood'].includes(m.target.kind)?{kind:m.target.kind,id:m.target.id}:null;
       p.inp={mx:number(m.mx),mz:number(m.mz),sprint:!!m.sprint,crouch:!!m.crouch,jump:!!m.jump,use:!!m.use,
+        camera:Array.isArray(m.camera)&&m.camera.length===3&&m.camera.every(Number.isFinite)?m.camera.slice():undefined,
         aim:Number.isFinite(m.aim)?Math.atan2(Math.sin(m.aim),Math.cos(m.aim)):undefined,target};
     }else if(m.t==='act')g.act(p,m);
     else if(m.t==='chat'&&now-chatAt>850){

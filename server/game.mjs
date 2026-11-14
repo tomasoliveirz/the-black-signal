@@ -1,5 +1,5 @@
 import { randomInt } from 'node:crypto';
-import { LAYOUT, EXTRACT, MAPS, MAP_ID, MAP_RADIUS, BOXES, captureLayout, activateLayout, setMap, height, inBox } from '../shared/layout.js';
+import { LAYOUT, EXTRACT, MAP, MAPS, MAP_ID, MAP_RADIUS, BOXES, captureLayout, activateLayout, setMap, height, inBox } from '../shared/layout.js';
 import '../shared/maps/index.js';
 import { stepMove, newMove, SPEED, TICK, VOICE_RANGE } from '../shared/sim.js';
 import { RULES as R, PHASES } from '../shared/rules.js';
@@ -52,7 +52,7 @@ export class Game {
     Object.assign(p,{s:newMove(sp.x,sp.z),inp:{mx:0,mz:0,use:false,target:null},face:Math.PI,st:p.spectator?2:0,
       form:0,hp:100,mhp:0,role:'operative',partner:null,energy:0,ammo:R.ammoStart,med:0,flare:1,cell:0,
       cdFire:0,cdAtk:0,cdEmpty:0,stun:0,protect:0,bleed:0,rv:0,extT:0,nightUsed:-1,
-      footDistance:0,footSample:0,interaction:null,executing:null,windup:0,damageVersion:0,ai:{},connected:p.conn?true:p.connected});
+      visibilityCache:null,watch:null,footDistance:0,footSample:0,interaction:null,executing:null,windup:0,damageVersion:0,ai:{},connected:p.conn?true:p.connected});
   }
   addPlayer(name,bot=false,conn=null){
     const used=new Set([...this.players.values()].map(p=>p.slot));let slot=0;while(used.has(slot))slot++;
@@ -74,7 +74,52 @@ export class Game {
       id:p.id,name:p.name,bot:p.bot,slot:p.slot,spectator:p.spectator,connected:p.connected!==false
     }))});
   }
-  broadcast(msg){for(const p of this.players.values())if(!p.bot)this.send(p,msg);}
+  observer(p) {
+    if (!p.spectator && p.st < 2) return p;
+    const chosen=this.players.get(p.watch);
+    return chosen && !chosen.spectator && chosen.st<2 ? chosen : this.active().find(q=>q.st<2) ?? null;
+  }
+  observationOrigin(p) {
+    const origin=eye(p.s,p.inp.crouch),camera=p.inp.camera;
+    if(Array.isArray(camera)&&camera.length===3&&camera.every(Number.isFinite)) {
+      const proposed={x:camera[0],y:camera[1],z:camera[2]};
+      if(Math.hypot(proposed.x-origin.x,proposed.y-origin.y,proposed.z-origin.z)<=10&&obstacle(origin,proposed,false)>.995)return proposed;
+    }
+    return origin;
+  }
+  canObservePoint(viewer,point,key) {
+    const night=Math.max(Number(this.night),MAP.theme.minNight??0),indoor=MAP.kind==='factory'||MAP.kind==='mesh';
+    const range=(MAP.theme.fog?.[1]??150)*(1-night*(indoor?.27:.37));
+    if(!viewer||distance(viewer.s,point)>range)return false;
+    const origin=this.observationOrigin(viewer);
+    if(key===undefined)return obstacle(origin,point,true,true)>.995;
+    const stamp=`${MAP_ID}:${origin.x}:${origin.y}:${origin.z}`;
+    if(viewer.visibilityCache?.stamp!==stamp)viewer.visibilityCache={stamp,points:new Map()};
+    const cache=viewer.visibilityCache.points,old=cache.get(key);
+    if(old&&old.x===point.x&&old.y===point.y&&old.z===point.z)return old.visible;
+    const visible=obstacle(origin,point,true,true)>.995;
+    if(cache.size>=128)cache.delete(cache.keys().next().value);
+    cache.set(key,{...point,visible});return visible;
+  }
+  canObserve(viewer,target) {
+    if(!viewer)return false;
+    if(viewer===target)return true;
+    const top=target.form?2.1:target.st===1?.5:target.inp.crouch?1.15:1.65;
+    for(const [dx,dz,y] of [[0,0,top],[0,0,top*.55],[-.3,0,top*.6],[.3,0,top*.6],[0,-.3,top*.6],[0,.3,top*.6]]) {
+      if(this.canObservePoint(viewer,{x:target.s.x+dx,y:target.s.y+y,z:target.s.z+dz}))return true;
+    }
+    return false;
+  }
+  soundPoint(point) {return {x:Math.round(point.x/4)*4,y:Math.round((point.y??0)/2)*2,z:Math.round(point.z/4)*4};}
+  broadcast(msg){
+    const cue={shot:'shot',claw:'growl-2',transform:'growl-1',revert:'growl-3'}[msg.k];
+    const actor=cue?this.players.get(msg.id):null;
+    for(const p of this.players.values())if(!p.bot) {
+      const observer=this.observer(p);
+      if(!actor||actor===p||this.canObserve(observer,actor))this.send(p,msg);
+      else if(observer&&distance(observer.s,actor.s)<(msg.k==='shot'?50:24))this.send(p,{t:'ev',k:'sound',sound:cue,...this.soundPoint({...actor.s,y:actor.s.y+1})});
+    }
+  }
   start(){
     if(this.running)return;
     this.reset();let n=0;
@@ -133,7 +178,11 @@ export class Game {
     const gait=!grounded?3:p.form?2:speed>(SPEED.sprint+SPEED.walk)/2?1:0,stride=[1.35,1.68,1.85,0][gait];
     p.footDistance+=distanceMoved;if(p.footDistance<stride)return;p.footDistance=Math.max(0,p.footDistance-stride);
     const {x,y,z}=p.s,event={t:'ev',k:'step',id:p.id,x,y,z,gait,sample:p.footSample++%3};
-    for(const q of this.players.values())if(!q.bot&&(q.spectator||q.st>=2||distance(q.s,p.s)<32))this.send(q,event);
+    for(const q of this.players.values())if(!q.bot) {
+      const observer=this.observer(q);
+      if(!observer||distance(observer.s,p.s)>=32)continue;
+      this.send(q,q===p||this.canObserve(observer,p)?event:{...event,id:0,...this.soundPoint(p.s)});
+    }
   }
   tick(dt=TICK){
     this.time+=dt;this.tickN++;
@@ -206,12 +255,21 @@ export class Game {
       flares:this.flares.map(f=>[round(f.x),round(f.z)])
     };
     for(const p of this.players.values())if(!p.bot){
-      this.send(p,{...publicState,you:p.spectator?null:{
+      const observer=this.observer(p);
+      const visible=new Set(this.active().filter(q=>q===p||this.canObserve(observer,q)).map(q=>q.id));
+      const pointVisible=(point,key)=>this.canObservePoint(observer,{...point,y:point.y+.9},key);
+      this.send(p,{...publicState,
+        players:publicState.players.filter(q=>visible.has(q.id)),
+        watching:p.spectator||p.st>=2?observer?.id??null:null,
+        extraDrops:publicState.extraDrops.filter(p=>pointVisible(p,'drop:'+p.id)),
+        items:this.items.slice(0,LAYOUT.items.length).map(i=>pointVisible(i,'item:'+i.id)?i.available?'1':'0':'?').join(''),
+        blood:this.blood.map(b=>pointVisible(b,'blood:'+b.id)?Math.ceil(b.clue):0),
+        you:p.spectator?null:{
         x:p.s.x,y:p.s.y,z:p.s.z,vy:p.s.vy,stam:round(p.s.stam),hp:Math.ceil(p.form?p.mhp:p.hp),ammo:p.ammo,med:p.med,flare:p.flare,cell:p.cell,
         energy:p.role==='echo'?round(p.energy):undefined,nightUsed:p.role==='echo'?p.nightUsed:undefined,
         stun:Number(p.stun>0),protect:round(p.protect),bleed:Math.ceil(p.bleed),ext:round(p.extT/R.extractTime),
         action:p.interaction?{...p.inp.target,progress:round(p.interaction.progress)}:null,
-        bloodUsed:p.role==='echo'?this.blood.map(b=>Number(b.used)).join(''):undefined
+        bloodUsed:p.role==='echo'?this.blood.map(b=>pointVisible(b,'blood:'+b.id)?Number(b.used):'?').join(''):undefined
       }});
     }
   }
