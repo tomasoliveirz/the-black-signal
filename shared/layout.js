@@ -281,6 +281,7 @@ function buildMesh(d) {
   for (const p of [...resources.items, ...resources.blood]) colliders.push({ x:p.x, z:p.z, r:.43, h:.78 });
   return {
     trees: [], rocks: [], lanterns, colliders, tx, ...resources, spawns, props: [], pillars: [],
+    ceilingTriangles: d.ceilingTriangles ?? [], ceilingMinY: Math.min(...(d.ceilingTriangles ?? []).flatMap(t => [t[1],t[4],t[7]])),
     hint: zone => tx[Math.min(zone, 2)], zoneNames: ['Átrio', 'Galeria', 'Serviço'],
   };
 }

@@ -26,6 +26,22 @@ export function rayCircle(a, d, x, z, radius) {
   return t >= 0 && t <= 1 ? t : Infinity;
 }
 
+function ceilingHit(a, d, triangle) {
+  const [ax, ay, az, bx, by, bz, cx, cy, cz] = triangle;
+  const e1x = bx-ax, e1y = by-ay, e1z = bz-az, e2x = cx-ax, e2y = cy-ay, e2z = cz-az;
+  const px = d.y*e2z-d.z*e2y, py = d.z*e2x-d.x*e2z, pz = d.x*e2y-d.y*e2x;
+  const determinant = e1x*px+e1y*py+e1z*pz;
+  if (Math.abs(determinant)<1e-8) return Infinity;
+  const tx = a.x-ax, ty = a.y-ay, tz = a.z-az;
+  const u = (tx*px+ty*py+tz*pz)/determinant;
+  if (u<0 || u>1) return Infinity;
+  const qx = ty*e1z-tz*e1y, qy = tz*e1x-tx*e1z, qz = tx*e1y-ty*e1x;
+  const v = (d.x*qx+d.y*qy+d.z*qz)/determinant;
+  if (v<0 || u+v>1) return Infinity;
+  const t = (e2x*qx+e2y*qy+e2z*qz)/determinant;
+  return t>=0 && t<=1 ? t : Infinity;
+}
+
 export function obstacle(a, b, includeProps = true) {
   const d = { x: b.x - a.x, y: b.y - a.y, z: b.z - a.z };
   let best = 1;
@@ -35,6 +51,10 @@ export function obstacle(a, b, includeProps = true) {
       ['y', box.gy - .1, box.gy + box.h + .06],
     ]);
     if (t >= .0001 && t < best) best = t;
+  }
+  if (Math.max(a.y,b.y)>=LAYOUT.ceilingMinY) for (const triangle of LAYOUT.ceilingTriangles) {
+    const t = ceilingHit(a, d, triangle);
+    if (t>=.0001 && t<best) best=t;
   }
   if (includeProps) for (const c of LAYOUT.colliders) {
     const t = rayCircle(a, d, c.x, c.z, c.r);

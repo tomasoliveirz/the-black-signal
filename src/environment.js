@@ -94,7 +94,7 @@ export function buildEnvironment(scene) {
     const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, width * .26), mat);
     mesh.position.set(x,y,z); mesh.rotation.y=yaw; scene.add(mesh); owned.push(mat);
   }
-  function light(x,y,z, kind = 'work') {
+  function light(x,y,z, kind = 'work', power) {
     const profile = kind === 'egress' ? {color:0xa2d2ab,day:.45,night:.8,range:4,power:4}
       : kind === 'street' ? {color:0xffd7a0,day:.15,night:1,range:8,power:12}
       : {color:0xffdfb0,day:1,night:.04,range:9,power:38};
@@ -102,7 +102,7 @@ export function buildEnvironment(scene) {
     block('steel',x,y+.16,z-.09,.10,.2,.12);
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(.61,.055,.13), new THREE.MeshBasicMaterial({color:profile.color}));
     mesh.position.set(x,y,z+.025); scene.add(mesh); owned.push(mesh.material);
-    practicals.push({p:mesh.position,c:profile.color,mesh,kind,...profile});
+    practicals.push({p:mesh.position,c:profile.color,mesh,kind,...profile,...(power===undefined?{}:{power})});
   }
   function lane(x,z,w,d,family='marking') {
     const y = Math.max(height(x-w*.45,z-d*.45),height(x+w*.45,z+d*.45),height(x,z));
@@ -271,7 +271,7 @@ export function buildEnvironment(scene) {
     for(let z=-24;z<25;z+=6){
       block('steel',-6.15,4.7,z,3.36,.13,.38);
       for (const side of [-1,1]) block('plaster',-6.15+side*1.68,4.87,z,1.04,.14,5.73);
-      for(const x of [-7.1,-5.25])light(x,4.58,z);
+      for(const x of [-7.1,-5.25])light(x,4.58,z,'work',6);
     }
     for(const b of BOXES){
       if(b.x<bounds.minX+1||b.x>bounds.maxX-1||b.w<1.5||b.w>8||b.d>.56||b.h>4.5||b.h<2.15)continue;
