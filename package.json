@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server/server.mjs",
     "test": "node server/selftest.mjs",
-    "test:network": "node --test server/network.test.mjs"
+    "test:network": "node --test server/network.test.mjs",
+    "test:models": "node tools/model-pipeline.test.mjs"
   },
   "dependencies": {
     "ws": "^8.18.0"

@@ -13,17 +13,16 @@ export const R2R = (key) => loadModel(`./assets/r2r/${key}.gltf`);
 export const STUD = 0.3; // rust-to-riches models are authored in studs
 
 // One lit material per source material, colours moved to display space.
-const litCache = new Map();
+const litCache = new WeakMap(), materialSignatures = new WeakMap();
 export function litMaterial(src, variant = '') {
-  const key = `${src.name}|${src.color.getHexString()}|${variant}`;
-  if (litCache.has(key)) return litCache.get(key);
-  const color = toDisplay(src.color);
-  const m = new THREE.MeshStandardMaterial({ color, roughness: Math.max(0.45, src.roughness ?? 0.85), metalness: Math.min(0.3, src.metalness ?? 0), side: THREE.DoubleSide });
-  if (variant === 'item') { m.emissive = color.clone().multiplyScalar(0.3); }
-  if (/glass/i.test(src.name)) { m.roughness = 0.25; m.metalness = 0.3; }
-  if (src.transparent && src.opacity < 1) { m.transparent = true; m.opacity = Math.max(0.3, src.opacity); m.depthWrite = false; }
-  litCache.set(key, m);
-  return m;
+  let variants = litCache.get(src);
+  if (!variants) { variants = new Map(); litCache.set(src, variants); }
+  if (variants.has(variant)) return variants.get(variant);
+  const material = src.clone();
+  if (src.color) material.color.copy(toDisplay(src.color));
+  if (variant === 'item' && material.emissive && material.color) material.emissive.add(material.color.clone().multiplyScalar(.3));
+  variants.set(variant, material);
+  return material;
 }
 export const palOf = (src) => paletteFor(toDisplay(src.color));
 
@@ -49,7 +48,7 @@ const triArea = (geo) => {
 // placements: [{ key, x, y, z, rot, s, big, center }]
 export async function buildStatic(scene, placements) {
   const buckets = new Map(), M = new THREE.Matrix4(), T = new THREE.Matrix4(), box = new THREE.Box3();
-  const srcs = await Promise.all(placements.map((p) => (p.url ? loadModel(p.url) : R2R(p.key)).catch((e) => { console.warn('modelo em falta', p.key, e); return null; })));
+  const srcs = await Promise.all(placements.map((p) => (p.url ? loadModel(p.url) : R2R(p.key)).catch((e) => { console.warn('Model missing', p.key, e); return null; })));
   placements.forEach((p, i) => {
     const src = srcs[i]; if (!src) return;
     box.setFromObject(src);
@@ -60,17 +59,49 @@ export async function buildStatic(scene, placements) {
     src.traverse((o) => {
       if (!o.isMesh) return;
       if (p.skip) for (let q = o; q; q = q.parent) if (p.skip.test(q.name)) return;
-      const g = (o.geometry.index ? o.geometry.toNonIndexed() : o.geometry.clone());
-      for (const name of Object.keys(g.attributes)) if (name !== 'position' && name !== 'normal') g.deleteAttribute(name);
-      g.applyMatrix4(new THREE.Matrix4().multiplyMatrices(M, o.matrixWorld));
-      const key = `${o.material.name}|${o.material.color.getHexString()}|${p.big ? 1 : 0}`;
-      if (!buckets.has(key)) buckets.set(key, { mat: o.material, big: !!p.big, geos: [] });
-      buckets.get(key).geos.push(g);
+      const geometry = o.geometry.index ? o.geometry.toNonIndexed() : o.geometry.clone();
+      const materials = Array.isArray(o.material) ? o.material : [o.material];
+      const groups = Array.isArray(o.material) ? geometry.groups : [{ start: 0, count: geometry.attributes.position.count, materialIndex: 0 }];
+      const first = geometry.drawRange.start, last = Math.min(geometry.attributes.position.count, first + geometry.drawRange.count);
+      const transform = new THREE.Matrix4().multiplyMatrices(M, o.matrixWorld);
+      for (const group of groups) {
+        const material = materials[group.materialIndex];
+        if (!material) throw new Error(`Missing material group on ${o.name || p.key || p.url}`);
+        const start = Math.max(first, group.start), count = Math.min(last, group.start + group.count) - start;
+        if (count <= 0) continue;
+        const part = new THREE.BufferGeometry();
+        for (const [name, attribute] of Object.entries(geometry.attributes)) {
+          const source = attribute.isInterleavedBufferAttribute ? attribute.data.array : attribute.array;
+          const stride = attribute.isInterleavedBufferAttribute ? attribute.data.stride : attribute.itemSize;
+          const offset = attribute.isInterleavedBufferAttribute ? attribute.offset : 0;
+          const values = new source.constructor(count * attribute.itemSize);
+          for (let vertex = 0; vertex < count; vertex++) for (let component = 0; component < attribute.itemSize; component++) {
+            values[vertex * attribute.itemSize + component] = source[(start + vertex) * stride + offset + component];
+          }
+          part.setAttribute(name, new THREE.BufferAttribute(values, attribute.itemSize, attribute.normalized));
+        }
+        part.applyMatrix4(transform);
+        const format = Object.entries(part.attributes).sort(([a], [b]) => a.localeCompare(b))
+          .map(([name, attribute]) => `${name}:${attribute.itemSize}:${attribute.normalized}:${attribute.array.constructor.name}`).join('|');
+        let signature = materialSignatures.get(material);
+        if (!signature) {
+          const properties = material.toJSON();
+          for (const field of ['metadata', 'uuid', 'name', 'userData', 'textures', 'images']) delete properties[field];
+          signature = JSON.stringify(properties) + material.customProgramCacheKey();
+          materialSignatures.set(material, signature);
+        }
+        const key = `${signature}|${Number(!!p.big)}|${format}`;
+        if (!buckets.has(key)) buckets.set(key, { mat: material, big: !!p.big, geos: [] });
+        buckets.get(key).geos.push(part);
+      }
+      geometry.dispose();
     });
   });
   const dabs = new DabSet();
   for (const b of buckets.values()) {
     const geo = mergeGeometries(b.geos), pal = palOf(b.mat);
+    if (!geo) throw new Error(`Incompatible geometry for ${b.mat.name || b.mat.uuid}`);
+    for (const geometry of b.geos) geometry.dispose();
     const mesh = new THREE.Mesh(geo, null); mesh.castShadow = true; mesh.receiveShadow = true;
     registerStyled(mesh, underMaterial(pal, 2, 0.9, { side: THREE.DoubleSide }), litMaterial(b.mat));
     scene.add(mesh);
