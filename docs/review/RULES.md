@@ -1,8 +1,13 @@
 
-
 # Walk through the game. Question every choice.
 
 Visual review · build 0.5 · captured 14 November 2026. These are screenshots of the running game, with diagrams generated from its actual layout data.
+
+Live on the temporary HTTPS address below. The tomasoliveira.xyz route is prepared on the VPS, but its public DNS currently points elsewhere.
+
+Live visual review
+
+ · GitHub repository
 
 Play the current build
 
@@ -16,28 +21,15 @@ Review build, not a finished competitive release. Six-player human balance, broa
 
 The left column holds identity, room admission, language and settings. The right column holds the six maps and, after joining, the roster, match controls and text chat. The purpose is to keep the scene visible while you prepare the session.
 
-![Screenshot](01-menu-en.png)
-Before joining: choose English or Portuguese, enter a name, pick an existing public room or create a new one.
-
-![Screenshot](02-public-room.png)
-Public room created through the actual menu. The host can choose a map and start.
-
-![Screenshot](09-private-room.png)
-Private room: share its invitation code. It is omitted from the public list.
-
-Control | Actual behaviour | 
-Create public roomCreates a new room that appears in the public list. You become its host. | 
-Create private roomCreates an unlisted room with a random invitation code. The code grants admission; it is not an account password. | 
-Public room / RefreshLists public rooms, player count, map and whether a match is running. Refresh fetches the current list. | 
-Room codeA typed code takes precedence over the public-room selector when you press Join room. | 
-Map cardsPreview before joining; the host sets the room map before play. Selection is locked during a running match. | 
-Start matchThe host starts immediately. Bots fill vacant active seats. There is currently no ready-check vote. | 
-Leave roomLeaves the session. The host role transfers to another connected player if one exists. | 
-![Screenshot](08-map-selection.png)
-Selecting Marrow Mall changes the actual 3D preview, not only a card highlight.
-
-![Screenshot](07-chat.png)
-Room text chat before the match. Player text is rendered as plain text.
+| Control | Actual behaviour |
+| --- | --- |
+| Create public room | Creates a new room that appears in the public list. You become its host. |
+| Create private room | Creates an unlisted room with a random invitation code. The code grants admission; it is not an account password. |
+| Public room / Refresh | Lists public rooms, player count, map and whether a match is running. Refresh fetches the current list. |
+| Room code | A typed code takes precedence over the public-room selector when you press Join room. |
+| Map cards | Preview before joining; the host sets the room map before play. Selection is locked during a running match. |
+| Start match | The host starts immediately. Bots fill vacant active seats. There is currently no ready-check vote. |
+| Leave room | Leaves the session. The host role transfers to another connected player if one exists. |
 
 ## How a match actually works
 
@@ -45,24 +37,18 @@ There are six active seats: four Operatives and two Echoes. Human players take f
 
 Everyone starts at one of six predefined positions near the entrance. The slot determines the spawn, not the secret role. Spawns are grouped deliberately: the first day is for observing and preparing together, and combat is disabled throughout it.
 
-Match clock | Phase | What changes | 
-Before 00:00 · 20 sPreparation | Role reveal; movement and actions frozen. | 
-00:00–05:00Day 1 · 300 s | Sector 1 resources. No shots or claws can cause damage. | 
-05:00–06:00Night 1 · 60 s | Combat unlocks and remains available after this night. First transformation opportunity. | 
-06:00–09:30Day 2 · 210 s | Sector 2 resources unlock; sector 1 remains usable. | 
-09:30–10:40Night 2 · 70 s | A new transformation allowance for each Echo. | 
-10:40–13:40Day 3 · 180 s | Sector 3 resources unlock. Finish the third transmitter. | 
-13:40–16:00Final hunt · 140 s | Extraction warms for 45 s. All three transmitters must be on. Hold the green area for 5 s. | 
-After the result · 20 sResults | The room returns to the lobby for another round. | Repairing does not advance the phase clock. The first night cannot be triggered early by completing an objective. The 16-minute limit excludes the 20-second preparation. Winning can end the match earlier. There is no base-building, crafting economy or barricade construction in this build: the task is to carry energy cells and repair existing transmitters.
+| Match clock | Phase | What changes |
+| --- | --- | --- |
+| Before 00:00 · 20 s | Preparation | Role reveal; movement and actions frozen. |
+| 00:00–05:00 | Day 1 · 300 s | Sector 1 resources. No shots or claws can cause damage. |
+| 05:00–06:00 | Night 1 · 60 s | Combat unlocks and remains available after this night. First transformation opportunity. |
+| 06:00–09:30 | Day 2 · 210 s | Sector 2 resources unlock; sector 1 remains usable. |
+| 09:30–10:40 | Night 2 · 70 s | A new transformation allowance for each Echo. |
+| 10:40–13:40 | Day 3 · 180 s | Sector 3 resources unlock. Finish the third transmitter. |
+| 13:40–16:00 | Final hunt · 140 s | Extraction warms for 45 s. All three transmitters must be on. Hold the green area for 5 s. |
+| After the result · 20 s | Results | The room returns to the lobby for another round. |
 
-![Screenshot](05-preparation.png)
-Role and preparation: the first countdown is 20 seconds, before the match clock.
-
-![Screenshot](06-day1.png)
-First day: five minutes to explore. HUD shows your objective, sector, health and supplies.
-
-![Screenshot](04-phases.png)
-The same timeline is available inside How to play.
+Repairing does not advance the phase clock. The first night cannot be triggered early by completing an objective. The 16-minute limit excludes the 20-second preparation. Winning can end the match earlier. There is no base-building, crafting economy or barricade construction in this build: the task is to carry energy cells and repair existing transmitters.
 
 ## Six maps, one shared ruleset
 
@@ -76,43 +62,9 @@ Warm autumn woods give the baseline map a readable trail and a strong cabin land
 
 Cabin → Barn → Tower. The exit sits near the far radio mast. The visual tower is a landmark; the small portable generators are the repair objectives.
 
-Available resources
-
- T = transmitter · C = energy cell · A = ammo · M = medical kit · F = flare · pink diamond = blood cabinet · white dots = six spawns · green circle = extraction. Muted shapes are collision footprints.
+T = transmitter · C = energy cell · A = ammo · M = medical kit · F = flare · pink diamond = blood cabinet · white dots = six spawns · green circle = extraction. Muted shapes are collision footprints.
 
 Download full-size plan
-
-![Screenshot](maps/amberwood-overview-day.jpg)
-Day view · actual running build.
-
-![Screenshot](maps/amberwood-overview-night.jpg)
-Night view at the same camera position.
-
-More ground-level views and exact coordinates
-
-![Screenshot](maps/amberwood-player-day.jpg)
-Player-scale daytime view.
-
-![Screenshot](maps/amberwood-player-night.jpg)
-Player-scale night view.
-
-![Screenshot](maps/amberwood-landmark-day.jpg)
-Landmark and environmental detail.
-
-![Screenshot](maps/amberwood-chase-night.jpg)
-A night route. This free-roam capture shows visibility, not a recorded live chase.
-
-Object | x / z in world units | 
-T1-13.80 / -14.00
-T24.67 / -41.00
-T33.67 / -67.50
-Extraction | -1.33 / -66.00 · radius 4.5
-Spawn 1 | 3.60 / -5.00
-Spawn 2 | 2.30 / -2.75
-Spawn 3 | -0.30 / -2.75
-Spawn 4 | -1.60 / -5.00
-Spawn 5 | -0.30 / -7.25
-Spawn 6 | 2.30 / -7.25
 
 ### Hollow Mire
 
@@ -120,43 +72,9 @@ A denser woodland with dead trees, cooler colours and heavier haze. It supports 
 
 South trail → Grove → Antenna. The density is a deliberate mood choice; reading supplies and spotting an approaching monster here need close review.
 
-Available resources
-
- T = transmitter · C = energy cell · A = ammo · M = medical kit · F = flare · pink diamond = blood cabinet · white dots = six spawns · green circle = extraction. Muted shapes are collision footprints.
+T = transmitter · C = energy cell · A = ammo · M = medical kit · F = flare · pink diamond = blood cabinet · white dots = six spawns · green circle = extraction. Muted shapes are collision footprints.
 
 Download full-size plan
-
-![Screenshot](maps/hollow-overview-day.jpg)
-Day view · actual running build.
-
-![Screenshot](maps/hollow-overview-night.jpg)
-Night view at the same camera position.
-
-More ground-level views and exact coordinates
-
-![Screenshot](maps/hollow-player-day.jpg)
-Player-scale daytime view.
-
-![Screenshot](maps/hollow-player-night.jpg)
-Player-scale night view.
-
-![Screenshot](maps/hollow-landmark-day.jpg)
-Landmark and environmental detail.
-
-![Screenshot](maps/hollow-chase-night.jpg)
-A night route. This free-roam capture shows visibility, not a recorded live chase.
-
-Object | x / z in world units | 
-T1-16.46 / -14.00
-T23.64 / -41.00
-T35.90 / -67.50
-Extraction | 0.90 / -66.00 · radius 4.5
-Spawn 1 | 3.60 / -5.00
-Spawn 2 | 2.30 / -2.75
-Spawn 3 | -0.30 / -2.75
-Spawn 4 | -1.60 / -5.00
-Spawn 5 | -0.30 / -7.25
-Spawn 6 | 2.30 / -7.25
 
 ### Frostpeak
 
@@ -164,43 +82,9 @@ Snow and higher terrain create a pale map with dark silhouettes. Pines, snow ban
 
 Shelter → Ridge → Tower. Terrain affects movement and sightlines; the white ground can compete with bright interaction markers.
 
-Available resources
-
- T = transmitter · C = energy cell · A = ammo · M = medical kit · F = flare · pink diamond = blood cabinet · white dots = six spawns · green circle = extraction. Muted shapes are collision footprints.
+T = transmitter · C = energy cell · A = ammo · M = medical kit · F = flare · pink diamond = blood cabinet · white dots = six spawns · green circle = extraction. Muted shapes are collision footprints.
 
 Download full-size plan
-
-![Screenshot](maps/frost-overview-day.jpg)
-Day view · actual running build.
-
-![Screenshot](maps/frost-overview-night.jpg)
-Night view at the same camera position.
-
-More ground-level views and exact coordinates
-
-![Screenshot](maps/frost-player-day.jpg)
-Player-scale daytime view.
-
-![Screenshot](maps/frost-player-night.jpg)
-Player-scale night view.
-
-![Screenshot](maps/frost-landmark-day.jpg)
-Landmark and environmental detail.
-
-![Screenshot](maps/frost-chase-night.jpg)
-A night route. This free-roam capture shows visibility, not a recorded live chase.
-
-Object | x / z in world units | 
-T1-16.74 / -12.85
-T24.45 / -41.00
-T32.95 / -67.50
-Extraction | -2.05 / -66.00 · radius 4.5
-Spawn 1 | 3.60 / -5.00
-Spawn 2 | 2.30 / -2.75
-Spawn 3 | -0.30 / -2.75
-Spawn 4 | -1.60 / -5.00
-Spawn 5 | -0.30 / -7.25
-Spawn 6 | 2.30 / -7.25
 
 ### Ashfall
 
@@ -208,43 +92,9 @@ An abandoned town organised around a street. Shop fronts, power lines, sidewalks
 
 Laundry → 24H store → Warehouse. Buildings divide sightlines and offer side cover. Many facades are scenery and collision volumes, not fully explorable rooms.
 
-Available resources
-
- T = transmitter · C = energy cell · A = ammo · M = medical kit · F = flare · pink diamond = blood cabinet · white dots = six spawns · green circle = extraction. Muted shapes are collision footprints.
+T = transmitter · C = energy cell · A = ammo · M = medical kit · F = flare · pink diamond = blood cabinet · white dots = six spawns · green circle = extraction. Muted shapes are collision footprints.
 
 Download full-size plan
-
-![Screenshot](maps/ashfall-overview-day.jpg)
-Day view · actual running build.
-
-![Screenshot](maps/ashfall-overview-night.jpg)
-Night view at the same camera position.
-
-More ground-level views and exact coordinates
-
-![Screenshot](maps/ashfall-player-day.jpg)
-Player-scale daytime view.
-
-![Screenshot](maps/ashfall-player-night.jpg)
-Player-scale night view.
-
-![Screenshot](maps/ashfall-landmark-day.jpg)
-Landmark and environmental detail.
-
-![Screenshot](maps/ashfall-chase-night.jpg)
-A night route. This free-roam capture shows visibility, not a recorded live chase.
-
-Object | x / z in world units | 
-T1-6.25 / -14.00
-T27.60 / -41.00
-T3-2.53 / -67.50
-Extraction | -7.53 / -66.00 · radius 4.5
-Spawn 1 | 3.60 / -5.00
-Spawn 2 | 2.30 / -2.75
-Spawn 3 | -0.30 / -2.75
-Spawn 4 | -1.60 / -5.00
-Spawn 5 | -0.30 / -7.25
-Spawn 6 | 2.30 / -7.25
 
 ### Foundry 9
 
@@ -252,43 +102,9 @@ A long industrial hall with overhead structure, loading areas, pipes and marked 
 
 Reception → Furnaces → Maintenance. The original long axis remains. This layout performed poorly for Operative bots and needs human testing before calling it balanced.
 
-Available resources
-
- T = transmitter · C = energy cell · A = ammo · M = medical kit · F = flare · pink diamond = blood cabinet · white dots = six spawns · green circle = extraction. Muted shapes are collision footprints.
+T = transmitter · C = energy cell · A = ammo · M = medical kit · F = flare · pink diamond = blood cabinet · white dots = six spawns · green circle = extraction. Muted shapes are collision footprints.
 
 Download full-size plan
-
-![Screenshot](maps/foundry-overview-day.jpg)
-Day view · actual running build.
-
-![Screenshot](maps/foundry-overview-night.jpg)
-Night view at the same camera position.
-
-More ground-level views and exact coordinates
-
-![Screenshot](maps/foundry-player-day.jpg)
-Player-scale daytime view.
-
-![Screenshot](maps/foundry-player-night.jpg)
-Player-scale night view.
-
-![Screenshot](maps/foundry-landmark-day.jpg)
-Landmark and environmental detail.
-
-![Screenshot](maps/foundry-chase-night.jpg)
-A night route. This free-roam capture shows visibility, not a recorded live chase.
-
-Object | x / z in world units | 
-T1-9.00 / -16.00
-T29.00 / -38.00
-T3-11.00 / -70.00
-Extraction | -9.00 / -66.00 · radius 4.5
-Spawn 1 | 3.60 / -5.00
-Spawn 2 | 2.30 / -2.75
-Spawn 3 | -0.30 / -2.75
-Spawn 4 | -1.60 / -5.00
-Spawn 5 | -0.30 / -7.25
-Spawn 6 | 2.30 / -7.25
 
 ### Marrow Mall
 
@@ -296,82 +112,27 @@ An imported indoor mall: existing storefronts, kiosks, pillars and service branc
 
 Atrium → Gallery → Service. Transmitters are placed in actual reachable branches rather than lined up down the main corridor. Its narrow width remains a design constraint; it has not been rebuilt into a larger map.
 
-Available resources
-
- T = transmitter · C = energy cell · A = ammo · M = medical kit · F = flare · pink diamond = blood cabinet · white dots = six spawns · green circle = extraction. Muted shapes are collision footprints.
+T = transmitter · C = energy cell · A = ammo · M = medical kit · F = flare · pink diamond = blood cabinet · white dots = six spawns · green circle = extraction. Muted shapes are collision footprints.
 
 Download full-size plan
-
-![Screenshot](maps/mall-overview-day.jpg)
-Day view · actual running build.
-
-![Screenshot](maps/mall-overview-night.jpg)
-Night view at the same camera position.
-
-More ground-level views and exact coordinates
-
-![Screenshot](maps/mall-player-day.jpg)
-Player-scale daytime view.
-
-![Screenshot](maps/mall-player-night.jpg)
-Player-scale night view.
-
-![Screenshot](maps/mall-landmark-day.jpg)
-Landmark and environmental detail.
-
-![Screenshot](maps/mall-chase-night.jpg)
-A night route. This free-roam capture shows visibility, not a recorded live chase.
-
-Object | x / z in world units | 
-T1-14.70 / 16.50
-T21.13 / 12.00
-T37.13 / -15.75
-Extraction | -5.12 / -28.50 · radius 3
-Spawn 1 | -8.37 / 26.25
-Spawn 2 | -9.12 / 27.55
-Spawn 3 | -10.62 / 27.55
-Spawn 4 | -11.37 / 26.25
-Spawn 5 | -10.62 / 24.95
-Spawn 6 | -9.12 / 24.95
 
 ## What each object does
 
 Aim at a nearby object. The E prompt names the selected action. Pressing E locks that target for the hold: looking away stops progress, and changing to another target requires releasing E. The server also checks distance, walls, state and inventory. Walking over a pickup does not automatically take it.
 
-Object | Count / purpose | Interaction and constraints | 
-Energy cell | 6 total · 2 per sector | Take with E within 1.9 m. Carry only one. R drops it; another player can take it. One cell powers one transmitter. | 
-Transmitter | 3 total · 1 per sector | Install a carried cell with E, then hold E within 2.6 m to repair: 8 s alone or 5 s with at least two Operatives. Echoes can mimic repairing but add no progress. | 
-Ammo cache | 6 total · 2 per sector | +3 rounds. Carry at most 12. Everyone begins with 4 rounds. Ammo is spent only on a valid authorised shot. | 
-Medical kit | 3 total · 1 per sector | Take with E; Q restores up to 50 human HP. It cannot revive you after you are downed. | 
-Flare | 3 pickups · everyone also starts with 1 | G throws ahead, after combat unlocks. Lasts 15 s; 6 m radius; initial monster stun 2 s with line of sight; nearby monsters move at half speed. | 
-Blood cabinet | 12 total · 4 per sector | Echo only, daytime only. Hold E for 6 s for +30 energy, capped at 100. Each cabinet is globally single-use per round. Leaves a visible clue for 40 s. | 
-Downed player | A rescue or execution target | Human form: hold E for 5 s to revive to 50 HP. Monster form: hold E for 2.5 s to execute. Damage, range and interrupted use matter. | 
-Extraction circle | One exit, with a map-specific radius | Final hunt only, after 45 s warm-up and all transmitters active. A living Operative must stay inside for 5 s. The first escape immediately wins for all Operatives. | 
-Mast, buildings, trees, props | Navigation, atmosphere and cover | The mast marks the exit area. Buildings and solid props block movement or sight where their collision data says so. Scenery cannot currently be dismantled or crafted into barricades. | The extra energy cell in each sector is redundancy: one lost or carried-away cell should not automatically end the objective. Invalid cell drops are recovered to a sector recovery point. Resource cases and blood cabinets are solid, so they also affect movement.
+| Object | Count / purpose | Interaction and constraints |
+| --- | --- | --- |
+| Energy cell | 6 total · 2 per sector | Take with E within 1.9 m. Carry only one. R drops it; another player can take it. One cell powers one transmitter. |
+| Transmitter | 3 total · 1 per sector | Install a carried cell with E, then hold E within 2.6 m to repair: 8 s alone or 5 s with at least two Operatives. Echoes can mimic repairing but add no progress. |
+| Ammo cache | 6 total · 2 per sector | +3 rounds. Carry at most 12. Everyone begins with 4 rounds. Ammo is spent only on a valid authorised shot. |
+| Medical kit | 3 total · 1 per sector | Take with E; Q restores up to 50 human HP. It cannot revive you after you are downed. |
+| Flare | 3 pickups · everyone also starts with 1 | G throws ahead, after combat unlocks. Lasts 15 s; 6 m radius; initial monster stun 2 s with line of sight; nearby monsters move at half speed. |
+| Blood cabinet | 12 total · 4 per sector | Echo only, daytime only. Hold E for 6 s for +30 energy, capped at 100. Each cabinet is globally single-use per round. Leaves a visible clue for 40 s. |
+| Downed player | A rescue or execution target | Human form: hold E for 5 s to revive to 50 HP. Monster form: hold E for 2.5 s to execute. Damage, range and interrupted use matter. |
+| Extraction circle | One exit, with a map-specific radius | Final hunt only, after 45 s warm-up and all transmitters active. A living Operative must stay inside for 5 s. The first escape immediately wins for all Operatives. |
+| Mast, buildings, trees, props | Navigation, atmosphere and cover | The mast marks the exit area. Buildings and solid props block movement or sight where their collision data says so. Scenery cannot currently be dismantled or crafted into barricades. |
 
-![Screenshot](object-cell.jpg)
-Energy cell on its field case.
-
-![Screenshot](object-ammo.jpg)
-Ammunition cache.
-
-![Screenshot](object-med.jpg)
-Medical kit.
-
-![Screenshot](object-flare.jpg)
-Flare pickup.
-
-![Screenshot](object-blood.jpg)
-Medical cabinet used by Echoes to feed.
-
-![Screenshot](object-transmitter.jpg)
-Portable transmitter and generator: install a cell, then repair.
-
-![Screenshot](object-extraction.jpg)
-Extraction area and mast in free roam. It only opens under the final-hunt conditions.
-
-![Screenshot](object-monster.jpg)
-Echo monster model in an inspection scene; not evidence of a live match event.
+The extra energy cell in each sector is redundancy: one lost or carried-away cell should not automatically end the objective. Invalid cell drops are recovered to a sector recovery point. Resource cases and blood cabinets are solid, so they also affect movement.
 
 ## Pistols, Echoes, death and victory
 
@@ -387,9 +148,6 @@ At zero human HP you are downed for up to 40 s. You can crawl and a human-form p
 
 Operatives win by extracting at least one Operative, or by permanently eliminating both Echoes after combat opens. Echoes win by eliminating all Operatives without an escape, or by reaching the final deadline with no extraction. A valid escape on the deadline tick takes priority over the timeout loss.
 
-![Screenshot](13-controls.png)
-Controls in the game guide. Movement, interaction, voice, chat and accessibility to the menu.
-
 ## Sound that communicates space
 
 Recorded effects cover footsteps, gunshots, empty fire, pickups, healing, revival, flares, transformation, impacts, transmitter power and extraction. Footstep material changes with the map: soil, snow, hard floor or metal. Crouched human movement emits no footsteps. Other actions, nearby voices and ambient machinery remain audible while crouched.
@@ -400,9 +158,6 @@ Voice is opt-in. Enable the microphone in settings, then hold Z during play. The
 
 The three supplied lobby tracks are shuffled without an immediate repeat. Music continues through the menu and waiting room, fades when a match starts and resumes for the waiting state. You can skip tracks and adjust music independently from effects, ambience and voice. Browsers require an initial interaction before audio playback. Hover, focus and button clicks have quieter feedback sounds.
 
-![Screenshot](11-audio-settings.png)
-Music, next track, separate audio buses, listening and microphone permission.
-
 Current voice transport is 16 kHz mono PCM in 40 ms packets over the game WebSocket, not WebRTC. It has bounded receive buffering, per-sender rate limits and backpressure protection. It is functional but more bandwidth-hungry and vulnerable to TCP head-of-line delay than a dedicated compressed voice transport. Voice is not end-to-end encrypted: HTTPS/WSS encrypts transport, and the server relays the audio.
 
 ## Accounts, rooms and what the server owns
@@ -411,10 +166,9 @@ Accounts provide a persistent unique username and a seven-day session. Usernames
 
 Guest names are prefixed with Guest to distinguish them from registered identities. A signed-in account overrides a supplied display name. Guests can play without an account. The current account flow has no password reset, email verification, two-factor authentication, account deletion or gameplay progression; these must not be assumed to exist.
 
-![Screenshot](10-account.png)
-Actual account form. No emails or passwords are shown in this review.
-
 Rooms isolate map state, timers, players, text and voice. The host controls starting and map selection. A broken connection retains a player for 45 s, with a random resume token bound to the same account identity. Reconnection can restore the same role and player ID. A full page reload currently loses the in-memory resume token.
+
+Anti-cheat limitation: public snapshots currently include player positions without server-side line-of-sight culling. The server rejects invalid hits through walls, but a modified client could reveal positions. Visibility privacy is a remaining hardening task.
 
 The server decides movement, damage, cooldowns, resources, phase deadlines, interactions and extraction. Clients send input and receive public state plus their own private fields. Other players’ secret roles, health and energy are excluded from live snapshots. Bots use server actions under the same guards; current automated tests cover hidden-role leakage.
 
@@ -422,18 +176,17 @@ Security controls include same-origin HTTP/WebSocket checks, limited payload siz
 
 ## Where the design still needs your judgement
 
-Area | Current issue to review | 
-Menu density | Identity, settings, map choice, roster and chat share one screen. Decide whether room creation should become a separate step. | 
-Sector readability | Resources unlock by time, but the world is physically traversable. Locked and usable stations need a clearer distinction. | 
-Object recognition | Supplies and blood cabinets use field cases. Their shape and silhouette should communicate type before reading E. | 
-Building expectation | The game repairs existing equipment. If you want barricades or crafting, that is a new mechanic to design and implement. | 
-Map balance | Automated bots favour Echoes on several maps, especially the factory. Bot results are not human balance evidence. | 
-Mall width | Objectives use existing side branches, but the imported hall remains narrow. Decide whether it needs a structural rebuild. | 
-Visual feedback | Review repair progress, cell installation, blood clues, downed readability and extraction status at player scale. | 
-Touch play | The menu adapts to a narrow screen, but gameplay uses keyboard and mouse. There is no mobile touch-control scheme. | 
-Language coverage | English is the default, Portuguese is selectable and persistent. Player names, player chat and music titles are not automatically translated. Imported baked artwork may retain its original branding. | 
-![Screenshot](14-mobile-guide.png)
-Narrow-screen guide check. This demonstrates the menu layout, not touch gameplay support.
+| Area | Current issue to review |
+| --- | --- |
+| Menu density | Identity, settings, map choice, roster and chat share one screen. Decide whether room creation should become a separate step. |
+| Sector readability | Resources unlock by time, but the world is physically traversable. Locked and usable stations need a clearer distinction. |
+| Object recognition | Supplies and blood cabinets use field cases. Their shape and silhouette should communicate type before reading E. |
+| Building expectation | The game repairs existing equipment. If you want barricades or crafting, that is a new mechanic to design and implement. |
+| Map balance | Automated bots favour Echoes on several maps, especially the factory. Bot results are not human balance evidence. |
+| Mall width | Objectives use existing side branches, but the imported hall remains narrow. Decide whether it needs a structural rebuild. |
+| Visual feedback | Review repair progress, cell installation, blood clues, downed readability and extraction status at player scale. |
+| Touch play | The menu adapts to a narrow screen, but gameplay uses keyboard and mouse. There is no mobile touch-control scheme. |
+| Language coverage | English is the default, Portuguese is selectable and persistent. Player names, player chat and music titles are not automatically translated. Imported baked artwork may retain its original branding. |
 
 ## Evidence and a precise handoff
 

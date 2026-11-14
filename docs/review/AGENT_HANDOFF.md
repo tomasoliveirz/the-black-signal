@@ -4,6 +4,8 @@ This review describes the implemented 2026-11-14 build. Distinguish observed beh
 
 ## Public entry points
 
+Live temporary origin: https://black-signal.51-38-190-126.sslip.io . Game at /black-signal/ and review at /black-signal/review/. The intended tomasoliveira.xyz routes below are prepared on the VPS but need DNS/proxy cutover.
+
 - Game: https://tomasoliveira.xyz/black-signal/
 - Visual review: https://tomasoliveira.xyz/black-signal/review/
 - Deployment evidence: DEPLOYMENT.json next to this file.
@@ -50,6 +52,10 @@ Deployment must follow the owner's live VPS operations inventory and preflight/s
 
 ## Still requires product decisions or validation
 
-No six-human balance approval, mobile touch controls, crafting/barricades, account recovery, moderation, email verification, 2FA or independent penetration test. The factory and several other maps strongly favour Echo bots. Do not present bot win ratios as human balance evidence. Imported mall is still narrow. In-memory reconnect is not persistent across a page reload. PCM voice over TCP is functional but uncompressed and not end-to-end encrypted. Private room codes are shareable admission secrets, not passwords. Supplied lobby music has user-provided provenance; do not invent a licence grant.
+Public snapshots still expose player positions without server-side line-of-sight culling; modified clients could reveal them. Server wall-hit validation does not eliminate wallhacks. No six-human balance approval, mobile touch controls, crafting/barricades, account recovery, moderation, email verification, 2FA or independent penetration test. The factory and several other maps strongly favour Echo bots. Do not present bot win ratios as human balance evidence. Imported mall is still narrow. In-memory reconnect is not persistent across a page reload. PCM voice over TCP is functional but uncompressed and not end-to-end encrypted. Private room codes are shareable admission secrets, not passwords. Supplied lobby music has user-provided provenance; do not invent a licence grant.
 
 For redesign: use the screenshot filename and map ID to identify the exact surface; reproduce the current route before editing. Keep rules in shared/rules.js, preserve deterministic placements or deliberately revalidate every map, and run relevant acceptance and network tests after authoritative changes.
+
+## Verified deployment follow-up
+
+Both public-browser clients passed private room admission, host-only controls, shared text, preparation and safe day1. All 56 referenced review images returned 200. Register/session/logout and Secure/HttpOnly/SameSite cookie flags passed on the production HTTPS route. Fake-microphone Chrome tests over the public origin passed 31 decoded effects, push-to-talk, HRTF receive, audible remote steps, silent crouching and first-day shot rejection. A daily local SQLite snapshot job was installed and its first integrity check passed; off-site backup was not added. Global VPS preflight remains at the same two prior Minecraft backup issues; global smoke remains at the same five prior failures, with the added Black Signal origin passing. Do not mark the entire VPS healthy.

@@ -1,19 +1,73 @@
 {
   "version": "0.5.0",
-  "status": "deployment-in-progress",
+  "verified_at_utc": "2026-11-14T17:05:12.557614+00:00",
+  "status": "live-on-temporary-https-origin",
+  "game": "https://black-signal.51-38-190-126.sslip.io/black-signal/",
+  "review": "https://black-signal.51-38-190-126.sslip.io/black-signal/review/",
+  "repository": "https://github.com/tomasoliveirz/the-black-signal",
   "intended_game": "https://tomasoliveira.xyz/black-signal/",
   "intended_review": "https://tomasoliveira.xyz/black-signal/review/",
-  "temporary_origin": "https://black-signal.51-38-190-126.sslip.io",
   "dns_cutover_required": true,
+  "image_id": "sha256:cd494d29accb9f99057a59a2b1b02599d1d090bc1c78d88b2fee6c891d2a8dfc",
+  "runtime": {
+    "non_root": true,
+    "read_only_root": true,
+    "loopback_only_ingress": true,
+    "health": "healthy",
+    "tls": "valid certificate; renewal timer enabled",
+    "accounts_backup": "daily local SQLite snapshot; integrity check executed successfully; no off-site copy added"
+  },
   "tests": {
-    "rules": 18,
-    "network": 12,
-    "browser_languages": "passed",
-    "review_languages_and_sector_filters": "passed"
+    "rules_passed": 18,
+    "network_passed": 12,
+    "fresh_clone_passed": 30,
+    "remote_browser": {
+      "origin": "https://black-signal.51-38-190-126.sslip.io",
+      "version": "0.5.0",
+      "twoRemoteClients": true,
+      "privateRoom": true,
+      "hostControls": true,
+      "chatAcrossClients": true,
+      "prepAndSafeDay1": true,
+      "liveLanguageSwitch": true,
+      "reviewAssets": 56,
+      "reviewAssetsOK": true,
+      "errors": [],
+      "failed": []
+    },
+    "remote_auth": {
+      "register": true,
+      "persistentSession": true,
+      "logoutRevokesToken": true,
+      "cookieFlags": [
+        "HttpOnly",
+        "Secure",
+        "SameSite=Strict",
+        "Path=/black-signal"
+      ]
+    },
+    "remote_audio": {
+      "microphone": "simulated Chrome input",
+      "decoded_effect_recordings": 31,
+      "push_to_talk": true,
+      "spatial_receive": true,
+      "remote_footsteps": true,
+      "silent_crouch": true,
+      "first_day_shots_rejected": true
+    }
+  },
+  "global_vps_checks": {
+    "inventory": "valid",
+    "nginx": "valid",
+    "preflight": "2 pre-existing failures unchanged",
+    "smoke": "27 checks, 5 pre-existing failures unchanged; new game origin passes",
+    "unrelated_failures": "Minecraft/BlueMap, Minecraft backup units/archive and existing-domain DNS/TLS"
   },
   "unvalidated": [
     "six-human balance",
     "independent security assessment",
-    "long-distance voice quality under packet loss"
+    "server-side player visibility culling",
+    "long-distance human voice quality under packet loss",
+    "account recovery and moderation"
   ]
 }
