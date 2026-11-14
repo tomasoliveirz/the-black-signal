@@ -23,7 +23,7 @@ const guideCopy = {
       ['E', 'Aponta e interage. Mantém para reparar, reanimar, drenar ou executar.'], ['R', 'Largar a célula de energia'],
       ['Clique / Q / G', 'Disparar ou garra / kit médico / sinalizador'], ['F', 'Transformar ou regressar à forma humana (Echo)'],
       ['Z (premir)', 'Falar por proximidade. Ativa o microfone nas definições.'], ['Enter / T', 'Texto de proximidade / texto privado Echo'],
-      ['V / 1–4 / Esc', 'Estilo visual / qualidade / menu'],
+      ['1–4 / Esc', 'Qualidade / menu'],
     ],
     controlsEnd: '<p>Andar agachado é silencioso. Os sons e as vozes indicam direção e distância. Podes regular o áudio e silenciar jogadores na sala.</p>',
     victory: '<p><strong>Operativos</strong> vencem se pelo menos um evacuar na fase final com os três transmissores ativos. Também vencem ao eliminar definitivamente os dois Echoes depois de começar a primeira noite.</p><p><strong>Echoes</strong> vencem ao eliminar todos os Operativos sem evacuação, ou ao terminar a caçada final sem ninguém evacuado.</p><p>Ficar abatido dá uma oportunidade de salvamento. Um aliado pode reanimar-te; se morreres, acompanhas o resto da partida como espetador.</p>',
@@ -43,14 +43,14 @@ const guideCopy = {
       ['E', 'Aim and interact. Hold to repair, revive, drain or execute.'], ['R', 'Drop the energy cell'],
       ['Click / Q / G', 'Fire or claw / medical kit / flare'], ['F', 'Transform or return to human form (Echo)'],
       ['Z (hold)', 'Proximity voice. Enable your microphone in settings.'], ['Enter / T', 'Proximity text / private Echo text'],
-      ['V / 1–4 / Esc', 'Visual style / quality / menu'],
+      ['1–4 / Esc', 'Quality / menu'],
     ],
     controlsEnd: '<p>Crouched footsteps are silent. Sounds and voices have direction and distance. Adjust the mix in settings and mute individual players in the room.</p>',
     victory: '<p><strong>Operatives</strong> win if at least one evacuates in the final hunt with all three transmitters active. They also win by permanently eliminating both Echoes once the first night has begun.</p><p><strong>Echoes</strong> win if all Operatives die without an evacuation, or if the final hunt ends before anyone escapes.</p><p>A downed player can still be saved. An ally can revive you; after death, you watch the remaining match as a spectator.</p>',
   },
 };
 
-export function createMenu({ game, enter, openMenu, applyStyle, setQuality }) {
+export function createMenu({ game, enter, openMenu, setQuality }) {
   const entry = $('entry'), name = $('name'), play = $('play'), start = $('start'), resume = $('resume');
   let onlineStatus='connecting';
   let host=0;
@@ -292,7 +292,6 @@ export function createMenu({ game, enter, openMenu, applyStyle, setQuality }) {
     if (!game.me.spectator) enter(true);
   });
   resume.addEventListener('click', () => enter(true));
-  $('visual').addEventListener('change', (event) => applyStyle(event.target.value === 'normal'));
   $('quality').addEventListener('change', (event) => setQuality(Number(event.target.value)));
   renderMap();
   window.addEventListener('language-change', () => {

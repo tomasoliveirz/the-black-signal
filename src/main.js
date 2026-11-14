@@ -76,11 +76,9 @@ function setQuality(q) {
   sun.shadow.mapSize.setScalar(q >= 2 ? 2048 : 1024); sun.shadow.map?.dispose(); sun.shadow.map = null;
   renderer.setPixelRatio(Math.min(devicePixelRatio, q === 0 ? 1 : 1.5));
 }
-function applyStyle(normal) {
-  setStyle(normal);
-  sun.castShadow = normal;
-  $('visual').value = normal ? 'normal' : 'paint';
-  try { localStorage.setItem('bs.style', normal ? 'normal' : 'paint'); } catch {}
+function applyStyle() {
+  setStyle(true);
+  sun.castShadow = true;
 }
 
 // ---------- input
@@ -107,7 +105,7 @@ function openMenu() {
   document.body.classList.add('menu-open');
   document.exitPointerLock?.();
 }
-const menu = createMenu({ game, enter, openMenu, applyStyle, setQuality });
+const menu = createMenu({ game, enter, openMenu, setQuality });
 const roomUI = createRooms(game,openMenu);
 let identityReady=false;
 createAccount(() => {
@@ -142,7 +140,6 @@ addEventListener('keydown', (e) => {
   if (e.target instanceof HTMLElement && e.target.matches('input, select')) return;
   keys.add(e.code);
   if (e.code === 'Escape' && active) return openMenu();
-  if (!e.repeat && e.code === 'KeyV') applyStyle(!isNormal());
   if (!e.repeat && /^Digit[1-4]$/.test(e.code)) setQuality(+e.code[5] - 1);
   if (!active) return;
   if (e.code === 'KeyZ' && !e.repeat) { ambience.wake(); game.voice.push(true); }
@@ -256,8 +253,7 @@ function frame() {
 }
 
 // debug/benchmark URL params: ?auto (join + start with bots) &style=paint|normal &night &yaw= &pitch= &dist= &q=
-let style = 'normal'; try { style = localStorage.getItem('bs.style') || 'normal'; } catch {}
-applyStyle((qp.get('style') || style) !== 'paint');
+applyStyle();
 setQuality(qp.has('q') ? +qp.get('q') : 3);
 if (qp.has('auto')) autoStart = true;
 if (qp.has('free')) enter(false);
