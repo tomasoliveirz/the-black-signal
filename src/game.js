@@ -12,8 +12,9 @@ const PHASE = {lobby:'Room',prep:'Preparation',day1:'Day 1 — night in',night1:
 
 export function createGame({ scene, world, view, keys, changeMap, menu, ambience, isActive, camera }) {
   const me = { id: 0, slot: 0, role: null, partner: 0, s: newMove(LAYOUT.spawns[0].x, LAYOUT.spawns[0].z), st: 0, form: 0, you: null, spectator: false };
+  const voicePositions = new Map();
   const views = new Map();   // id -> { fig, mon, pos, target, face, st, form, speed, name }
-  let state = null, names = new Map(), ws = null, online = false, joined = false, sandboxNight = 0, sendAcc = 0, attackT = 0, aimT = 0, spectate = 0, reconnectTimer, reconnecting=false, lastRoom=null;
+  let state = null, names = new Map(), ws = null, online = false, joined = false, sandboxNight = 0, sendAcc = 0, attackT = 0, aimT = 0, reconnectTimer, reconnecting=false, lastRoom=null;
   const focus = new THREE.Vector3(), tmp = new THREE.Vector3();
 
   const getView = (id, slot = 0) => {
@@ -157,6 +158,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     $('toast').style.opacity = 0;
     $('feed').replaceChildren();
     resetViews();
+    voicePositions.clear();
     ambience.reset();
     voice.reset();
   }
@@ -181,7 +183,10 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
 
   function onEvent(m) {
     const k = m.k;
-    const from = m.id === me.id ? null : views.get(m.id)?.pos;
+    if(k==='voice-position'){voicePositions.set(m.id,{x:m.x,y:m.y,z:m.z,heard:performance.now()});return;}
+    if(k==='sound'){ambience.cue(m.sound,{x:m.x,y:m.y,z:m.z});return;}
+    const source=views.get(m.id);
+    const from = m.id === me.id ? null : source?.seen===state?source.pos:undefined;
     const tx = LAYOUT.tx[m.tx];
     if (k === 'step') ambience.step(m, m.id === me.id);
     if (k === 'shot') ambience.cue('shot', m.id === me.id ? null : { x: m.a[0], y: m.a[1], z: m.a[2] });
@@ -246,7 +251,13 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     } else send({t:'act',a});
   }
   function chat(text, ch) { if (joined) send({ t: 'chat', text, ch }); }
-  function nextSpectate() { spectate++; }
+  function nextSpectate() {
+    if(!state||(!me.spectator&&me.st<2))return;
+    const targets=state.players.filter(p=>p.st<2&&p.id!==me.id);
+    if(!targets.length)return;
+    const current=targets.findIndex(p=>p.id===state.watching);
+    send({t:'watch',id:targets[(current+1)%targets.length].id});
+  }
   function toggleSandboxNight() { if (!playing()) { sandboxNight = 1 - sandboxNight; toast(sandboxNight ? t("Blackout — the signal is lost") : t("Signal restored")); } }
 
   // ---------- per-frame
@@ -301,7 +312,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     useHeld = held;
     inp.use = held && Boolean(focused);
     inp.target = focused ? heldTarget : null;
-    if (active) inp.aim = Math.atan2(camera.getWorldDirection(aimDirection).x, aimDirection.z);
+    if (active) {inp.aim = Math.atan2(camera.getWorldDirection(aimDirection).x, aimDirection.z);inp.camera=camera.position.toArray();}
 
     const inMatch = playing();
     const frozen = inMatch && (state.phase === 'prep' || me.you?.stun || (me.form && me.you?.action?.kind === 'player'));
@@ -355,7 +366,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     focus.copy(localView.pos); let focusForm = inMatch ? me.form : 0;
     if (joined && state && (me.spectator || me.st >= 2) && state.phase !== 'lobby') {
       const alive = state.players.filter((p) => p.st < 2 && p.id !== me.id);
-      if (alive.length) { const p = alive[spectate % alive.length], v = views.get(p.id); if (v) { focus.copy(v.pos); focusForm = v.form; } }
+      if (alive.length) { const p = alive.find(p=>p.id===state.watching)??alive[0], v = views.get(p.id); if (v) { focus.copy(v.pos); focusForm = v.form; } }
     }
     voice.update();
     hud(inMatch, t);
@@ -435,7 +446,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     frame => { if (ws?.readyState === 1 && ws.bufferedAmount < 8192) ws.send(frame); },
     id => {
       const v = views.get(id);
-      return v && v.seen === state && v.st < 2 ? { x: v.pos.x, y: v.pos.y + (v.st === 1 ? .45 : v.form ? 1.9 : v.cr ? .95 : 1.55), z: v.pos.z } : null;
+      return v && v.seen === state && v.st < 2 ? { x: v.pos.x, y: v.pos.y + (v.st === 1 ? .45 : v.form ? 1.9 : v.cr ? .95 : 1.55), z: v.pos.z } : performance.now()-(voicePositions.get(id)?.heard??-1000)<500?voicePositions.get(id):null;
     },
     nameOf
   );

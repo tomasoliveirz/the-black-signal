@@ -26,7 +26,7 @@ export function rayCircle(a, d, x, z, radius) {
   return t >= 0 && t <= 1 ? t : Infinity;
 }
 
-export function obstacle(a, b, includeProps = true) {
+export function obstacle(a, b, includeProps = true, anyHit = false) {
   const d = { x: b.x - a.x, y: b.y - a.y, z: b.z - a.z };
   let best = 1;
   for (const box of BOXES) {
@@ -34,11 +34,11 @@ export function obstacle(a, b, includeProps = true) {
       ['x', box.x - box.w / 2, box.x + box.w / 2], ['z', box.z - box.d / 2, box.z + box.d / 2],
       ['y', box.gy - .1, box.gy + box.h + .06],
     ]);
-    if (t >= .0001 && t < best) best = t;
+    if (t >= .0001 && t < best) {if(anyHit&&t<.995)return t;best = t;}
   }
   if (includeProps) for (const c of LAYOUT.colliders) {
     const t = rayCircle(a, d, c.x, c.z, c.r);
-    if (t > .0001 && t < best && a.y + d.y * t < height(c.x, c.z) + c.h) best = t;
+    if (t > .0001 && t < best && a.y + d.y * t < height(c.x, c.z) + c.h) {if(anyHit&&t<.995)return t;best = t;}
   }
   const steps = Math.max(1, Math.ceil(Math.hypot(d.x, d.y, d.z) / .28));
   for (let i = 1; i <= steps && i / steps < best; i++) {
