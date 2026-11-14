@@ -1,5 +1,8 @@
 const portuguese = {
   "Language": "Idioma",
+  "Invalid recovery request.": "Pedido de recuperação inválido.",
+  "Recovery expired or not authorised. Join the room again.": "A recuperação expirou ou não foi autorizada. Volta a entrar na sala.",
+  "This player is still connected. Close the previous tab.": "Este jogador continua ligado. Fecha o separador anterior.",
   "WORKSHOP": "OFICINA",
   "STATION 06": "ESTAÇÃO 06",
   "MARSH": "PÂNTANO",

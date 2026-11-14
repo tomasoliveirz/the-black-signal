@@ -14,7 +14,15 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
   const me = { id: 0, slot: 0, role: null, partner: 0, s: newMove(LAYOUT.spawns[0].x, LAYOUT.spawns[0].z), st: 0, form: 0, you: null, spectator: false };
   const voicePositions = new Map();
   const views = new Map();   // id -> { fig, mon, pos, target, face, st, form, speed, name }
-  let state = null, names = new Map(), ws = null, online = false, joined = false, sandboxNight = 0, sendAcc = 0, attackT = 0, aimT = 0, reconnectTimer, reconnecting=false, lastRoom=null;
+  let state = null, names = new Map(), ws = null, online = false, joined = false, sandboxNight = 0, sendAcc = 0, attackT = 0, aimT = 0, reconnectTimer, reconnecting=false, lastRoom=null, restorePending=false, resumeAttempts=0;
+  try {
+    const saved=JSON.parse(sessionStorage.getItem('bs.room')||'null');
+    if(saved&&/^(PUBLIC|[A-F0-9]{10})$/.test(saved.room)&&Number.isSafeInteger(saved.player)&&saved.player>0){lastRoom=saved;reconnecting=true;}
+  }catch{}
+  function rememberRoom(value){
+    lastRoom=value;
+    try{if(value)sessionStorage.setItem('bs.room',JSON.stringify(value));else sessionStorage.removeItem('bs.room');}catch{}
+  }
   const focus = new THREE.Vector3(), tmp = new THREE.Vector3();
 
   const getView = (id, slot = 0) => {
@@ -52,7 +60,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     try { const endpoint=new URL('./ws',location.href);endpoint.protocol=location.protocol==='https:'?'wss:':'ws:';ws=new WebSocket(endpoint); } catch { return offline(); }
     ws.onopen = () => {
       online = true; menu.connection('online');
-      if(reconnecting&&lastRoom) { send({t:'join',name:$('name').value||t("Guest"),room:lastRoom.room,resume:lastRoom.resume}); }
+      if(reconnecting&&lastRoom) { send({t:'join',name:$('name').value||t("Guest"),room:lastRoom.room,player:lastRoom.player}); }
     };
     ws.binaryType = 'arraybuffer';
     ws.onclose = offline;
@@ -76,24 +84,16 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
   }
   function leave(){
     send({t:'leave'});
-    lastRoom=null;reconnecting=false;joined=false;clearMatch();
+    rememberRoom(null);reconnecting=false;restorePending=false;joined=false;clearMatch();
     menu.connection('online');menu.roomLeft();
     $('entry').hidden=false;$('room').hidden=true;$('play').disabled=false;
   }
   function reconnect(){
-    lastRoom=null;reconnecting=false;clearTimeout(reconnectTimer);
+    rememberRoom(null);reconnecting=false;restorePending=false;clearTimeout(reconnectTimer);
     if(ws){ws.onclose=null;ws.close();}
     joined=false;online=false;clearMatch();voice.reset();menu.roomLeft();
     $('entry').hidden=false;$('room').hidden=true;$('play').disabled=false;
-    function renderRole() {
-    if (!me.role) return;
-    const panel=$('role'); panel.style.display='block'; panel.className='hud '+me.role;
-    panel.innerHTML=me.role==='echo'
-      ? `<b>ECHO</b>${t('Stop the signal. Eliminate the Operatives.')}<br>${esc(t('Partner: {name}',{name:nameOf(me.partner)}))}`
-      : `<b>${t('OPERATIVE')}</b>${t('Repair the transmitters and evacuate.')}<br>${t('Two of you are no longer human.')}`;
-  }
-  window.addEventListener('language-change', () => {renderRole();hintUntil=0;lastHint=-30;shownHints.clear();hudAcc=2;hud(playing());});
-  connect();
+    connect();
   }
 
   // the room's map is the server's call; offline it is ours
@@ -121,14 +121,17 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     if (m.t === 'welcome') {
       me.id = m.id; me.spectator = m.spectator; joined = true;
       setSlot(m.slot);
-      lastRoom={room:m.room,resume:m.resume};reconnecting=false;
+      restorePending=reconnecting;rememberRoom({room:m.room,player:m.id});reconnecting=false;resumeAttempts=0;
       menu.roomJoined(m);
       menu.joined();
     }
     else if(m.t==='left'){joined=false;clearMatch();menu.roomLeft();}
     else if(m.t==='error'){
+      if(m.code==='resume-active'&&lastRoom&&resumeAttempts++<10){
+        setTimeout(()=>{if(!joined&&lastRoom)send({t:'join',room:lastRoom.room,player:lastRoom.player});},300);return;
+      }
       $('room-connection').textContent=translateText(m.message);$('play').disabled=false;
-      if(!joined){lastRoom=null;reconnecting=false;}
+      if(!joined){rememberRoom(null);reconnecting=false;restorePending=false;}
     }
     else if (m.t === 'lobby') {
       names = new Map(m.players.map((p) => [p.id, p]));
@@ -142,6 +145,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
         resetPosition();
       }
       menu.lobby(m);
+      if(restorePending){restorePending=false;if(!['lobby','end'].includes(m.phase))menu.matchStart();}
     } else if (m.t === 'role') {
       me.role = m.role; me.partner = m.partner;
       renderRole();

@@ -2,7 +2,7 @@ import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { Game } from './game.mjs';
 import { setMap } from '../shared/layout.js';
 
-const secret = () => randomBytes(24).toString('base64url');
+const sameGuest=(a,b)=>typeof a==='string'&&typeof b==='string'&&/^[a-f0-9]{64}$/.test(a)&&/^[a-f0-9]{64}$/.test(b)&&timingSafeEqual(Buffer.from(a,'hex'),Buffer.from(b,'hex'));
 export class Rooms {
   constructor(send) {
     this.rooms = new Map(); this.send = send;
@@ -20,7 +20,7 @@ export class Rooms {
       map:r.game.mapId,running:r.game.running,
     }));
   }
-  join(socket,message,user){
+  join(socket,message,user,guestHash){
     let room;
     if(message.create) {
       const code=randomBytes(5).toString('hex').toUpperCase();
@@ -30,21 +30,24 @@ export class Rooms {
     room.game.activate();
     const humans=[...room.game.players.values()].filter(p=>!p.bot);
     let player=null;
-    if(typeof message.resume==='string'&&message.resume.length<90) {
-      player=humans.find(p=>p.resume && p.resume.length===message.resume.length&&timingSafeEqual(Buffer.from(p.resume),Buffer.from(message.resume))&&p.accountId===(user?.id??null));
-      if(player?.connected)player=null;
+    if(message.player!==undefined) {
+      if(!Number.isSafeInteger(message.player))throw Error('Invalid recovery request.');
+      player=humans.find(p=>p.id===message.player);
+      const authorised=player&&(user?player.accountId===user.id:player.accountId===null&&sameGuest(player.guestHash,guestHash));
+      if(!authorised||(!player.connected&&Date.now()-player.disconnectAt>45000))throw Error('Recovery expired or not authorised. Join the room again.');
+      if(player.connected)throw Object.assign(Error('This player is still connected. Close the previous tab.'),{code:'resume-active'});
     }
     if(!player) {
       if(humans.length>=10)throw Error('Sala cheia.');
       if(user&&humans.some(p=>p.accountId===user.id))throw Error('Esta conta já está na sala.');
       player=room.game.addPlayer(user?.username||('Guest '+String(message.name||'Player').slice(0,14)),false,socket);
-      player.resume=secret();player.accountId=user?.id??null;
+      player.guestHash=guestHash;player.accountId=user?.id??null;
     }
     player.conn=socket;player.connected=true;player.disconnectAt=0;
     if(!room.host||!room.game.players.has(room.host))room.host=player.id;
     room.touched=Date.now();
     this.send(player,{t:'welcome',version:'0.5.0',map:room.game.mapId,id:player.id,slot:player.slot,spectator:player.spectator,
-      room:room.code,private:room.private,host:room.host,resume:player.resume});
+      room:room.code,private:room.private,host:room.host});
     room.game.lobby();
     if(room.game.running){
       this.send(player,{t:'role',role:player.role,partner:player.partner});

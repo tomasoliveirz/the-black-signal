@@ -1,4 +1,5 @@
 import http from 'node:http';
+import {randomBytes,createHash} from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -60,6 +61,7 @@ const server=http.createServer(async(req,res)=>{
 });
 const wss=new WebSocketServer({noServer:true,maxPayload:8192,perMessageDeflate:false});
 const connections=new Map();
+wss.on('headers',(headers,req)=>{if(req.guestCookie)headers.push('Set-Cookie: '+req.guestCookie);});
 server.on('upgrade',(req,socket,head)=>{
   const route=new URL(req.url,'http://localhost').pathname;
   if(![BASE+'/',BASE+'/ws'].includes(route)||!originOK(req)||wss.clients.size>=120){
@@ -67,6 +69,10 @@ server.on('upgrade',(req,socket,head)=>{
   }
   const ip=process.env.TRUST_PROXY==='1'?String(req.headers['x-real-ip']||req.socket.remoteAddress):req.socket.remoteAddress;
   if((connections.get(ip)||0)>=12){socket.write('HTTP/1.1 429 Too Many Requests\r\n\r\n');socket.destroy();return;}
+  const savedGuest=String(req.headers.cookie||'').split(';').map(v=>v.trim()).find(v=>v.startsWith('bsignal_guest='))?.slice('bsignal_guest='.length);
+  const guestToken=/^[a-f0-9]{64}$/.test(savedGuest??'')?savedGuest:randomBytes(32).toString('hex');
+  req.guestHash=createHash('sha256').update(guestToken).digest('hex');
+  if(guestToken!==savedGuest)req.guestCookie=`bsignal_guest=${guestToken}; HttpOnly; SameSite=Strict; Path=${BASE||'/'}${process.env.TRUST_PROXY==='1'&&req.headers['x-forwarded-proto']==='https'?'; Secure':''}`;
   wss.handleUpgrade(req,socket,head,ws=>{
     connections.set(ip,(connections.get(ip)||0)+1);
     ws.once('close',()=>{const n=(connections.get(ip)||1)-1;n?connections.set(ip,n):connections.delete(ip);});
@@ -78,7 +84,7 @@ wss.on('connection',(ws,req)=>{
   let membership=null,budget=90,updated=performance.now(),voiceBudget=6,voiceAt=updated,chatAt=-1000,lastAuthAt=0,watchAt=-1000;
   const voicePositions=new Map();
   ws.alive=true;ws.on('pong',()=>{ws.alive=true;});
-  const failure=message=>ws.readyState===1&&ws.send(JSON.stringify({t:'error',message}));
+  const failure=(message,code)=>ws.readyState===1&&ws.send(JSON.stringify({t:'error',message,code}));
   ws.on('message',(raw,binary)=>{
     const now=performance.now();
     if(membership?.player.accountId && now-lastAuthAt>1000) {
@@ -108,7 +114,7 @@ wss.on('connection',(ws,req)=>{
     let m;try{m=JSON.parse(raw);}catch{return;}
     if(!m||typeof m!=='object'||Array.isArray(m))return;
     if(m.t==='join'&&!membership){
-      try{membership=rooms.join(ws,m,auth.user(req));}catch(error){failure(error.message);}
+      try{membership=rooms.join(ws,m,auth.user(req),req.guestHash);}catch(error){failure(error.message,error.code);}
       return;
     }
     if(!membership)return;
