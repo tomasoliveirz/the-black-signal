@@ -1,0 +1,429 @@
+[
+  {
+    "file": "assets/chars/dana.glb",
+    "materials": 15,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 0,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/chars/eli.glb",
+    "materials": 14,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 0,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/chars/maya.glb",
+    "materials": 15,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 0,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/chars/member_a.glb",
+    "materials": 13,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 0,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/chars/porter.glb",
+    "materials": 20,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 0,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/chars/vale.glb",
+    "materials": 15,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 0,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/knocker.glb",
+    "materials": 11,
+    "textures": 9,
+    "images": [
+      "embedded-buffer",
+      "embedded-buffer",
+      "embedded-buffer",
+      "embedded-buffer",
+      "embedded-buffer",
+      "embedded-buffer",
+      "embedded-buffer",
+      "embedded-buffer",
+      "embedded-buffer"
+    ],
+    "uvPrimitives": 291,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/knocker_hd.glb",
+    "materials": 10,
+    "textures": 7,
+    "images": [
+      "embedded-buffer",
+      "embedded-buffer",
+      "embedded-buffer",
+      "embedded-buffer",
+      "embedded-buffer",
+      "embedded-buffer",
+      "embedded-buffer"
+    ],
+    "uvPrimitives": 10,
+    "colorPrimitives": 10,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/maps/mall.glb",
+    "materials": 90,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 0,
+    "colorPrimitives": 0,
+    "ceilingNodes": [
+      {
+        "name": "CEIL_mall",
+        "mesh": 0
+      },
+      {
+        "name": "CEIL_service",
+        "mesh": 1
+      }
+    ],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/copper_wiring_bundle.gltf",
+    "materials": 3,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 3,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_barn_old.gltf",
+    "materials": 7,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 7,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_bollard.gltf",
+    "materials": 2,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 2,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_chainlink_fence_8.gltf",
+    "materials": 2,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 2,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_concrete_wall_8.gltf",
+    "materials": 2,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 2,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_container.gltf",
+    "materials": 3,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 3,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_derelict_car.gltf",
+    "materials": 6,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 6,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_garage_detached.gltf",
+    "materials": 4,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 4,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_house_boarded.gltf",
+    "materials": 7,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 7,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_house_ranch_a.gltf",
+    "materials": 6,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 6,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_house_ranch_b.gltf",
+    "materials": 7,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 7,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_motel_closed.gltf",
+    "materials": 8,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 8,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_motel_sign.gltf",
+    "materials": 3,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 3,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_power_pole.gltf",
+    "materials": 4,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 4,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_steel_stairs.gltf",
+    "materials": 2,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 2,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_storage_office.gltf",
+    "materials": 5,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 5,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_storefront_old.gltf",
+    "materials": 6,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 6,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_street_lamp.gltf",
+    "materials": 3,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 3,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_trailer_abandoned.gltf",
+    "materials": 7,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 7,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_tree_sparse.gltf",
+    "materials": 2,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 2,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_warehouse_salvage.gltf",
+    "materials": 5,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 5,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/env_water_tower.gltf",
+    "materials": 5,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 5,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/portable_generator.gltf",
+    "materials": 4,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 4,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/portable_radio.gltf",
+    "materials": 4,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 4,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/prop_cinder_blocks.gltf",
+    "materials": 1,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 1,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/prop_crate_wood_a.gltf",
+    "materials": 2,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 2,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/prop_jerry_can.gltf",
+    "materials": 3,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 3,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/prop_metal_barrel.gltf",
+    "materials": 4,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 4,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/prop_pallet_wood_a.gltf",
+    "materials": 2,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 2,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/prop_tire_stack_a.gltf",
+    "materials": 2,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 2,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  },
+  {
+    "file": "assets/r2r/steel_toolbox.gltf",
+    "materials": 3,
+    "textures": 0,
+    "images": [],
+    "uvPrimitives": 3,
+    "colorPrimitives": 0,
+    "ceilingNodes": [],
+    "license": null
+  }
+]
