@@ -69,7 +69,8 @@ export const MAPS = {
   },
   foundry: {
     zoneNames: ['Receção', 'Fornos', 'Manutenção'],
-    name: 'Fundição 9', sub: 'Fábrica abandonada', kind: 'factory', seed: 9009, pa: 0, pb: 0, amp: 0, trees: 0, pine: 0, dead: 0, rocks: 0, cabin: false, tower: null, mastH: 9, radius: 92,
+    overhead: [{ x:0, z:-36, w:54.4, d:95.6, gy:8.25, h:.24 }],
+    name: 'Fundição 9', sub: 'Fábrica abandonada', kind: 'factory', seed: 9009, pa: 0, pb: 0, amp: 0, trees: 0, pine: 0, dead: 0, rocks: 0, cabin: false, tower: null, mastH: 3.8, radius: 92,
     structs: () => [
       wall(0, 10.5, 54, 1), wall(0, -82.5, 54, 1), wall(-26.5, -36, 1, 94), wall(26.5, -36, 1, 94),
       // two partitions split the hall into three zones; each has a central gate and a side door
@@ -235,7 +236,7 @@ function build() {
     const z = -17 - zone * 26 + Math.sin(t * .2 + id) * 4;
     return { x: pathX(z) + Math.cos(id) * 3, z };
   };
-  return { trees, rocks, lanterns, colliders, tx, ...resources, spawns, props, pillars, hint, zoneNames: MAP.zoneNames };
+  return { trees, rocks, lanterns, colliders, tx, ...resources, spawns, props, pillars, hint, overhead: MAP.overhead ?? [], zoneNames: MAP.zoneNames };
 }
 
 const resourceTypes = ['cell', 'cell', 'ammo', 'ammo', 'med', 'flare'];
