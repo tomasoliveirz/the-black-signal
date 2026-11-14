@@ -82,12 +82,20 @@ export function buildWorld(parent) {
   // ---------- lantern posts
   const lampPos = [];
   for (const l of LAYOUT.lanterns) {
-    const post = place(box, l.x, l.y + 1.25, l.z, 0.14, 2.5, 0.14), arm = place(box, l.x - 0.3, l.y + 2.45, l.z, 0.7, 0.1, 0.1);
-    put(post, 5); put(arm, 5);
-    solid.add(post, { count: 90, pal: 5, size: [0.1, 0.18] }).add(arm, { count: 20, pal: 5, size: [0.1, 0.16] });
-    const lamp = place(new THREE.IcosahedronGeometry(0.17, 1), l.x - 0.6, l.y + 2.2, l.z);
-    litGeo.push(lamp); lit.add(lamp, { count: 70, pal: 14, size: [0.1, 0.16], flag: FLAG.EMISSIVE });
-    lampPos.push(new THREE.Vector3(l.x - 0.6, l.y + 2.2, l.z));
+    if (MAP.kind === 'factory' || MAP.kind === 'mesh' || MAP.kind === 'city') {
+      put(place(box,l.x,l.y+.04,l.z,.45,.08,.45),12);
+      put(place(box,l.x,l.y+1.2,l.z,.07,2.4,.07),12);
+      put(place(box,l.x,l.y+2.3,l.z,.42,.22,.23),22);
+      litGeo.push(place(box,l.x,l.y+2.3,l.z+.125,.30,.13,.02).toNonIndexed());
+      lampPos.push(new THREE.Vector3(l.x,l.y+2.3,l.z+.15));
+    } else {
+      put(place(box,l.x,l.y+1.25,l.z,.14,2.5,.14),5);
+      put(place(box,l.x-.3,l.y+2.45,l.z,.7,.10,.10),5);
+      for(const y of [2.04,2.36])put(place(box,l.x-.6,l.y+y,l.z,.29,.06,.29),12);
+      for(const x of [-.73,-.47])for(const z of [-.13,.13])put(place(box,l.x+x,l.y+2.2,l.z+z,.025,.28,.025),12);
+      litGeo.push(place(box,l.x-.6,l.y+2.2,l.z,.18,.24,.18).toNonIndexed());
+      lampPos.push(new THREE.Vector3(l.x-.6,l.y+2.2,l.z));
+    }
   }
 
   // ---------- radio mast
@@ -101,7 +109,6 @@ export function buildWorld(parent) {
     put(ring, 12); solid.add(ring, { count: 110, pal: 12, size: [0.12, 0.2] });
   }
   if (MAP.kind !== 'mesh') { const hut = place(box, MAST.x + 3.2, my + 1.1, MAST.z, 2.6, 2.2, 2.6); put(hut, indoor ? 22 : 6); solid.add(hut, { count: 700, pal: indoor ? 22 : 6, size: [0.2, 0.36] }); }
-  const mastTop = new THREE.Vector3(MAST.x, my + MH + 0.3, MAST.z);
 
   // Structural walls retain the shared collision footprint.
   for (const b of BOXES) {
@@ -112,11 +119,12 @@ export function buildWorld(parent) {
 
   // ---------- transmitters (console + antenna; the status lamp is separate)
   const txLamps = LAYOUT.tx.map((t) => {
-    const ant = place(box, t.x + 0.3, t.y + 1.9, t.z, 0.05, 1.5, 0.05);
-    put(ant, 12); solid.add(ant, { count: 30, pal: 12, size: [0.08, 0.12] });
-    const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.11, 10, 8), new THREE.MeshBasicMaterial({ color: 0xff4030, fog: false }));
-    lamp.position.set(t.x + 0.3, t.y + 2.7, t.z); scene.add(lamp);
-    return lamp;
+    put(place(box,t.x+.33,t.y+.43,t.z,.045,.86,.045),12);
+    put(place(box,t.x+.33,t.y+.96,t.z,.26,.32,.08),22);
+    const antenna=place(box,t.x+.25,t.y+1.19,t.z,.025,.65,.025);
+    put(antenna,12);
+    const lamp=new THREE.Mesh(new THREE.SphereGeometry(.025,8,6),new THREE.MeshBasicMaterial({color:0x424a4c}));
+    lamp.position.set(t.x+.33,t.y+.99,t.z+.055);scene.add(lamp);return lamp;
   });
 
   // ---------- terrain
@@ -207,9 +215,6 @@ export function buildWorld(parent) {
     sp.position.copy(pos); sp.scale.setScalar(s); sp.userData.s = s; scene.add(sp); return sp;
   };
   const powerGlows = [...lampPos.map((p) => glow(p, 2.6)), ...(CABIN ? [glow(new THREE.Vector3(cx + 1.4, cy + 1.7, cz - d / 2 - 0.3), 3.2)] : [])];
-  const beacon = glow(mastTop, 5, 0xff5040);
-  const beaconMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(0.3, 1), new THREE.MeshBasicMaterial({ color: 0xff5040, fog: false }));
-  beaconMesh.position.copy(mastTop); scene.add(beaconMesh);
 
   // ---------- items
   const prim = (geo, pal, tone = 0.5) => styledMesh(geo, underMaterial(pal, 1, 1), stdMaterial(pal, { key: 'item' + tone, tone, emissive: new THREE.Color(PALETTE[pal][1]).multiplyScalar(0.3) }), false);
@@ -278,7 +283,7 @@ export function buildWorld(parent) {
     l.geometry.setFromPoints([new THREE.Vector3(...a), new THREE.Vector3(...b)]); l.userData.t = 0.12; l.visible = true;
   };
 
-  const TXCOL = [new THREE.Color(0xff4030), new THREE.Color(0xffb040), new THREE.Color(0x60ff90), new THREE.Color(0x6c7378)];
+  const TXCOL = [new THREE.Color(0x424a4c), new THREE.Color(0xc9984c), new THREE.Color(0x79bf94), new THREE.Color(0x6c7378)];
   function update(dt, t, night, state) {
     environment.update(night);
     // power: path lanterns and windows die in a blackout
@@ -286,12 +291,11 @@ export function buildWorld(parent) {
     litMat.color.setRGB(1 * (0.12 + 0.88 * power), 0.82 * (0.1 + 0.9 * power), 0.44 * (0.1 + 0.9 * power));
     litDabs.visible = !isNormal() && power > 0.5;
     for (const g of powerGlows) g.scale.setScalar(g.userData.s * power * (0.6 + 0.05 * Math.sin(t * 9)));
-    beacon.material.opacity = beaconMesh.material.opacity = 0.5 + 0.5 * Math.sin(t * 2.2);
     for (const l of tracers) if (l.visible) { l.userData.t -= dt; l.material.opacity = Math.max(0, l.userData.t / 0.12); if (l.userData.t <= 0) l.visible = false; }
     txLamps.forEach((lamp, i) => {
       const status = state?.tx[i], locked = state && LAYOUT.tx[i].zone > (state.unlocked ?? 0);
       lamp.material.color.copy(TXCOL[locked ? 3 : status?.on ? 2 : status?.fuse ? 1 : 0]);
-      lamp.scale.setScalar(locked ? .75 : status?.on ? 1.3 : 1 + .15 * Math.sin(t * 6 + i));
+      lamp.scale.setScalar(1);
     });
     for (let i = 0; i < items.length; i++) {
       const unlocked = !state || LAYOUT.items[i].zone <= (state.unlocked ?? 0);

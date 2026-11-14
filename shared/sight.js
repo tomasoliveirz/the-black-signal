@@ -29,7 +29,7 @@ export function rayCircle(a, d, x, z, radius) {
 export function obstacle(a, b, includeProps = true) {
   const d = { x: b.x - a.x, y: b.y - a.y, z: b.z - a.z };
   let best = 1;
-  for (const box of BOXES) {
+  for (const box of LAYOUT.overhead?.length ? [...BOXES, ...LAYOUT.overhead] : BOXES) {
     const t = entry(a, d, [
       ['x', box.x - box.w / 2, box.x + box.w / 2], ['z', box.z - box.d / 2, box.z + box.d / 2],
       ['y', box.gy - .1, box.gy + box.h + .06],

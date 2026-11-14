@@ -94,11 +94,15 @@ export function buildEnvironment(scene) {
     const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, width * .26), mat);
     mesh.position.set(x,y,z); mesh.rotation.y=yaw; scene.add(mesh); owned.push(mat);
   }
-  function light(x,y,z, emergency = false) {
-    const color = emergency ? 0xe67b5e : 0xffd59c;
-    const mesh = new THREE.Mesh(new THREE.BoxGeometry(.65,.075,.20), new THREE.MeshBasicMaterial({color}));
-    mesh.position.set(x,y,z); scene.add(mesh); owned.push(mesh.material);
-    practicals.push({ p: mesh.position, c:color, mesh, emergency });
+  function light(x,y,z, kind = 'work') {
+    const profile = kind === 'egress' ? {color:0xa2d2ab,day:.45,night:.8,range:4,power:4}
+      : kind === 'street' ? {color:0xffd7a0,day:.15,night:1,range:8,power:12}
+      : {color:0xffdfb0,day:1,night:.04,range:9,power:38};
+    block('steel',x,y+.06,z-.035,.85,.18,.16);
+    block('steel',x,y+.16,z-.09,.10,.2,.12);
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(.61,.055,.13), new THREE.MeshBasicMaterial({color:profile.color}));
+    mesh.position.set(x,y,z+.025); scene.add(mesh); owned.push(mesh.material);
+    practicals.push({p:mesh.position,c:profile.color,mesh,kind,...profile});
   }
   function lane(x,z,w,d,family='marking') {
     const y = Math.max(height(x-w*.45,z-d*.45),height(x+w*.45,z+d*.45),height(x,z));
@@ -106,6 +110,12 @@ export function buildEnvironment(scene) {
   }
 
   if (MAP.kind === 'factory') {
+    for (const roof of LAYOUT.overhead) block('steel',roof.x,roof.gy+roof.h/2,roof.z,roof.w,roof.h,roof.d);
+    for (const x of [-26.5,26.5]) {
+      block('glass',x,7.62,-36,.18,1.24,94);
+      for(let z=-82;z<12;z+=7)block('steel',x,7.62,z,.32,1.24,.22);
+    }
+    for(const z of [10.5,-82.5])block('glass',0,7.62,z,53,1.24,.18);
     for (const wall of BOXES.filter(b=>b.kind==='wall')) {
       const cross = wall.w > wall.d, narrow = cross ? wall.d : wall.w;
       const floor = cross ? wall.w : wall.d;
@@ -123,6 +133,7 @@ export function buildEnvironment(scene) {
       block('steel',p.x+.19,3.5,p.z,.12,7,.63);
       block('rust',p.x,.66,p.z,.47,.24,.64);
       block('steel',p.x,7.05,p.z,1,.22,.96);
+      block('steel',p.x,7.62,p.z,.44,1.24,.45);
     }
     for (const z of [-4,-18,-34,-48,-64,-78]) {
       for (const x of [-19.75,-6.5,6.5,19.75]) {
@@ -180,7 +191,7 @@ export function buildEnvironment(scene) {
     }
     for (const [label,z] of [['RECEPTION',-25.64],['FURNACES',-55.64],['MAINTENANCE',-81.94]]) {
       sign(label,0,5.6,z,4.0,0,'#414638');
-      light(-2.8,3.8,z+.17,true); light(2.8,3.8,z+.17,true);
+      light(-2.8,3.8,z+.17,'egress'); light(2.8,3.8,z+.17,'egress');
     }
   }
 
@@ -221,7 +232,7 @@ export function buildEnvironment(scene) {
       }
       f(trim,.41,2.68,0,.86,.18,d*.84);
       sign(name,front+s*.31,gy+3.15,z,Math.min(5.1,d*.69),s*Math.PI/2,trim==='rust'?'#77483d':'#2c4446');
-      light(front+s*.56,gy+2.53,z+door,true);
+      light(front+s*.56,gy+2.53,z+door,'street');
     }
     const station = STRUCTS.find(b => b.key === 'env_house_ranch_b');
     const sf = station.x - station.w / 2;
@@ -255,7 +266,7 @@ export function buildEnvironment(scene) {
       block('steel',-6.2,3.68,z,3.9,.63,.19);
       sign(label,-6.2,3.68,z+.11,2.4);
       sign(label,-6.2,3.68,z-.11,2.4,Math.PI);
-      light(-6.2,3.35,z,true);
+      light(-6.2,3.35,z,'egress');
     }
     for(let z=-24;z<25;z+=6){
       block('steel',-6.15,4.7,z,3.36,.13,.38);
@@ -323,7 +334,6 @@ export function buildEnvironment(scene) {
       block('wood',x,y+.85,z,.15,1.7,.16);
       block('wood',x,y+1.31,z,1.62,.37,.16);
       sign(label,x,y+1.31,z+.086,1.45,0,'#4b4430');
-      light(x,y+1.62,z,true);
     }
   }
 
@@ -338,9 +348,10 @@ export function buildEnvironment(scene) {
   }
   function update(night) {
     for (const source of practicals) {
-      const level = source.emergency ? .36 + .64*night : 1 - .93*night;
+      const level = source.day + (source.night-source.day)*night;
       source.mesh.material.color.setHex(source.c).multiplyScalar(level);
-      source.r = source.emergency ? 9*night : 8*(1-night);
+      source.r = source.range * level;
+      source.intensity = source.power * level;
     }
   }
   function dispose() {

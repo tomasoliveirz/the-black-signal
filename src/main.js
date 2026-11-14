@@ -8,8 +8,9 @@ import { createAmbience } from './ambience.js';
 import { createAccount } from './account.js';
 import { createRooms } from './rooms.js';
 import { createLobbyAudio } from './lobby-audio.js';
-import { height, setMap, MAP, MAP_ID, MAPS, BOXES } from '../shared/layout.js';
+import { height, setMap, MAP, MAP_ID, MAPS } from '../shared/layout.js';
 import '../shared/maps/index.js';
+import { obstacle } from '../shared/sight.js';
 
 THREE.ColorManagement.enabled = false; // palette colours are authored directly in display space
 
@@ -198,11 +199,8 @@ function frame() {
   camTarget.set(g.focus.x, g.focus.y + 1.45 * big, g.focus.z);
   const cp = Math.cos(pitch), sx = Math.cos(yaw) * 0.55, sz = -Math.sin(yaw) * 0.55;
   camPos.set(Math.sin(yaw) * cp, Math.sin(pitch), Math.cos(yaw) * cp).multiplyScalar(distance * big);
-  let reach = 1; // pull the camera in front of any wall between it and the player
-  scan: for (let k = 2; k <= 12; k++) {
-    const f = k / 12, x = camTarget.x + sx * f + camPos.x * f, y = camTarget.y + camPos.y * f, z = camTarget.z + sz * f + camPos.z * f;
-    for (const b of BOXES) if (Math.abs(x - b.x) < b.w / 2 + 0.25 && Math.abs(z - b.z) < b.d / 2 + 0.25 && y < b.gy + b.h + 0.3) { reach = Math.max(0.12, (k - 1.2) / 12); break scan; }
-  }
+  const cameraRay = obstacle(camTarget, {x:camTarget.x+sx+camPos.x,y:camTarget.y+camPos.y,z:camTarget.z+sz+camPos.z}, false);
+  const reach = cameraRay < 1 ? Math.max(.12, cameraRay-.04) : 1;
   camReach += (reach - camReach) * Math.min(1, dt * (reach < camReach ? 30 : 5));
   camPos.multiplyScalar(camReach).add(camTarget);
   camPos.x += sx * camReach; camPos.z += sz * camReach;
@@ -217,7 +215,7 @@ function frame() {
   const flick = 1 + Math.sin(elapsed * 11) * 0.03 + Math.sin(elapsed * 23.7) * 0.02;
   for (let i = 0; i < NLIGHTS; i++) {
     const l = lightList[i], pl = points[i];
-    if (l) { u.uLights.value[i].set(l.p.x, l.p.y, l.p.z, l.r * flick); pl.position.copy(l.p); pl.color.set(l.c); pl.distance = l.r * 1.5; pl.intensity = normal ? (0.8 + 4.2 * night) * flick : 0; }
+    if (l) { u.uLights.value[i].set(l.p.x, l.p.y, l.p.z, l.r * flick); pl.position.copy(l.p); pl.color.set(l.c); pl.distance = l.r * 1.5; pl.intensity = normal ? (l.intensity ?? (0.8 + 4.2 * night)) * flick : 0; }
     else { u.uLights.value[i].set(0, -999, 0, 1); pl.intensity = 0; }
   }
   u.uBlob.value.copy(g.focus);
@@ -234,9 +232,9 @@ function frame() {
   world.update(dt, elapsed, night, game.state && game.state.phase !== 'lobby' ? game.state : null);
   if (normal) {
     sun.color.copy(sunDay).lerp(sunNight, night);
-    sun.intensity = (sheltered ? 1.62 : 1.98) - .92 * night;
+    sun.intensity = sheltered ? .3-.22*night : 1.98-.92*night;
     hemi.color.copy(hemiDay).lerp(hemiNight, night);
-    hemi.intensity = .98 - .48 * night;
+    hemi.intensity = sheltered ? .7-.46*night : .98-.48*night;
     sun.target.position.set(Math.round(g.focus.x), g.focus.y, Math.round(g.focus.z));
     sun.position.copy(sun.target.position).addScaledVector(u.uSun.value, 80);
   }
