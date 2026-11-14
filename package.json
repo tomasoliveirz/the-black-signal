@@ -7,7 +7,10 @@
     "start": "node server/server.mjs",
     "test": "node server/selftest.mjs",
     "test:network": "node --test server/network.test.mjs",
-    "test:models": "node tools/model-pipeline.test.mjs"
+    "test:models": "node tools/model-pipeline.test.mjs",
+    "check:assets": "node tools/validate-assets.mjs",
+    "test:assets": "node --test tools/asset-manifest.test.mjs",
+    "test:worlds": "node tools/world-contract.test.mjs"
   },
   "dependencies": {
     "ws": "^8.18.0"

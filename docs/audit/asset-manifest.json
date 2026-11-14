@@ -1,0 +1,922 @@
+{
+  "schema": 1,
+  "rightsReview": "ASSET_LICENSES.md (unknown rights remain uncleared)",
+  "entries": [
+    {
+      "file": "assets/audio/CREDITS.md",
+      "bytes": 2253,
+      "sha256": "4d3a96398c1e5d909fe23af24bd9c313726c784494c5f825ab2616e98f335398"
+    },
+    {
+      "file": "assets/audio/blackout.ogg",
+      "bytes": 19729,
+      "sha256": "488f60fcb6c03a7645d56548a0d1186d222fcf97c58fee99c557cac83ce8afa1"
+    },
+    {
+      "file": "assets/audio/dread.ogg",
+      "bytes": 205171,
+      "sha256": "604f8b8deb83298f3948e639a1fcf9656eb960368a35f70e285c5b54369e7512"
+    },
+    {
+      "file": "assets/audio/empty.ogg",
+      "bytes": 6487,
+      "sha256": "5248dc62c67fc5ce716e06d567db73ecc2cee5551367b4a8993cb526126cba5b"
+    },
+    {
+      "file": "assets/audio/extract.ogg",
+      "bytes": 9646,
+      "sha256": "01e86436167bff62c05fbbfa17bf44f764496bb55ebf2f9da213b102b06c29a2"
+    },
+    {
+      "file": "assets/audio/flare.ogg",
+      "bytes": 8291,
+      "sha256": "f8c5c3f642a60986db51c1fba838cdbd2ce7d1eb388f507a5dc59b2af80a78fa"
+    },
+    {
+      "file": "assets/audio/forest.ogg",
+      "bytes": 268564,
+      "sha256": "ddf1c98b15288f1c29099d4ad73c380dffacc9531cf061e7b56ee5973e66c7dc"
+    },
+    {
+      "file": "assets/audio/fuse.ogg",
+      "bytes": 6229,
+      "sha256": "38fdcdc680abe3cef50a2be46bb0d46462064f5482ef1909292b5c93730daf88"
+    },
+    {
+      "file": "assets/audio/generator.ogg",
+      "bytes": 44985,
+      "sha256": "128925a6e2e069d1226a366fa2023cc5f27a94e1245910ed8d41af56a07b6351"
+    },
+    {
+      "file": "assets/audio/growl-1.ogg",
+      "bytes": 18475,
+      "sha256": "65f88a292ac27ee5e2551e5d8b31c7dfe09703966109eb362b5314cf415ffd78"
+    },
+    {
+      "file": "assets/audio/growl-2.ogg",
+      "bytes": 32786,
+      "sha256": "2f3e1b82c06c84c817812cacb2f266e48af0cc550badc06605a3f5aa6cc8dee1"
+    },
+    {
+      "file": "assets/audio/growl-3.ogg",
+      "bytes": 13307,
+      "sha256": "3c6526a307c2798c72b6e7544f170b0a73a644860847c3f7b677cca8b746d0ea"
+    },
+    {
+      "file": "assets/audio/hard-1.ogg",
+      "bytes": 6841,
+      "sha256": "cedb2f0bb70b5aef386d7f909c44eb99b8395db719b2e72eea7d4665c97e4d94"
+    },
+    {
+      "file": "assets/audio/hard-2.ogg",
+      "bytes": 6909,
+      "sha256": "6e585b22e4f4a164450b5e8cc17ce48f64af1f4dc409620ff1b462f1770039ca"
+    },
+    {
+      "file": "assets/audio/hard-3.ogg",
+      "bytes": 6659,
+      "sha256": "ff41b083c3872fde3ac6104a55c68719bf629d6302c1553b2186a51cb172b1e1"
+    },
+    {
+      "file": "assets/audio/heal.ogg",
+      "bytes": 7644,
+      "sha256": "4b455cbb27760210b085cf0b45a62aed432e871635ddc30f9e1421ada5286697"
+    },
+    {
+      "file": "assets/audio/impact.ogg",
+      "bytes": 9246,
+      "sha256": "ba287074b48bf4e9043ddea1abaeded279e6045b8a0373be7aa1cf3e38fd4371"
+    },
+    {
+      "file": "assets/audio/lobby-autumn-alt.ogg",
+      "bytes": 2606195,
+      "sha256": "4a348c9eab56f59e922174de2a3662a53acd03a6904050f3c1ed50bce9a8dd89"
+    },
+    {
+      "file": "assets/audio/lobby-autumn.ogg",
+      "bytes": 2585498,
+      "sha256": "d973d1ecef704a0f3499add9c3c9bfd7c676fd9f9ad925d1cad3e14cf8b241f8"
+    },
+    {
+      "file": "assets/audio/lobby-factory.ogg",
+      "bytes": 3279957,
+      "sha256": "31ba61a80ed0cd32857ed5251c8bc443e3b92219dbcccc4c5be6539ef7139021"
+    },
+    {
+      "file": "assets/audio/metal-1.ogg",
+      "bytes": 5048,
+      "sha256": "40aa6ea670351b2d529444c8f2dbbc8ed47a31db6e2d9fd780c558776a102000"
+    },
+    {
+      "file": "assets/audio/metal-2.ogg",
+      "bytes": 5407,
+      "sha256": "09cb8dcd106580a37708843cf78251b282c021901e00a363331f6c61d1338c98"
+    },
+    {
+      "file": "assets/audio/metal-3.ogg",
+      "bytes": 5436,
+      "sha256": "495af7d0dd43e8101ed6dbb26303183af57702a2d78463f91521c01d00f563be"
+    },
+    {
+      "file": "assets/audio/mire.ogg",
+      "bytes": 216413,
+      "sha256": "badd5255f44abedd7648f682ae800a59380747b8bfb6db60432f9ddaacffaaf5"
+    },
+    {
+      "file": "assets/audio/phase.ogg",
+      "bytes": 19528,
+      "sha256": "268b43d81db06b8a10667b70d71eaaba8b71216a4c77273d614dc17fb32eacaa"
+    },
+    {
+      "file": "assets/audio/pickup.ogg",
+      "bytes": 4865,
+      "sha256": "04ca1e4632580c111f37fcbf5efa66505b3c8ff3dc2101d9001a17d0c91fd055"
+    },
+    {
+      "file": "assets/audio/revive.ogg",
+      "bytes": 5703,
+      "sha256": "0bcc3637c6ace159a23cf1ac951519d7d0360a428c8a00b40e707bef9c793a7d"
+    },
+    {
+      "file": "assets/audio/shot.ogg",
+      "bytes": 12995,
+      "sha256": "56ffa2d175d73eb8bc23009dc5b448ba9c85fea0cf4873576ffd9810bfdb3dab"
+    },
+    {
+      "file": "assets/audio/snow-1.ogg",
+      "bytes": 7893,
+      "sha256": "44611a3fec51577743c59f199464a39ad7ad8005ba46454ee3ff09317a778831"
+    },
+    {
+      "file": "assets/audio/snow-2.ogg",
+      "bytes": 9735,
+      "sha256": "041d4f478dff4b2d96330cda1ce38f56784d2ae21b9c5884578a37cac570af44"
+    },
+    {
+      "file": "assets/audio/snow-3.ogg",
+      "bytes": 9281,
+      "sha256": "641ba92071f8e32b67e212606a156d8e44d16bf50a0d07b0f2d0b2a1a5f6a483"
+    },
+    {
+      "file": "assets/audio/soil-1.ogg",
+      "bytes": 8133,
+      "sha256": "0d025c6a56e995ef213a8d692460101dcfca90e69709410840e3538d7fd4e8a8"
+    },
+    {
+      "file": "assets/audio/soil-2.ogg",
+      "bytes": 6925,
+      "sha256": "eafd8a011e5b634282fa6f8b8f9eda9baa8da05883d0d280d14a698f0a100cc2"
+    },
+    {
+      "file": "assets/audio/soil-3.ogg",
+      "bytes": 6318,
+      "sha256": "37ca4558eb4e19793f2ef694936e2fb8d75965bd4ebaa552bb82ded6d0856e19"
+    },
+    {
+      "file": "assets/audio/wind.ogg",
+      "bytes": 216496,
+      "sha256": "a5122b455250e36a8f4d4c3d3ff3f4d772889a25c763371068a794e001415505"
+    },
+    {
+      "file": "assets/chars/dana.glb",
+      "bytes": 242128,
+      "sha256": "13df289cb247ee6d42de8e5e6887cea8963ac9d6e74d788c9b0bc1c4dd3b3f0d",
+      "model": {
+        "primitives": 38,
+        "texturedPrimitives": 0,
+        "materials": 15,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/chars/eli.glb",
+      "bytes": 352404,
+      "sha256": "8c7c2d201209a2cbf321414585bf05fade56aa49f4110277f4d370d19bb015d2",
+      "model": {
+        "primitives": 48,
+        "texturedPrimitives": 0,
+        "materials": 14,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/chars/maya.glb",
+      "bytes": 238092,
+      "sha256": "81c12a257c681ff5b428a90d73edcc473693e289dfb970b691369f31da15383d",
+      "model": {
+        "primitives": 38,
+        "texturedPrimitives": 0,
+        "materials": 15,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/chars/member_a.glb",
+      "bytes": 234964,
+      "sha256": "8e25e9ef48bce0339559d168fea84d3097dabdd26f4ecb0170b11847fa051bda",
+      "model": {
+        "primitives": 38,
+        "texturedPrimitives": 0,
+        "materials": 13,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/chars/porter.glb",
+      "bytes": 294012,
+      "sha256": "fd4e5cb586765f87a904243ed30ff5f08308dff204fe1856c581ccaaef00c943",
+      "model": {
+        "primitives": 48,
+        "texturedPrimitives": 0,
+        "materials": 20,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/chars/vale.glb",
+      "bytes": 267844,
+      "sha256": "561e975dc526078fe09be3f0dcecfe3a58f15c4297496f3f52c875befdc7fe4f",
+      "model": {
+        "primitives": 42,
+        "texturedPrimitives": 0,
+        "materials": 15,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/knocker.glb",
+      "bytes": 9953320,
+      "sha256": "66e8c5f4310c91019f3c1f1e0a26a396d7787f19113b6a0c1e62b9f7701f3589",
+      "model": {
+        "primitives": 291,
+        "texturedPrimitives": 118,
+        "materials": 11,
+        "textures": 9,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/knocker_hd.glb",
+      "bytes": 9014120,
+      "sha256": "a082ca122328d7a9c5966874a51c3a4abf6ff0c68f50d71d1e01b8b18546de56",
+      "model": {
+        "primitives": 10,
+        "texturedPrimitives": 2,
+        "materials": 10,
+        "textures": 7,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/maps/mall.glb",
+      "bytes": 3182960,
+      "sha256": "2c6b6b7cf4fc5d3b9e6c3e8c01be87ba8f81e2e81a9a616cf2fe6e3657a2604c",
+      "model": {
+        "primitives": 103,
+        "texturedPrimitives": 0,
+        "materials": 90,
+        "textures": 0,
+        "ceilingNodes": [
+          "CEIL_mall",
+          "CEIL_service"
+        ],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/qa/README.md",
+      "bytes": 318,
+      "sha256": "d6779676e9d284a4bff901885a43eef95eb61d3bc59304718067e4e082087988"
+    },
+    {
+      "file": "assets/qa/checker-alt.png",
+      "bytes": 85,
+      "sha256": "75d1b5bcb47727c358a51ca6dff983acc9f178ced9268634bda21235284e9f9e"
+    },
+    {
+      "file": "assets/qa/checker.bin",
+      "bytes": 360,
+      "sha256": "a91cc284950c351f27b868d37933f2c8ea9e8d1b6b55968c25e4f4d01c7ad161"
+    },
+    {
+      "file": "assets/qa/checker.gltf",
+      "bytes": 2825,
+      "sha256": "ee07f62ec1fdc80a6c7af3720ad615cfa0945cb05c8833863dc4501534f75c52",
+      "model": {
+        "primitives": 2,
+        "texturedPrimitives": 2,
+        "materials": 2,
+        "textures": 2,
+        "ceilingNodes": [],
+        "copyright": "CC0-1.0; generated checker/geometry by project owner tooling"
+      }
+    },
+    {
+      "file": "assets/qa/checker.png",
+      "bytes": 83,
+      "sha256": "6f1b5d039c171acace6b3bfc670f4519e31a0e2d7394aced6d787d0eb3da0136"
+    },
+    {
+      "file": "assets/r2r/copper_wiring_bundle.bin",
+      "bytes": 57624,
+      "sha256": "fdc9c1d9ac88729990896ca06233c5cbf08737d65624b685f000312e076e2569"
+    },
+    {
+      "file": "assets/r2r/copper_wiring_bundle.gltf",
+      "bytes": 4550,
+      "sha256": "f0fcd594bcf3dbdb53a103919f73fbb3aad108e7c0ed4eede8dfb3a30cfde8ff",
+      "model": {
+        "primitives": 3,
+        "texturedPrimitives": 0,
+        "materials": 3,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_barn_old.bin",
+      "bytes": 248680,
+      "sha256": "f318e099cf7527c44c52a12509d8c395bc5aa7d076be28f0e3fb3797b793568d"
+    },
+    {
+      "file": "assets/r2r/env_barn_old.gltf",
+      "bytes": 9837,
+      "sha256": "80e883bf71b84f989653c59b9e09008029fc197533bbcc6024d8edbe15691295",
+      "model": {
+        "primitives": 7,
+        "texturedPrimitives": 0,
+        "materials": 7,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_bollard.bin",
+      "bytes": 46952,
+      "sha256": "a24cec8edfbc4b6c23f0a8598676ef93d69fcd6b17f093da4434a25bfd62b4df"
+    },
+    {
+      "file": "assets/r2r/env_bollard.gltf",
+      "bytes": 3102,
+      "sha256": "8be8fd2b1147e48be4a4d4e79a6d8a6381a5d066b0c665daf91971165e693604",
+      "model": {
+        "primitives": 2,
+        "texturedPrimitives": 0,
+        "materials": 2,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_chainlink_fence_8.bin",
+      "bytes": 20544,
+      "sha256": "c30b7ed48f90e7140ee43b5cacee810c96dd789154b29b6195fdf7b49c85023a"
+    },
+    {
+      "file": "assets/r2r/env_chainlink_fence_8.gltf",
+      "bytes": 3137,
+      "sha256": "12cb06c7ecdb494ce3ef4e3e730edcee8dedd65652bc154167ef905f4e67b1ca",
+      "model": {
+        "primitives": 2,
+        "texturedPrimitives": 0,
+        "materials": 2,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_concrete_wall_8.bin",
+      "bytes": 27288,
+      "sha256": "6167990e912620d3f1415299a39e62320cfe71faa1241fb460e90bbebeed8c4f"
+    },
+    {
+      "file": "assets/r2r/env_concrete_wall_8.gltf",
+      "bytes": 3046,
+      "sha256": "3e5f72a7556bd83396478614c508466e2a57c12868f926e70bd5ba0de577f239",
+      "model": {
+        "primitives": 2,
+        "texturedPrimitives": 0,
+        "materials": 2,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_container.bin",
+      "bytes": 68328,
+      "sha256": "fec5bb635e3ddb2a6e340e522b959f004a0e814b86ac894dfa74ecc5093c4775"
+    },
+    {
+      "file": "assets/r2r/env_container.gltf",
+      "bytes": 4434,
+      "sha256": "283c46fe89c468f9b00147fd43c439eb92388ac39174bc88c73d9f0f2a344f83",
+      "model": {
+        "primitives": 3,
+        "texturedPrimitives": 0,
+        "materials": 3,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_derelict_car.bin",
+      "bytes": 82488,
+      "sha256": "4e7fcd558d4c063621abc3abd4f13bbc1c9671f77ad283ad4aa8fb293c0f8e4a"
+    },
+    {
+      "file": "assets/r2r/env_derelict_car.gltf",
+      "bytes": 8201,
+      "sha256": "42c9c5cdfb2f573808e16b32216eed98d1a6f2343ed90db1e5291fa229ef3a65",
+      "model": {
+        "primitives": 6,
+        "texturedPrimitives": 0,
+        "materials": 6,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_garage_detached.bin",
+      "bytes": 36960,
+      "sha256": "70bfdbc73f2f7028e2b59f763dfc1ce338247f4e422078ab402b637593f561ca"
+    },
+    {
+      "file": "assets/r2r/env_garage_detached.gltf",
+      "bytes": 5701,
+      "sha256": "783a296db0e93fe3a9d654a606399d3b4f2b3aa9bcb3a6b1f06d7d86bf1b15b5",
+      "model": {
+        "primitives": 4,
+        "texturedPrimitives": 0,
+        "materials": 4,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_house_boarded.bin",
+      "bytes": 237936,
+      "sha256": "de95804f9465fef6fc5da9db8f5da42f3b03d1462ba1adbd3904f722b256824c"
+    },
+    {
+      "file": "assets/r2r/env_house_boarded.gltf",
+      "bytes": 9929,
+      "sha256": "aabc4ced12eaecab46fe70d69a129093e7e1f7a01808ad74e7952c965a7432ec",
+      "model": {
+        "primitives": 7,
+        "texturedPrimitives": 0,
+        "materials": 7,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_house_ranch_a.bin",
+      "bytes": 161160,
+      "sha256": "a7891bb081a117dcc0589a037100429c54c2b6b2964baf0ae62d220b4be2db96"
+    },
+    {
+      "file": "assets/r2r/env_house_ranch_a.gltf",
+      "bytes": 8531,
+      "sha256": "0d4ef98cbafa244b101fcbf8376f8c34a445f2c0f2eb558242ff423b9117ebd2",
+      "model": {
+        "primitives": 6,
+        "texturedPrimitives": 0,
+        "materials": 6,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_house_ranch_b.bin",
+      "bytes": 171864,
+      "sha256": "502399e8e87711300447f247b2d64b05d339ee4dea1740ddf265f56775be21c4"
+    },
+    {
+      "file": "assets/r2r/env_house_ranch_b.gltf",
+      "bytes": 9886,
+      "sha256": "0727814050975a50f4283f011f638b41c56d20c7882aad5f7f5fa61cef89ed9f",
+      "model": {
+        "primitives": 7,
+        "texturedPrimitives": 0,
+        "materials": 7,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_motel_closed.bin",
+      "bytes": 234336,
+      "sha256": "8dee84fd2a14595f0755c3e4575e64285798e914b540dcd634f44d56f5ad4432"
+    },
+    {
+      "file": "assets/r2r/env_motel_closed.gltf",
+      "bytes": 11131,
+      "sha256": "2fdbe7371910ead8141687d4e4a65225487d95097e970deffa2aef13ab808837",
+      "model": {
+        "primitives": 8,
+        "texturedPrimitives": 0,
+        "materials": 8,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_motel_sign.bin",
+      "bytes": 68064,
+      "sha256": "be0b494611a7d42fa9b5c97d5d700be4f01f64809cc51ca2d74da18b28f9d6f3"
+    },
+    {
+      "file": "assets/r2r/env_motel_sign.gltf",
+      "bytes": 4405,
+      "sha256": "157954772fe4b8131753e942d1b78bfdc9fc9d7cec372038e00fc4f4937ad599",
+      "model": {
+        "primitives": 3,
+        "texturedPrimitives": 0,
+        "materials": 3,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_power_pole.bin",
+      "bytes": 155376,
+      "sha256": "d728804462055c3e88c1f676af2d21e548f6c62f9407bc438e7c9fdb15c2edba"
+    },
+    {
+      "file": "assets/r2r/env_power_pole.gltf",
+      "bytes": 5926,
+      "sha256": "9a59e773c42489dc5fb58e3753cf17c612b12b9cab5d3c9a9e61f7b57e4fb34d",
+      "model": {
+        "primitives": 4,
+        "texturedPrimitives": 0,
+        "materials": 4,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_steel_stairs.bin",
+      "bytes": 59696,
+      "sha256": "42ef965637b694743ee2d6ca35a485320cd345da545d0693c7b677b516251535"
+    },
+    {
+      "file": "assets/r2r/env_steel_stairs.gltf",
+      "bytes": 3100,
+      "sha256": "98fbdd28751f5503c529a55c78c9a2bb875d94fca078cf16bbfdc49cfe7d7d6f",
+      "model": {
+        "primitives": 2,
+        "texturedPrimitives": 0,
+        "materials": 2,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_storage_office.bin",
+      "bytes": 63256,
+      "sha256": "2910bc4985cec536b3c281976215a9ebc0996d176b60f65d84e1e69f523cf2c0"
+    },
+    {
+      "file": "assets/r2r/env_storage_office.gltf",
+      "bytes": 7032,
+      "sha256": "224255581f8ecbb99c20d2cd84655d08c2d781e42936cef33f2c823ce402c802",
+      "model": {
+        "primitives": 5,
+        "texturedPrimitives": 0,
+        "materials": 5,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_storefront_old.bin",
+      "bytes": 118592,
+      "sha256": "03b542341504599790bf6c0f1fffd0b632104390a4a400c656025edde77fbc1f"
+    },
+    {
+      "file": "assets/r2r/env_storefront_old.gltf",
+      "bytes": 8429,
+      "sha256": "cc99c80b5f32ec034eecd2d853ec99c34c51d10d8f75692c6623f6f5b3624a39",
+      "model": {
+        "primitives": 6,
+        "texturedPrimitives": 0,
+        "materials": 6,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_street_lamp.bin",
+      "bytes": 32256,
+      "sha256": "4ddc7de028154775b32e2c98be2a2f838a3a97dfd5c7d7892a7e3d817340ca9a"
+    },
+    {
+      "file": "assets/r2r/env_street_lamp.gltf",
+      "bytes": 4473,
+      "sha256": "c185487099a3368e9a52ec2b38c967f2c2873bee0519874d661176ed9d34ec05",
+      "model": {
+        "primitives": 3,
+        "texturedPrimitives": 0,
+        "materials": 3,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_trailer_abandoned.bin",
+      "bytes": 124592,
+      "sha256": "d8114760a8eb078a6bbff85d313fb1fd703d0529d1dea06a1af95b6ac4c5b809"
+    },
+    {
+      "file": "assets/r2r/env_trailer_abandoned.gltf",
+      "bytes": 9845,
+      "sha256": "2ab7712e0c17c98cc1d7e339fda94002369a78d5b78b4991c80c2169b789738a",
+      "model": {
+        "primitives": 7,
+        "texturedPrimitives": 0,
+        "materials": 7,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_tree_sparse.bin",
+      "bytes": 14400,
+      "sha256": "df9b921e020c264da2b2001467af34384ba0e280a6ddb3c60086318ea54fb3e0"
+    },
+    {
+      "file": "assets/r2r/env_tree_sparse.gltf",
+      "bytes": 3121,
+      "sha256": "78fa0998cbd56e498bc6e0db1c5e23f4e87d29826dd271bdc07eeca4f5260ea2",
+      "model": {
+        "primitives": 2,
+        "texturedPrimitives": 0,
+        "materials": 2,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_warehouse_salvage.bin",
+      "bytes": 93864,
+      "sha256": "9879e2b8681cd7a4ea4a79bb71a8f18d8a3c3e0f399ba78e0d66053c9295a4e6"
+    },
+    {
+      "file": "assets/r2r/env_warehouse_salvage.gltf",
+      "bytes": 7206,
+      "sha256": "212ef25209b6a3660320d48d1718bd3689e070e9da5b63184e58ca2516f3cc2a",
+      "model": {
+        "primitives": 5,
+        "texturedPrimitives": 0,
+        "materials": 5,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/env_water_tower.bin",
+      "bytes": 61032,
+      "sha256": "b70857b35495a513d8c6636a02d22900af9b15b29522179385ab893a41a05b3c"
+    },
+    {
+      "file": "assets/r2r/env_water_tower.gltf",
+      "bytes": 7265,
+      "sha256": "14702eee3bb09eb7daf425786e41197725900331ccd1a9a151868a1d3a8581cc",
+      "model": {
+        "primitives": 5,
+        "texturedPrimitives": 0,
+        "materials": 5,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/portable_generator.bin",
+      "bytes": 69120,
+      "sha256": "38d906ce44c2b2c8759adaf15b7e12820c55fced242e7aecf201ab2d4b00c4af"
+    },
+    {
+      "file": "assets/r2r/portable_generator.gltf",
+      "bytes": 5972,
+      "sha256": "3955ae9bd37c178e9755df4726fba83f17c116b8c9013acb12eeee920bef5ef3",
+      "model": {
+        "primitives": 4,
+        "texturedPrimitives": 0,
+        "materials": 4,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/portable_radio.bin",
+      "bytes": 33384,
+      "sha256": "82eb1a8d5f609caa8437edd457c7fbcd68ae754922f4494304ff77d69816a523"
+    },
+    {
+      "file": "assets/r2r/portable_radio.gltf",
+      "bytes": 5948,
+      "sha256": "e7feb412b297c27f3a771e14b9ef7773718255e2031fff49683f370033d683eb",
+      "model": {
+        "primitives": 4,
+        "texturedPrimitives": 0,
+        "materials": 4,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/prop_cinder_blocks.bin",
+      "bytes": 90960,
+      "sha256": "8bab0340ff1513f9b6742dfcd252df055360c6f1ae27625f48b9b05c35c84d56"
+    },
+    {
+      "file": "assets/r2r/prop_cinder_blocks.gltf",
+      "bytes": 1703,
+      "sha256": "1bc57399c6246877a83ed8890a6492d11534247063f1224039af2052a45b086e",
+      "model": {
+        "primitives": 1,
+        "texturedPrimitives": 0,
+        "materials": 1,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/prop_crate_wood_a.bin",
+      "bytes": 181920,
+      "sha256": "803c7d7e4d35e0d5a06a72554eeb8380716a1ff3558f18660628fa581a4c5ad0"
+    },
+    {
+      "file": "assets/r2r/prop_crate_wood_a.gltf",
+      "bytes": 3110,
+      "sha256": "96073f3465dcdee4b5ea9bf1ad706a89cd18efc30b15e85ea122dd366d01fb1b",
+      "model": {
+        "primitives": 2,
+        "texturedPrimitives": 0,
+        "materials": 2,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/prop_jerry_can.bin",
+      "bytes": 24936,
+      "sha256": "8b54eba9bffb91f35e4dce6007a4351ce95ac0a59b3c0e95d3fdb821cda085c6"
+    },
+    {
+      "file": "assets/r2r/prop_jerry_can.gltf",
+      "bytes": 4545,
+      "sha256": "49e0357a859284c824ef40605a35b328c904cdbe32589987b8bfa9293cc28adb",
+      "model": {
+        "primitives": 3,
+        "texturedPrimitives": 0,
+        "materials": 3,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/prop_metal_barrel.bin",
+      "bytes": 80592,
+      "sha256": "f844c7da00b55d1bf61157382fdacd354c9e11b0c84902099e2a37ba521dcb62"
+    },
+    {
+      "file": "assets/r2r/prop_metal_barrel.gltf",
+      "bytes": 5973,
+      "sha256": "0680baf242a4e5596f0e39de74cf14fca8a81399a7640b5697975e2941ae706e",
+      "model": {
+        "primitives": 4,
+        "texturedPrimitives": 0,
+        "materials": 4,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/prop_pallet_wood_a.bin",
+      "bytes": 90960,
+      "sha256": "3597c252b29af73d3613053a9ed20af413f053fc60b624b70b02ff573f74d52e"
+    },
+    {
+      "file": "assets/r2r/prop_pallet_wood_a.gltf",
+      "bytes": 3081,
+      "sha256": "6e2c72f98bbd577d6893882e8e951754a586526685a56b0ea29d420f020dff56",
+      "model": {
+        "primitives": 2,
+        "texturedPrimitives": 0,
+        "materials": 2,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/prop_tire_stack_a.bin",
+      "bytes": 51072,
+      "sha256": "cb5c2335d992eb037f62810e2c5cd2b5c7a63d6277f9dfd6e043afe442e84e78"
+    },
+    {
+      "file": "assets/r2r/prop_tire_stack_a.gltf",
+      "bytes": 3157,
+      "sha256": "9169a9cf51c7d61fbf13a6e1863f22442a88ff06726a65d97958710619fe9dad",
+      "model": {
+        "primitives": 2,
+        "texturedPrimitives": 0,
+        "materials": 2,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/r2r/steel_toolbox.bin",
+      "bytes": 90592,
+      "sha256": "f8fc7b49a5b1be5184a2addddbde319b57e536b49072dd93dc403fb45093a25f"
+    },
+    {
+      "file": "assets/r2r/steel_toolbox.gltf",
+      "bytes": 4561,
+      "sha256": "fae3e1f758adf5ae402700534dd549d1c5166b62917a8a65be284acba790d981",
+      "model": {
+        "primitives": 3,
+        "texturedPrimitives": 0,
+        "materials": 3,
+        "textures": 0,
+        "ceilingNodes": [],
+        "copyright": null
+      }
+    },
+    {
+      "file": "assets/ui/map_amberwood.jpg",
+      "bytes": 27464,
+      "sha256": "67fa7be18ebd43d0ccd94d522c597720fd3ef6ce00bc2581175221e41c15afea"
+    },
+    {
+      "file": "assets/ui/map_ashfall.jpg",
+      "bytes": 25027,
+      "sha256": "35918278937eecc320eb4e19b08120ab6eee0c9e554cdb4ecfb670e81eeb6ca6"
+    },
+    {
+      "file": "assets/ui/map_foundry.jpg",
+      "bytes": 27946,
+      "sha256": "2b485e413677ac4c96b3d377f7aa01b0de767ce61878272d89287c7d0feec1b8"
+    },
+    {
+      "file": "assets/ui/map_frost.jpg",
+      "bytes": 25289,
+      "sha256": "8d83686ade9481b30626ef7d9f751f4d62051fdc8ade9c23a63af6ac127ed23d"
+    },
+    {
+      "file": "assets/ui/map_hollow.jpg",
+      "bytes": 15701,
+      "sha256": "f426062450fc842a63c9e3d591d09e3e16961e31a7934039377d163ed679902d"
+    },
+    {
+      "file": "assets/ui/map_mall.jpg",
+      "bytes": 32304,
+      "sha256": "a50bcc897644335ca661511cd949af43a34d983f9f0e9946233475c4e2334d90"
+    }
+  ]
+}

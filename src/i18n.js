@@ -1,4 +1,8 @@
 const portuguese = {
+  "Loading game assets": "A carregar recursos do jogo",
+  "Loading game assets · {loaded}/{total}": "A carregar recursos do jogo · {loaded}/{total}",
+  "Required game assets could not load. Reload to try again.": "Não foi possível carregar recursos essenciais do jogo. Recarrega para tentar novamente.",
+  "Reload": "Recarregar",
   "Language": "Idioma",
   "WORKSHOP": "OFICINA",
   "STATION 06": "ESTAÇÃO 06",

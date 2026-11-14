@@ -1,0 +1,41 @@
+name: Quality contracts
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    container: node:24-bookworm
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: npm ci
+      - name: Source, asset and server contracts
+        run: |
+          npm run check:assets
+          node --test server/*.test.mjs tools/asset-manifest.test.mjs
+      - name: Install browser for real glTF and world checks
+        run: apt-get update && apt-get install -y --no-install-recommends chromium
+      - name: Actual WebGL asset pipeline and six worlds
+        shell: bash
+        run: |
+          set -euo pipefail
+          node server/server.mjs > /tmp/game.log 2>&1 &
+          GAME_PID=$!
+          chromium --headless --no-sandbox --disable-dev-shm-usage --use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader --remote-debugging-port=9533 --user-data-dir=/tmp/bs-ci-chrome about:blank > /tmp/chrome.log 2>&1 &
+          BROWSER_PID=$!
+          trap 'kill "$GAME_PID" "$BROWSER_PID" || true' EXIT
+          node --input-type=module - <<'JS'
+          for(const url of ['http://localhost:5173/api/health','http://127.0.0.1:9533/json/version']){
+            let ready=false;
+            for(let attempt=0;attempt<100;attempt++){
+              try{if((await fetch(url)).ok){ready=true;break}}catch{}
+              await new Promise(resolve=>setTimeout(resolve,100));
+            }
+            if(!ready)throw Error('Service did not start: '+url);
+          }
+          JS
+          npm run test:models
+          npm run test:worlds
