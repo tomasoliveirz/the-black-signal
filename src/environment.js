@@ -1,3 +1,4 @@
+import { t } from './i18n.js';
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { paletteFor, underMaterial, styledMesh, canvasTexture } from './paint.js';
@@ -16,6 +17,7 @@ const pipe = new THREE.CylinderGeometry(1, 1, 1, 10);
 const round = new THREE.IcosahedronGeometry(1, 0);
 
 const plates = new Map();
+window.addEventListener('language-change', () => {for(const texture of plates.values())texture.userData.redraw();});
 const grassBlade = new THREE.BufferGeometry();
 grassBlade.setAttribute('position',new THREE.Float32BufferAttribute([-.36,0,0,.21,0,0,.51,1,.08],3));
 grassBlade.setIndex([0,1,2]);
@@ -76,8 +78,16 @@ export function buildEnvironment(scene) {
         g.fillStyle = tone; g.fillRect(0, 0, s, s);
         g.strokeStyle = '#b2a283'; g.lineWidth = 5; g.strokeRect(9, 19, s - 18, s - 38);
         g.fillStyle = '#e5d7ad'; g.textAlign = 'center'; g.textBaseline = 'middle';
-        g.font = 'bold 43px sans-serif'; g.fillText(words, s / 2, s / 2 + 2, s - 33);
+        g.font = 'bold 43px sans-serif'; g.fillText(t(words), s / 2, s / 2 + 2, s - 33);
       });
+      texture.userData.redraw = () => {
+        const g=texture.image.getContext('2d'), s=texture.image.width;
+        g.fillStyle=tone;g.fillRect(0,0,s,s);
+        g.strokeStyle='#b2a283';g.lineWidth=5;g.strokeRect(9,19,s-18,s-38);
+        g.fillStyle='#e5d7ad';g.textAlign='center';g.textBaseline='middle';
+        g.font='bold 43px sans-serif';g.fillText(t(words),s/2,s/2+2,s-33);
+        texture.needsUpdate=true;
+      };
       plates.set(style, texture);
     }
     const mat = new THREE.MeshBasicMaterial({map:texture, color:0xffffff});
@@ -168,7 +178,7 @@ export function buildEnvironment(scene) {
       }
       for(const h of [4.36,4.95])block('rust',x-side*3.06,h,z,.10,.09,12.3);
     }
-    for (const [label,z] of [['RECEÇÃO',-25.64],['FORNOS',-55.64],['MANUTENÇÃO',-81.94]]) {
+    for (const [label,z] of [['RECEPTION',-25.64],['FURNACES',-55.64],['MAINTENANCE',-81.94]]) {
       sign(label,0,5.6,z,4.0,0,'#414638');
       light(-2.8,3.8,z+.17,true); light(2.8,3.8,z+.17,true);
     }
@@ -185,10 +195,10 @@ export function buildEnvironment(scene) {
     }
     for(const z of [0,-22,-43])for(let x=-3.6;x<4;x+=1.1)lane(pathX(z)+x,z,.47,1.75,'porcelain');
     const labels = {
-      env_storefront_old:['LAVANDARIA', 'plaster', 'painted'], env_motel_closed:['MOTEL', 'plaster','rust'],
-      env_garage_detached:['OFICINA','brick','steel'], env_house_ranch_b:['ESTAÇÃO 06','porcelain','rust'],
-      env_storage_office:['LOJA 24H','brick','painted'], env_house_boarded:['ARMAZÉM','wood','steel'],
-      env_warehouse_salvage:['CARGAS','steel','painted'],
+      env_storefront_old:['LAUNDRY', 'plaster', 'painted'], env_motel_closed:['MOTEL', 'plaster','rust'],
+      env_garage_detached:['WORKSHOP','brick','steel'], env_house_ranch_b:['STATION 06','porcelain','rust'],
+      env_storage_office:['24H STORE','brick','painted'], env_house_boarded:['WAREHOUSE','wood','steel'],
+      env_warehouse_salvage:['LOADING','steel','painted'],
     };
     for(const building of STRUCTS){
       if(!labels[building.key])continue;
@@ -241,7 +251,7 @@ export function buildEnvironment(scene) {
       for(const x of [-7.76,-4.62])block('porcelain',x,.022,z,.13,.035,1.97);
       if(z%6===-3||z%6===3)block('concrete',-6.22,.022,z,2.9,.034,.1);
     }
-    for(const [label,z] of [['INFORMAÇÕES',20],['GALERIA',5],['SERVIÇO',-16]]){
+    for(const [label,z] of [['INFORMATION',20],['GALLERY',5],['SERVICE',-16]]){
       block('steel',-6.2,3.68,z,3.9,.63,.19);
       sign(label,-6.2,3.68,z+.11,2.4);
       sign(label,-6.2,3.68,z-.11,2.4,Math.PI);
@@ -294,9 +304,9 @@ export function buildEnvironment(scene) {
       if(Math.hypot(rock.x,rock.z)>60)continue;
       if(MAP.theme.snow)stone('snow',rock.x,rock.y+rock.s*.87,rock.z,rock.s*.68,rock.s*.15,rock.s*.58);
     }
-    const markers = MAP.theme.snow ? [[-4.5,-9,'ABRIGO'],[4.4,-32,'CRISTA']]
-      : MAP.theme.minNight ? [[-9,-11,'PÂNTANO'],[-4.4,-32,'TRILHO NORTE']]
-      : [[-4.5,-9,'CABANA'],[4.5,-30,'CLAREIRA']];
+    const markers = MAP.theme.snow ? [[-4.5,-9,'SHELTER'],[4.4,-32,'RIDGE']]
+      : MAP.theme.minNight ? [[-9,-11,'MARSH'],[-4.4,-32,'NORTH TRAIL']]
+      : [[-4.5,-9,'CABIN'],[4.5,-30,'CLEARING']];
     if (MAP.theme.snow) {
       for (const z of [-9,-15,-24,-33,-49,-58]) {
         for (const side of [-1,1]) {

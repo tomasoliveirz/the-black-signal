@@ -26,21 +26,24 @@ const FARM = ['prop_crate_wood_a', 'prop_metal_barrel', 'prop_pallet_wood_a', 'p
 
 export const MAPS = {
   amberwood: {
+    zoneNames: ['Cabana', 'Celeiro', 'Torre'],
     name: 'Amberwood', sub: 'Floresta de outono', kind: 'wild', seed: 20260114, pa: 7, pb: 3, amp: 1, trees: 120, pine: 0.2, dead: 0, rocks: 34, cabin: true, tower: [-20, -10],
     structs: (px) => [S('env_barn_old', -28, -36), S('env_house_boarded', 27, -20), S('env_trailer_abandoned', 22, -54), S('env_derelict_car', px(-25) + 5.2, -25, 0.25)],
     clusters: [[-20, -36, 3, YARD], [18.5, -20, 2.5, FARM], [22, -49.5, 3, YARD]],
     theme: {},
   },
   hollow: {
+    zoneNames: ['Trilho Sul', 'Bosque', 'Antena'],
     name: 'Hollow Mire', sub: 'Floresta assombrada', kind: 'wild', seed: 666013, pa: 9, pb: 4, amp: 1.25, trees: 230, pine: 0.3, dead: 0.5, rocks: 55, cabin: true, tower: null,
     structs: (px) => [S('env_house_boarded', -27, -26), S('env_barn_old', 29, -46), S('env_trailer_abandoned', -24, -58), S('env_derelict_car', px(-40) - 5, -40, -0.4), S('env_garage_detached', 24, -12)],
     clusters: [[-18, -26, 2.5, FARM], [20, -44, 3, YARD], [-22, -53, 3, YARD]],
     theme: {
-      minNight: 0.55, fog: [7, 62], tuft: 0.8, mountains: false, fogDay: '#5f6f6a', fogNight: '#0c1418', zenith: '#3c4f58', grass: '#3f4a32', path: '#4a4038',
+      minNight: 0.31, fog: [12, 69], tuft: 0.8, mountains: false, fogDay: '#5f6f6a', fogNight: '#0c1418', zenith: '#3c4f58', grass: '#3f4a32', path: '#4a4038',
       pal: { 0: ['#6f7a4c', '#4a5638', '#2a3530'], 1: ['#7a6a58', '#54463c', '#30282a'], 2: ['#7c8a5a', '#4e5f48', '#283a36'], 3: ['#8a6a74', '#5c4258', '#33263c'], 4: ['#55705a', '#34503e', '#1c302c'], 15: ['#8a8058', '#5e5a40', '#3a3830'], 9: ['#7a8890', '#56646e', '#3a4650'] },
     },
   },
   frost: {
+    zoneNames: ['Abrigo', 'Crista', 'Torre'],
     name: 'Frostpeak', sub: 'Montanhas nevadas', kind: 'wild', seed: 90210, pa: 6, pb: 4, amp: 2.4, trees: 95, pine: 1, dead: 0.15, rocks: 60, cabin: true, tower: [-20, -10],
     structs: (px) => [S('env_trailer_abandoned', 21, -22), S('env_house_ranch_a', -29, -42), S('env_garage_detached', 24, -55), S('env_derelict_car', px(-12) - 5, -12, 0.5)],
     clusters: [[15, -18, 2.5, FARM], [-20, -40, 3, YARD], [19, -52, 2.5, FARM]],
@@ -50,6 +53,7 @@ export const MAPS = {
     },
   },
   ashfall: {
+    zoneNames: ['Lavandaria', 'Loja 24H', 'Armazém'],
     name: 'Ashfall', sub: 'Cidade apocalíptica', kind: 'city', seed: 4517, pa: 1.5, pb: 0, amp: 0.12, trees: 22, pine: 0, dead: 1, rocks: 14, cabin: false, tower: [30, 6], treeMin: 11,
     structs: (px) => [
       S('env_storefront_old', -17, -14, Q), S('env_motel_closed', -15.5, -40, Q), S('env_garage_detached', -15, 8, Q),
@@ -59,11 +63,12 @@ export const MAPS = {
     ],
     clusters: [[-9, -14, 2, YARD], [9, -12, 2, FARM], [9, -30, 2, YARD], [-9, -40, 2.5, YARD], [9.5, -46, 2, FARM], [9, -62, 2.5, YARD], [-8, -30, 2, ['prop_cinder_blocks', 'prop_cinder_blocks', 'prop_tire_stack_a']]],
     theme: {
-      minNight: 0.18, fog: [12, 95], tuft: 0, litter: 0.025, mountains: false, fogDay: '#c8a078', fogNight: '#1a1614', zenith: '#8a8078', grass: '#6a6258', path: '#4a4a4e',
+      minNight: 0.08, fog: [19, 112], tuft: 0, litter: 0.025, mountains: false, fogDay: '#a9a598', fogNight: '#141a22', zenith: '#758591', grass: '#6a6258', path: '#4a4a4e',
       pal: { 0: ['#a09484', '#746a5e', '#46403c'], 1: ['#7c7c82', '#55565c', '#33343a'], 15: ['#b4a48c', '#8a7a66', '#5a5048'], 9: ['#a89c94', '#7c7470', '#565258'] },
     },
   },
   foundry: {
+    zoneNames: ['Receção', 'Fornos', 'Manutenção'],
     name: 'Fundição 9', sub: 'Fábrica abandonada', kind: 'factory', seed: 9009, pa: 0, pb: 0, amp: 0, trees: 0, pine: 0, dead: 0, rocks: 0, cabin: false, tower: null, mastH: 9, radius: 92,
     structs: () => [
       wall(0, 10.5, 54, 1), wall(0, -82.5, 54, 1), wall(-26.5, -36, 1, 94), wall(26.5, -36, 1, 94),
@@ -75,7 +80,7 @@ export const MAPS = {
     pillars: [[-13, -4], [13, -4], [-13, -18], [13, -18], [-13, -34], [13, -32], [-13, -48], [13, -48], [-13, -64], [13, -62], [-13, -78], [13, -78]],
     clusters: [[20, -4, 3, YARD], [-21, 2, 3, FARM], [-21, -30, 2.5, YARD], [21, -33, 3, YARD], [21, -50, 2.5, FARM], [-20, -62, 3, YARD], [21, -78, 2.5, YARD], [0, -80, 3, FARM], [-6, -22, 2, ['prop_pallet_wood_a', 'prop_crate_wood_a', 'prop_crate_wood_a']], [6, -52, 2, ['prop_pallet_wood_a', 'prop_metal_barrel', 'prop_crate_wood_a']]],
     theme: {
-      minNight: 0.3, fog: [10, 70], tuft: 0, litter: 0.012, mountains: false, fogDay: '#8a8478', fogNight: '#0e1012', zenith: '#6a7078', grass: '#6c6a64', path: '#585a5c',
+      minNight: 0.12, fog: [13, 78], tuft: 0, litter: 0.012, mountains: false, fogDay: '#8b918b', fogNight: '#121c24', zenith: '#6a7078', grass: '#6c6a64', path: '#585a5c',
       pal: { 0: ['#9a968c', '#6e6c66', '#42434a'], 1: ['#8a8c90', '#5e6064', '#383a40'], 15: ['#a08c70', '#74624c', '#4a3e36'], 8: ['#c4c0b4', '#8e8e86', '#54575e'] },
     },
   },
@@ -84,6 +89,13 @@ export const MAPS = {
 export function registerMesh(id, def) { MAPS[id] = { kind: 'mesh', seed: 7, pa: 0, pb: 0, amp: 0, trees: 0, rocks: 0, cabin: false, tower: null, mastH: 5, clusters: [], ...def }; }
 
 export let MAP_ID = '', MAP = null, LAYOUT = null, BOXES = [], STRUCTS = [], CABIN = null, MAST = null, EXTRACT = null, TOWER = null, MAP_RADIUS = 84;
+export function captureLayout() {
+  return {MAP_ID,MAP,LAYOUT,BOXES,STRUCTS,CABIN,MAST,EXTRACT,TOWER,MAP_RADIUS};
+}
+export function activateLayout(context) {
+  ({MAP_ID,MAP,LAYOUT,BOXES,STRUCTS,CABIN,MAST,EXTRACT,TOWER,MAP_RADIUS}=context);
+}
+
 const segDist = (x, z, a, b) => { const dx = b.x - a.x, dz = b.z - a.z, t = Math.max(0, Math.min(1, ((x - a.x) * dx + (z - a.z) * dz) / (dx * dx + dz * dz || 1))); return Math.hypot(x - a.x - dx * t, z - a.z - dz * t); };
 export function pathX(z) { return MAP.pa * Math.sin(z * 0.07) + MAP.pb * Math.sin(z * 0.19 + 1); }
 export function pathDist(x, z) {
@@ -137,12 +149,18 @@ function build() {
   const rnd = rng(MAP.seed), rr = (a, b) => a + rnd() * (b - a);
   const colliders = [], trees = [], rocks = [];
   const at = (x, z) => ({ x, z, y: height(x, z) });
-  // transmitters: two per zone, the last one at the mast
-  const tx = [
-    { ...at(-10, 2), zone: 0 }, { ...at(pathX(-17) - 6, -17), zone: 0 },
-    { ...at(pathX(-33) + 7, -34), zone: 1 }, { ...at(pathX(-48) - 8, -47), zone: 1 },
-    { ...at(MAST.x - 4, MAST.z + 2.5), zone: 2 },
-  ].map((t, id) => ({ ...t, id }));
+  const positions = MAP.kind === 'factory'
+    ? [[-9, -16], [9, -38], [-11, -70]]
+    : [[pathX(-14) - 5, -14], [pathX(-41) + 8, -41], [MAST.x - 4, MAST.z + 2.5]];
+  const tx = positions.map(([x, z], zone) => {
+    for (let radius = 0; radius < 12; radius += 1) {
+      for (let i = 0; i < 16; i++) {
+        const px = x + Math.cos(i * Math.PI / 8) * radius, pz = z + Math.sin(i * Math.PI / 8) * radius;
+        if (!inBox(px, pz, 2)) return { id: zone, zone, ...at(px, pz) };
+      }
+    }
+    throw new Error(`Transmissor sem acesso em ${MAP.name}`);
+  });
   const spawns = [0, 1, 2, 3, 4, 5].map((i) => at(1 + Math.cos(i * 1.047) * 2.6, -5 + Math.sin(i * 1.047) * 2.6));
   const clear = [...tx.map((t) => ({ ...t, r: 3.6 })), ...spawns.map((s) => ({ ...s, r: 2 })), { ...EXTRACT, r: 6.5 }];
   const blocked = (x, z, m = 0) => clear.some((c) => Math.hypot(c.x - x, c.z - z) < c.r + m);
@@ -186,48 +204,83 @@ function build() {
   colliders.push({ x: MAST.x, z: MAST.z, r: 1.4, h: mh }, { x: MAST.x + 3.2, z: MAST.z, r: 1.9, h: 2.2 });
   for (const t of tx) colliders.push({ x: t.x, z: t.z, r: 0.6, h: 1.3 });
 
-  // item spawn points: fuses near each zone, the rest scattered
-  const items = [];
-  const limit = MAP.kind === 'factory' ? (x, z) => Math.abs(x) < 25 && z < 9 && z > -81 : (x, z) => Math.hypot(x, z) < 76;
-  const free = (x, z) => !colliders.some((c) => Math.hypot(c.x - x, c.z - z) < c.r + 0.8) && !inBox(x, z, 1) && limit(x, z);
-  const drop = (type, cx, cz, spread) => {
-    for (let k = 0; k < 60; k++) {
-      const x = cx + rr(-spread, spread), z = cz + rr(-spread, spread);
-      if (free(x, z)) { items.push({ id: items.length, type, ...at(x, z) }); return; }
+  const sectorDepths = [[-25, 8], [-55, -27], [-80, -57]];
+  const positionsByZone = [
+    [[-17,-17], [15,-18], [-11,-3], [19,-24], [-20,-7], [12,-8], [-16,3], [20,-9], [-21,-24], [11,-23], [0,-22]],
+    [[-19,-37], [18,-43], [-13,-30], [21,-48], [12,-31], [-18,-47], [21,-35], [-20,-52], [15,-53], [-20,-29], [0,-49]],
+    [[-16,-66], [19,-68], [-13,-59], [12,-75], [18,-58], [-12,-75], [22,-77], [-21,-73], [16,-61], [-19,-59], [0,-77]],
+  ];
+  const occupied = [...tx, ...spawns, EXTRACT];
+  function place(near, zone) {
+    const [cx, cz] = near;
+    const [low, high] = sectorDepths[zone];
+    for (let offset = 0; offset <= 22; offset += 1) {
+      const points = Math.max(1, Math.ceil(2 * Math.PI * offset));
+      for (let i = 0; i < points; i++) {
+        const angle = i / points * 2 * Math.PI;
+        const x = cx + offset * Math.cos(angle), z = cz + offset * Math.sin(angle);
+        if (z < low || z > high || Math.abs(x) > 24 || inBox(x, z, 1) || Math.hypot(x, z) > MAP_RADIUS - 2
+          || colliders.some(c => Math.hypot(c.x - x, c.z - z) < c.r + .85)
+          || occupied.some(p => Math.hypot(p.x - x, p.z - z) < (p.r ? p.r + 1 : 2.45))) continue;
+        const point = at(x, z);
+        occupied.push(point);
+        return point;
+      }
     }
+    throw new Error(`Sem espaço para recurso em ${MAP.name}, setor ${zone + 1}: ${near}`);
+  }
+  const resources = sectorResources(positionsByZone, place);
+  for (const p of [...resources.items, ...resources.blood]) colliders.push({ x:p.x, z:p.z, r:.43, h:.78 });
+  const hint = (zone, id, t) => {
+    const z = -17 - zone * 26 + Math.sin(t * .2 + id) * 4;
+    return { x: pathX(z) + Math.cos(id) * 3, z };
   };
-  for (const t of tx) { drop('fuse', t.x, t.z, 14); if (t.zone < 2) drop('fuse', t.x, t.z, 22); }
-  for (let i = 0; i < 12; i++) drop('ammo', pathX(-6 - i * 5.5), -6 - i * 5.5, 20);
-  for (let i = 0; i < 6; i++) drop('med', pathX(-8 - i * 11), -8 - i * 11, 22);
-  for (let i = 0; i < 7; i++) drop('flare', pathX(-4 - i * 10), -4 - i * 10, 24);
-  const hint = (zone, id, t) => { const z = -20 - zone * 18 + Math.sin(t * 0.2 + id) * 6; return { x: pathX(z) + Math.cos(id) * 3, z }; };
-  return { trees, rocks, lanterns, colliders, tx, items, spawns, props, pillars, hint };
+  return { trees, rocks, lanterns, colliders, tx, ...resources, spawns, props, pillars, hint, zoneNames: MAP.zoneNames };
 }
 
-// Imported set: objectives are laid out along the walking route from the spawn to the farthest reachable point.
+const resourceTypes = ['cell', 'cell', 'ammo', 'ammo', 'med', 'flare'];
+
+function sectorResources(positionsByZone, place) {
+  const items = [], blood = [], recovery = [];
+  positionsByZone.forEach((positions, zone) => {
+    const points = positions.map(near => place(near, zone));
+    resourceTypes.forEach((type, i) => items.push({ ...points[i], type, zone, id: items.length }));
+    for (const point of points.slice(6, 10)) blood.push({ ...point, zone, id: blood.length });
+    recovery.push(points[10]);
+  });
+  return { items, blood, recovery };
+}
+
+// The imported mall already has navigable branches around the kiosks and into the service wing.
 function buildMesh(d) {
-  const rnd = rng(MAP.seed), colliders = [], at = (p) => ({ x: p.x, z: p.z, y: 0 });
-  const taken = [];
-  const far = (p, r) => taken.every((q) => Math.hypot(q.x - p.x, q.z - p.z) > r);
-  const pick = (near, r = 2.5) => { // the open point closest to `near` that keeps its distance from everything already placed
-    let best = null, bd = 1e9;
-    for (const p of d.open) { const k = Math.hypot(p.x - near.x, p.z - near.z); if (k < bd && far(p, r)) { bd = k; best = p; } }
-    best ??= near; taken.push(best); return best;
+  const colliders = [];
+  const at = ([x, z]) => ({ x, z, y: 0 });
+  const spawns = Array.from({ length: 6 }, (_, i) => {
+    const x = d.spawn.x + Math.cos(i * Math.PI / 3) * 1.5;
+    const z = d.spawn.z + Math.sin(i * Math.PI / 3) * 1.5;
+    return inBox(x, z, .4) ? { ...d.spawn, y: 0 } : at([x, z]);
+  });
+  const tx = [[-14.7, 16.5], [1.13, 12], [7.13, -15.75]].map((p, zone) => ({ ...at(p), zone, id: zone }));
+  EXTRACT = { x: -5.12, z: -28.5, r: 3 };
+  const lanterns = [[-6.12, 16], [-7.87, 2.75], [-6.37, -16]].map(p => {
+    const point = at(p);
+    colliders.push({ ...point, r: .25, h: 2.5 });
+    return point;
+  });
+  colliders.push({ x: MAST.x, z: MAST.z, r: .5, h: MAP.mastH });
+  for (const t of tx) colliders.push({ x: t.x, z: t.z, r: .6, h: 1.3 });
+  const resources = sectorResources([
+    [[-15.37,21.25], [-5.87,19], [-15.37,27.25], [-4.12,21.25], [-15.37,12.75], [-4.37,27],
+      [-15.37,31.5], [-4.12,31.5], [-9.37,19.5], [-11.37,13], [-7.62,23.75]],
+    [[-15.12,8.5], [-1.37,15.25], [-4.12,8], [-10.62,0], [-12.62,5], [-4.12,3],
+      [-15.37,5.5], [-7.37,-.5], [-7.87,11.5], [-4.12,-2.5], [-9.12,7.5]],
+    [[-15.37,-19.25], [-15.37,-23], [-13.62,-6.75], [-4.87,-10.75], [-15.37,-27], [-13.12,-15.5],
+      [-15.37,-9], [-12.12,-25], [-.12,-16], [-7.87,-22.25], [-12.87,-21.25]],
+  ], at);
+  for (const p of [...resources.items, ...resources.blood]) colliders.push({ x:p.x, z:p.z, r:.43, h:.78 });
+  return {
+    trees: [], rocks: [], lanterns, colliders, tx, ...resources, spawns, props: [], pillars: [],
+    hint: zone => tx[Math.min(zone, 2)], zoneNames: ['Átrio', 'Galeria', 'Serviço'],
   };
-  const len = [0]; for (let i = 1; i < d.route.length; i++) len.push(len[i - 1] + Math.hypot(d.route[i].x - d.route[i - 1].x, d.route[i].z - d.route[i - 1].z));
-  const along = (f) => { const L = f * len[len.length - 1]; let i = 1; while (i < len.length - 1 && len[i] < L) i++; const t = (L - len[i - 1]) / (len[i] - len[i - 1] || 1); return { x: d.route[i - 1].x + (d.route[i].x - d.route[i - 1].x) * t, z: d.route[i - 1].z + (d.route[i].z - d.route[i - 1].z) * t }; };
-  taken.push(d.spawn, d.goal);
-  const spawns = [0, 1, 2, 3, 4, 5].map((i) => { const p = { x: d.spawn.x + Math.cos(i * 1.047) * 1.5, z: d.spawn.z + Math.sin(i * 1.047) * 1.5 }; return at(inBox(p.x, p.z, 0.4) ? d.spawn : p); });
-  const tx = [0.14, 0.3, 0.5, 0.68, 0.93].map((f, id) => ({ ...at(pick(along(f), 4)), zone: [0, 0, 1, 1, 2][id], id }));
-  const ex = pick(along(0.86), 5);
-  EXTRACT = { x: ex.x, z: ex.z, r: 3 };
-  const lanterns = [0.22, 0.45, 0.78].map((f) => { const p = at(pick(along(f), 3)); colliders.push({ x: p.x, z: p.z, r: 0.25, h: 2.5 }); return p; });
-  colliders.push({ x: MAST.x, z: MAST.z, r: 0.5, h: MAP.mastH });
-  for (const t of tx) colliders.push({ x: t.x, z: t.z, r: 0.6, h: 1.3 });
-  const items = [], shuffled = d.open.map((p) => [rnd(), p]).sort((a, b) => a[0] - b[0]).map((e) => e[1]).filter((p) => far(p, 1.6));
-  const types = [...Array(8).fill('fuse'), ...Array(12).fill('ammo'), ...Array(6).fill('med'), ...Array(7).fill('flare')];
-  types.forEach((type, i) => { const p = shuffled[i % shuffled.length]; items.push({ id: items.length, type, x: p.x + (rnd() - 0.5) * (i >= shuffled.length ? 1 : 0.4), y: 0, z: p.z + (rnd() - 0.5) * (i >= shuffled.length ? 1 : 0.4) }); });
-  const hint = (zone) => along([0.3, 0.6, 0.9][Math.min(zone, 2)]);
-  return { trees: [], rocks: [], lanterns, colliders, tx, items, spawns, props: [], pillars: [], hint };
 }
 setMap('amberwood');

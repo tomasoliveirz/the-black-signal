@@ -3,12 +3,10 @@ import { LAYOUT, BOXES, MAP_RADIUS, height } from './layout.js';
 
 export const SPEED = { walk: 3.6, sprint: 5.4, crouch: 1.8, monster: 6.6, downed: 0.7 };
 export const TICK = 1 / 30;
-export const RULES = {
-  prep: 12, explore: 95, blackout: 40, extract: 75, matchLimit: 14 * 60,
-  repairTime: 7, reviveTime: 4, bleedTime: 35, useRange: 2.6, pickupRange: 1.3,
-  transformCost: 50, energyDrain: 2.6, monsterHp: 220, fireCd: 0.38, attackCd: 1.3,
-  bulletDmg: 34, bulletDmgMonster: 25, clawDmg: 34, flareTime: 15, flareRadius: 6,
-};
+export const VOICE_RANGE = 22;
+export const VOICE_SAMPLES = 640;
+export const VOICE_RATE = 16000;
+export { RULES, PHASES } from './rules.js';
 
 export const newMove = (x, z) => ({ x, y: height(x, z), z, vx: 0, vy: 0, vz: 0, grounded: true, stam: 1 });
 

@@ -1,0 +1,9 @@
+node_modules
+data
+.git
+.claude
+work
+outputs
+capturas
+*.log
+.env*

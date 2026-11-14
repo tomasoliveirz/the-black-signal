@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-PT">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,6 +45,7 @@
     padding:10px 12px; min-height:42px; user-select:text; caret-color:var(--gold);
   }
   #name::placeholder { color:var(--muted); }
+  #name[readonly] { color:var(--gold); background:#29241d; }
   #menu .primary {
     min-height:44px; border:1px solid transparent; border-radius:4px; padding:10px 14px; cursor:pointer;
     color:#231a11; background:var(--gold); font:600 13px 'IBM Plex Sans', sans-serif; letter-spacing:.085em;
@@ -57,14 +58,76 @@
   .net[data-state="offline"]::before { background:#d07a66; }
   .settings { border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
   .settings summary { cursor:pointer; color:var(--canvas); font-weight:500; padding:12px 0; }
+  #account-panel { margin:0 0 16px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  #account-panel summary { cursor:pointer; padding:11px 0; font-size:14px; }
+  #account-form { display:grid; gap:7px; padding:0 0 8px; }
+  #account-form label { font-size:12px; color:var(--muted); }
+  #menu .account-input, #menu #room-chat-text {
+    box-sizing:border-box; min-width:0; width:100%; border:1px solid var(--line); border-radius:4px;
+    padding:9px 11px; min-height:40px; color:var(--canvas); background:#1a1916; caret-color:var(--gold); user-select:text;
+  }
+  .account-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:3px; }
+  #menu .account-actions button { flex:1; min-width:105px; }
+  #account-status { margin:3px 0 10px; font-size:12px; line-height:1.4; color:var(--muted); }
+  #account-status[data-error="true"] { color:#f1a58b; }
+  #account-logout { margin:0 0 8px; }
+  #account-user { color:var(--gold); }
   .settings-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   .setting { display:grid; gap:5px; }
+  .audio-setting { display:flex; align-items:center; gap:8px; margin-top:8px; font-size:13px; }
+  .audio-setting input { accent-color:var(--gold); }
+  .audio-mix label { justify-content:space-between; }
+  .audio-mix input { min-width:72px; width:52%; }
+  #mic { border:1px solid var(--line); border-radius:4px; background:#211e19; color:var(--canvas); padding:7px 10px; cursor:pointer; }
+  #mic-status { margin:6px 0; color:var(--muted); font-size:12px; }
+  #room-options { display:grid; gap:7px; margin:4px 0; font-size:12px; }
+  .room-select { display:flex; gap:6px; }
+  #room-options input, #room-options select { box-sizing:border-box; width:100%; min-width:0; background:#211e19; border:1px solid var(--line); border-radius:4px; color:var(--canvas); padding:7px; }
+  #room-options button, .music-controls button { cursor:pointer; background:#211e19; border:1px solid var(--line); border-radius:4px; color:var(--canvas); padding:7px; font-size:12px; }
+  #room-connection { color:var(--gold); font-size:12px; overflow-wrap:anywhere; margin:8px 0; }
+  .music-controls { display:flex; gap:8px; align-items:center; margin:7px 0; font-size:12px; }
+  #music-status { flex:1; color:var(--muted); }
+  .audio-credits { color:var(--muted); font-size:12px; text-underline-offset:3px; }
+  #voice-hud { right:18px; bottom:94px; max-width:min(320px, 86vw); font-size:11px; padding:6px 10px; background:rgba(22,20,18,.87); color:#f3c98c; }
   .setting label { color:var(--muted); }
   #menu .setting select { width:100%; font-size:13px; padding:8px; }
   .controls { display:grid; grid-template-columns:max-content 1fr; column-gap:12px; row-gap:4px; font-size:13px; margin:0 0 14px; }
   .controls dt { color:var(--gold); font-family:var(--mono); font-size:11px; align-self:center; }
   .controls dd { margin:0; }
   .settings .controls-heading { font:500 18px var(--serif); margin:15px 0 7px; }
+  #menu .secondary {
+    min-height:40px; padding:8px 12px; background:#211e19; border:1px solid var(--line); border-radius:4px;
+    color:var(--canvas); cursor:pointer;
+  }
+  #menu .secondary:hover { border-color:var(--gold); color:var(--gold); }
+  .guide-entry { width:100%; margin-bottom:10px; text-align:left; }
+  #menu .guide-link { margin:12px 0; padding-left:0; min-height:36px; border:0; background:none; color:var(--gold); text-decoration:underline; text-underline-offset:3px; }
+  #guide {
+    align-self:center; min-width:0; box-sizing:border-box; padding:clamp(20px,3.5vw,42px);
+    border:1px solid var(--line); border-radius:12px; background:#211e19;
+  }
+  .guide-actions { display:flex; align-items:center; flex-wrap:wrap; justify-content:space-between; gap:10px; }
+  .guide-language { display:flex; align-items:center; gap:8px; color:var(--muted); font-size:13px; }
+  #menu #guide-language { padding:6px 8px; color:var(--canvas); background:#29241d; border:1px solid var(--line); border-radius:4px; }
+  #guide h2 { margin:20px 0 13px; font:400 clamp(32px,4vw,50px)/1.1 var(--serif); }
+  .guide-tabs { display:flex; flex-wrap:wrap; gap:3px 12px; border-bottom:1px solid var(--line); }
+  #menu .guide-tabs button {
+    margin-bottom:-1px; padding:8px 1px; min-height:40px; border:0; border-bottom:2px solid transparent;
+    background:none; color:var(--muted); font-size:14px; text-align:left; cursor:pointer;
+  }
+  #menu .guide-tabs button:hover { color:var(--canvas); }
+  #menu .guide-tabs button[aria-selected="true"] { border-bottom-color:var(--gold); color:var(--gold); }
+  .guide-panel { margin-top:20px; color:var(--canvas); font-size:15px; line-height:1.55; }
+  .guide-panel h3 { font:400 26px/1.13 var(--serif); margin:0 0 10px; }
+  .guide-panel p { margin:0 0 10px; max-width:65ch; }
+  .guide-panel ul, .guide-panel ol { padding-left:1.25em; margin:0; }
+  .guide-panel li { padding-left:.15em; margin-bottom:4px; }
+  .guide-panel li::marker { color:var(--gold); }
+  .guide-panel .controls { margin:0; }
+  .guide-panel .controls dt { font-size:12px; }
+  .guide-timeline { display:grid; grid-template-columns:max-content minmax(0,1fr); gap:4px 14px; margin:12px 0; }
+  .guide-timeline dt { color:var(--gold); font:400 12px/2 var(--mono); }
+  .guide-timeline dd { margin:0; }
   .menu-heading { display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:12px; }
   .menu-heading h2 { font:400 clamp(26px,3vw,39px)/1.12 var(--serif); margin:0; }
   .map-count { color:var(--muted); text-align:right; }
@@ -90,7 +153,7 @@
   .room .menu-heading h2, #result h2 { font-size:27px; }
   #lobby { list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px 10px; }
   .seat {
-    display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:9px;
+    display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:center; gap:9px;
     min-height:42px; padding:5px 8px; border:1px solid var(--line); border-radius:4px; background:#211e19;
   }
   .seat.mine { border-color:var(--amber); }
@@ -100,14 +163,28 @@
   .seat-player { font-size:14px; line-height:1.2; font-weight:600; }
   .seat-character { font-size:12px; line-height:1.25; }
   .seat-tag { color:var(--gold); font-size:10px; }
+  #menu .seat-audio {
+    display:grid; place-items:center; width:30px; height:30px; padding:0; border:1px solid transparent;
+    border-radius:4px; color:var(--muted); background:none; cursor:pointer;
+  }
+  #menu .seat-audio:hover { border-color:var(--line); color:var(--gold); }
+  .seat-audio[aria-pressed="true"] { color:var(--gold); background:#382c20; }
+  .seat-audio path:last-child { display:none; }
+  .seat-audio[aria-pressed="true"] path:nth-child(2) { display:none; }
+  .seat-audio[aria-pressed="true"] path:last-child { display:block; }
   .room-actions { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:10px; }
   #room-status { margin:0; font-size:13px; color:var(--muted); }
+  .room-chat { margin-top:18px; padding-top:13px; border-top:1px solid var(--line); }
+  .room-chat h3 { font:400 23px var(--serif); margin:0 0 7px; }
+  #room-chat-log { list-style:none; margin:0 0 8px; padding:0; max-height:118px; overflow-y:auto;
+    font-size:13px; line-height:1.5; user-select:text; scrollbar-color:var(--amber) #1c1a17; }
+  #room-chat-log li { overflow-wrap:anywhere; padding:2px 0; }
+  #room-chat-log strong { color:var(--gold); font-weight:500; }
+  #room-chat-form { display:flex; gap:8px; }
+  #menu #room-chat-form .primary { min-height:40px; padding:8px 12px; flex:none; }
+  #room-chat-text::placeholder { color:var(--muted); }
   #result h2 { margin:0; color:var(--gold); font-family:var(--serif); font-weight:400; }
   #result p { color:var(--muted); margin:4px 0 0; font-size:13px; }
-  #result details { margin-top:6px; font-size:13px; }
-  #result summary { cursor:pointer; }
-  #result-roles { list-style:none; padding:0; margin:5px 0 0; line-height:1.7; }
-  #result-roles .echo { color:#ff9a86; }
   @media (max-width:1000px) {
     .menu-layout { padding:28px; gap:24px; grid-template-columns:minmax(230px, .72fr) minmax(0,1.5fr); }
   }
@@ -115,6 +192,7 @@
     .menu-layout { grid-template-columns:minmax(0,1fr); width:min(100%,600px); align-content:start; }
     .identity h1 { font-size:clamp(3.25rem,9vw,5rem); }
     .tag { margin-bottom:20px; }
+    #menu.showing-guide .identity { display:none; }
   }
   @media (max-width:450px) {
     .menu-layout { padding:22px 16px; }
@@ -123,6 +201,12 @@
   }
   .hud { position:fixed; pointer-events:none; font-family:var(--mono); letter-spacing:.06em; text-shadow:0 1px 6px rgba(0,0,0,.7); }
   #stats { left:18px; top:14px; font-size:11px; line-height:1.6; opacity:.6; white-space:pre; }
+  #relay-status { left:18px; top:16px; padding:7px 9px; font-size:12px; background:rgba(22,20,18,.86); color:#f3c98c; }
+  #relay-status:empty { display:none; }
+  body:has(#relay-status:not(:empty)) #stats { display:none; }
+  #match-tip { left:50%; bottom:12%; transform:translateX(-50%); width:max-content; max-width:min(510px, 80vw);
+    box-sizing:border-box; padding:8px 12px; background:rgba(22,20,18,.92); color:#f3c98c; border-radius:4px;
+    text-align:center; font:500 14px/1.35 'IBM Plex Sans', sans-serif; letter-spacing:.02em; }
   #top { top:16px; left:50%; transform:translateX(-50%); text-align:center; }
   #phase { font-family:var(--serif); font-size:22px; letter-spacing:.03em; }
   #timer { font-size:13px; opacity:.85; margin-top:2px; }
@@ -145,8 +229,10 @@
   #feed div { background:rgba(24,26,26,.45); padding:1px 8px; margin-top:3px; width:fit-content; } #feed .echo { color:#ff9a86; } #feed .dead { opacity:.6; } #feed .sys { color:#f3c98c; }
   #chat { position:fixed; left:18px; bottom:116px; width:380px; background:rgba(24,26,26,.8); border:0; border-left:2px solid var(--amber); color:var(--canvas); font:13px var(--mono); padding:7px 10px; outline:none; display:none; user-select:text; }
   #toast { top:26%; left:50%; transform:translateX(-50%); font-family:var(--serif); font-style:italic; font-size:26px; opacity:0; transition:opacity .7s; text-align:center; }
-  #toast { width:max-content; max-width:85vw; }
+  #toast { width:max-content; max-width:85vw; background:rgba(22,20,18,.91); padding:8px 16px; border-radius:4px; }
   #toast span { display:block; margin-top:4px; font:500 13px var(--mono); color:#f3c98c; }
+.language-setting { display:flex; align-items:center; gap:12px; margin:14px 0; font-size:14px; color:var(--muted); }
+.language-setting select { min-height:36px; padding:4px 8px; color:var(--canvas); background:#211e19; border:1px solid var(--line); font:inherit; }
 </style>
 <script type="importmap">
 { "imports": {
@@ -159,68 +245,100 @@
 <canvas id="view"></canvas>
 <div class="vignette" id="vignette"></div>
 <div class="hud" id="stats"></div>
+<div class="hud" id="relay-status"></div>
 <div class="hud" id="top"><div id="phase"></div><div id="timer"></div><div id="objective"></div><div id="txrow"></div></div>
 <div class="hud" id="role" style="display:none"></div>
 <div class="hud" id="vitals" style="display:none">
-  <div>VIDA <span id="hpn"></span></div><div class="bar" id="hp"><i></i></div>
-  <div>FÔLEGO</div><div class="bar" id="stam"><i></i></div>
-  <div id="energyRow" style="display:none"><div>ENERGIA DO SINAL <span id="enn"></span></div><div class="bar" id="energy"><i></i></div></div>
+  <div><span data-i18n="HEALTH">HEALTH</span> <span id="hpn"></span></div><div class="bar" id="hp"><i></i></div>
+  <div data-i18n="STAMINA">STAMINA</div><div class="bar" id="stam"><i></i></div>
+  <div id="energyRow" style="display:none"><div><span data-i18n="SIGNAL ENERGY">SIGNAL ENERGY</span> <span id="enn"></span></div><div class="bar" id="energy"><i></i></div></div>
   <div id="inv"></div>
 </div>
 <div class="hud" id="feed"></div>
 <input id="chat" maxlength="140" autocomplete="off">
+<div id="voice-hud" class="hud" hidden></div>
 <div class="hud" id="prompt"></div>
 <div class="hud" id="progress"><div class="bar"><i></i></div></div>
+<div class="hud" id="match-tip" role="status" hidden></div>
 <div class="hud" id="cross"></div>
 <div class="hud" id="toast"></div>
-<div class="hud" id="keys">WASD mover · SHIFT correr · C agachar · ESPAÇO saltar · E interagir<br>CLIQUE disparar/atacar · Q curar · G sinalizador · F transformar (Echo)<br>ENTER voz de proximidade (texto) · T canal Echo · V visual · 1–4 qualidade</div>
+<div class="hud" id="keys" data-i18n="WASD move · SHIFT sprint · C crouch · E interact · R drop cell">WASD move · SHIFT sprint · C crouch · E interact · R drop cell<br data-i18n="CLICK fire or attack · Z talk · ESC menu">CLICK fire or attack · Z talk · ESC menu</div>
 <main id="menu" aria-labelledby="title">
   <div class="menu-layout">
     <div class="identity">
       <h1 id="title">The Black<br>Signal</h1>
-      <p class="tag">Há vozes a que nunca se deve responder.</p>
+      <label class="language-setting" for="language"><span data-i18n="Language">Language</span> <select id="language"><option value="en" lang="en">English</option><option value="pt-PT" lang="pt-PT">Português</option></select></label>
+      <p class="tag" data-i18n="Some voices should never be answered.">Some voices should never be answered.</p>
+      <details id="account-panel">
+        <summary><span data-i18n="Account">Account</span> · <span id="account-user" data-i18n="Guest">Guest</span></summary>
+        <form id="account-form" autocomplete="on">
+          <label for="account-username" data-i18n="Username">Username</label>
+          <input class="account-input" id="account-username" name="username" autocomplete="username"
+            minlength="3" maxlength="20" pattern="[A-Za-z0-9_]{3,20}" required spellcheck="false"
+            aria-describedby="account-status" data-i18n-title="Use 3–20 ASCII letters, numbers or underscores." title="Use 3–20 ASCII letters, numbers or underscores.">
+          <label for="account-password" data-i18n="Password">Password</label>
+          <input class="account-input" id="account-password" name="password" type="password" autocomplete="current-password"
+            minlength="10" maxlength="128" required aria-describedby="account-status">
+          <div class="account-actions">
+            <button class="secondary" id="account-login" type="submit" value="login" data-i18n="Sign in">Sign in</button>
+            <button class="secondary" id="account-register" type="submit" value="register" data-i18n="Create account">Create account</button>
+          </div>
+        </form>
+        <button class="secondary" id="account-logout" type="button" hidden data-i18n="Sign out">Sign out</button>
+        <p id="account-status" role="status" data-i18n="You can join a room as a guest.">You can join a room as a guest.</p>
+      </details>
       <form id="entry">
-        <label for="name">NOME DO JOGADOR</label>
-        <input id="name" maxlength="16" placeholder="Jogador" autocomplete="nickname">
-        <button class="primary" id="play" type="submit" disabled>ENTRAR NA SALA</button>
+        <label for="name" data-i18n="PLAYER NAME">PLAYER NAME</label>
+        <input id="name" maxlength="24" data-i18n-placeholder="Player" placeholder="Player" autocomplete="nickname">
+        <div id="room-options">
+          <label for="public-room" data-i18n="PUBLIC ROOM">PUBLIC ROOM</label>
+          <div class="room-select"><select id="public-room" data-i18n-aria-label="Public room" aria-label="Public room"></select><button id="room-refresh" type="button" data-i18n="Refresh">Refresh</button></div>
+          <label for="room-code" data-i18n="OR ROOM CODE">OR ROOM CODE</label>
+          <input id="room-code" maxlength="12" data-i18n-placeholder="Invitation code" placeholder="Invitation code" autocomplete="off">
+          <div class="room-select"><button id="room-create-private" type="button" data-i18n="Create private room">Create private room</button><button id="room-create-public" type="button" data-i18n="Create public room">Create public room</button></div>
+        </div>
+        <button class="primary" id="play" type="submit" disabled data-i18n="JOIN ROOM">JOIN ROOM</button>
       </form>
-      <p class="net" id="net" role="status">A LIGAR AO SERVIDOR…</p>
+      <p id="room-connection" role="status"></p>
+      <button type="button" id="room-leave" class="secondary" hidden data-i18n="Leave room">Leave room</button>
+      <p class="net" id="net" role="status" data-i18n="CONNECTING TO SERVER…">CONNECTING TO SERVER…</p>
+      <button class="secondary guide-entry" id="how-to-play" type="button" aria-controls="guide" aria-expanded="false" data-i18n="How to play">How to play</button>
       <details class="settings" id="settings">
-        <summary>Definições e controlos</summary>
+        <summary data-i18n="Settings & controls">Settings & controls</summary>
         <div class="settings-grid">
           <div class="setting">
-            <label for="visual">VISUAL</label>
-            <select id="visual"><option value="normal">Normal</option><option value="paint">Pintura</option></select>
+            <label for="visual" data-i18n="VISUAL STYLE">VISUAL STYLE</label>
+            <select id="visual"><option value="normal">Normal</option><option value="paint" data-i18n="Painterly">Painterly</option></select>
           </div>
           <div class="setting">
-            <label for="quality">QUALIDADE</label>
-            <select id="quality"><option value="0">1 · Baixa</option><option value="1">2 · Média</option><option value="2">3 · Alta</option><option value="3">4 · Ultra</option></select>
+            <label for="quality" data-i18n="QUALITY">QUALITY</label>
+            <select id="quality"><option value="0" data-i18n="1 · Low">1 · Low</option><option value="1" data-i18n="2 · Medium">2 · Medium</option><option value="2" data-i18n="3 · High">3 · High</option><option value="3">4 · Ultra</option></select>
           </div>
         </div>
-        <h2 class="controls-heading">Controlos</h2>
-        <dl class="controls">
-          <dt>WASD</dt><dd>Mover</dd>
-          <dt>Rato / roda</dt><dd>Olhar / aproximar a câmara</dd>
-          <dt>Shift / C / Espaço</dt><dd>Correr / agachar / saltar</dd>
-          <dt>E / clique</dt><dd>Interagir / disparar ou atacar</dd>
-          <dt>Q / G / F</dt><dd>Curar / sinalizador / transformar (Echo)</dd>
-          <dt>Enter / T</dt><dd>Chat de proximidade / canal Echo</dd>
-          <dt>V / 1–4 / Esc</dt><dd>Visual / qualidade / menu</dd>
-        </dl>
+        <label class="audio-setting"><input id="tips-enable" type="checkbox" checked> <span data-i18n="Show in-game tips">Show in-game tips</span></label>
+        <h2 class="controls-heading" data-i18n="Audio">Audio</h2>
+        <label class="audio-setting"><span data-i18n="Music">Music</span> <input id="volume-music" type="range" min="0" max="100" value="35"></label>
+        <div class="music-controls"><span id="music-status"></span><button id="music-next" type="button" data-i18n="Next track">Next track</button></div>
+        <div class="audio-mix">
+          <label class="audio-setting"><span data-i18n="Effects">Effects</span> <input id="volume-effects" type="range" min="0" max="100" value="80"></label>
+          <label class="audio-setting"><span data-i18n="Ambience">Ambience</span> <input id="volume-environment" type="range" min="0" max="100" value="68"></label>
+          <label class="audio-setting"><span data-i18n="Voices">Voices</span> <input id="volume-voices" type="range" min="0" max="100" value="85"></label>
+        </div>
+        <label class="audio-setting"><input id="voice-listen" type="checkbox" checked> <span data-i18n="Hear proximity voice">Hear proximity voice</span></label>
+        <button id="mic" class="audio-setting" type="button" aria-describedby="mic-status" data-i18n="Enable microphone">Enable microphone</button>
+        <p id="mic-status" role="status" data-i18n="Hold Z to talk. Range: 22 m.">Hold Z to talk. Range: 22 m.</p>
+        <a class="audio-credits" href="./assets/audio/CREDITS.md" target="_blank" rel="noopener" data-i18n="Sound effect credits">Sound effect credits</a>
+        <div><button id="guide-controls" class="secondary guide-link" type="button" aria-controls="guide" data-i18n="View controls">View controls</button></div>
       </details>
     </div>
-    <div>
+    <div id="match-menu">
       <section id="result" aria-labelledby="endTitle" aria-live="polite" hidden>
         <h2 id="endTitle"></h2>
         <p id="result-map"></p>
-        <details>
-          <summary>Ver papéis da última partida</summary>
-          <ul id="result-roles"></ul>
-        </details>
       </section>
       <section aria-labelledby="maps-heading">
         <div class="menu-heading">
-          <h2 id="maps-heading">Escolher mapa</h2>
+          <h2 id="maps-heading" data-i18n="Choose a map">Choose a map</h2>
           <span class="map-count" id="map-count"></span>
         </div>
         <div class="maps" id="maps"></div>
@@ -228,17 +346,40 @@
       </section>
       <section class="room" id="room" aria-labelledby="room-heading" hidden>
         <div class="menu-heading">
-          <h2 id="room-heading">Sala</h2>
+          <h2 id="room-heading" data-i18n="Room">Room</h2>
           <span class="map-count" id="room-count"></span>
         </div>
         <ol id="lobby"></ol>
         <div class="room-actions">
           <p id="room-status" role="status"></p>
-          <button class="primary" type="button" id="start">COMEÇAR PARTIDA</button>
-          <button class="primary" type="button" id="resume" hidden>VOLTAR À PARTIDA</button>
+          <button class="primary" type="button" id="start" data-i18n="START MATCH">START MATCH</button>
+          <button class="primary" type="button" id="resume" hidden data-i18n="RETURN TO MATCH">RETURN TO MATCH</button>
         </div>
+        <section class="room-chat" aria-labelledby="room-chat-heading">
+          <h3 id="room-chat-heading" data-i18n="Room chat">Room chat</h3>
+          <ol id="room-chat-log" role="log" aria-live="polite" aria-relevant="additions" data-i18n-aria-label="Room messages" aria-label="Room messages"></ol>
+          <form id="room-chat-form">
+            <input id="room-chat-text" name="message" maxlength="280" data-i18n-aria-label="Message to the room" aria-label="Message to the room"
+              data-i18n-placeholder="Message to the room…" placeholder="Message to the room…" autocomplete="off">
+            <button class="primary" type="submit" data-i18n="Send">Send</button>
+          </form>
+        </section>
       </section>
     </div>
+    <section id="guide" aria-labelledby="guide-heading" hidden>
+      <div class="guide-actions">
+        <button id="guide-close" class="secondary" type="button" data-i18n="Back to menu">Back to menu</button>
+        <label class="guide-language"><span id="guide-language-label">Idioma do guia</span>
+          <select id="guide-language">
+            <option value="pt-PT" lang="pt-PT">Português</option>
+            <option value="en" lang="en">English</option>
+          </select>
+        </label>
+      </div>
+      <h2 id="guide-heading" data-i18n="How to play">How to play</h2>
+      <div class="guide-tabs" id="guide-tabs" role="tablist" aria-labelledby="guide-heading"></div>
+      <div id="guide-pages"></div>
+    </section>
   </div>
 </main>
 <script type="module" src="./src/main.js"></script>

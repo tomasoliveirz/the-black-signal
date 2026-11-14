@@ -164,6 +164,22 @@ export function buildWorld(parent) {
   const mountainMat = underMaterial(9, 1, 0.95, { fog: false });
   if (peaks) scene.add(styledMesh(mergeGeometries(mgeo), mountainMat, new THREE.MeshLambertMaterial({ vertexColors: true, flatShading: true, fog: false }), false));
 
+  // Supplies sit on field cases; blood is stored in sealed medical lockers.
+  for (const supply of [...LAYOUT.items, ...LAYOUT.blood.map(source => ({ ...source, type: 'blood' }))]) {
+    const { x, y, z, type } = supply;
+    const blood = type === 'blood';
+    const body = place(box, x, y + .37, z, blood ? .7 : .8, .74, blood ? .48 : .58);
+    put(body, blood ? 22 : 5);
+    put(place(box, x, y + .77, z, blood ? .73 : .86, .07, blood ? .51 : .64), 22);
+    put(place(box, x, y + .14, z, blood ? .71 : .81, .09, blood ? .49 : .59), 12);
+    if (blood) {
+      put(place(box, x, y + .49, z + .247, .49, .48, .024), 21);
+      put(place(box, x + .19, y + .48, z + .276, .045, .18, .025), 12);
+      put(place(box, x - .1, y + .48, z + .265, .18, .06, .01), 23);
+      put(place(box, x - .1, y + .48, z + .267, .06, .18, .01), 23);
+    }
+  }
+
   // ---------- merged static meshes, one per palette
   const texFor = { 5: TEX.bark(3), 6: TEX.planks(2), 7: TEX.planks(4) };
   for (const k of Object.keys(under)) {
@@ -196,10 +212,13 @@ export function buildWorld(parent) {
   beaconMesh.position.copy(mastTop); scene.add(beaconMesh);
 
   // ---------- items
-  const GLOW = { fuse: 0x8fe8ff, ammo: 0xe8c060, med: 0xff6a5a, flare: 0xff9838 };
   const prim = (geo, pal, tone = 0.5) => styledMesh(geo, underMaterial(pal, 1, 1), stdMaterial(pal, { key: 'item' + tone, tone, emissive: new THREE.Color(PALETTE[pal][1]).multiplyScalar(0.3) }), false);
   const itemModel = {
-    fuse: (g) => R2R('copper_wiring_bundle').then((src) => { const m = styledClone(src, 'item'); m.scale.setScalar(0.22); m.position.y = -0.06; g.add(m); }),
+    cell: (g) => {
+      g.add(prim(new THREE.BoxGeometry(.22,.33,.15), 22), prim(new THREE.BoxGeometry(.23,.06,.16).translate(0,.16,0), 21));
+      g.add(prim(new THREE.BoxGeometry(.12,.13,.013).translate(0,.015,.082), 17));
+      for (const x of [-.06,.06]) g.add(prim(new THREE.CylinderGeometry(.025,.025,.045,6).translate(x,.21,0), 19));
+    },
     ammo: (g) => { // ammunition can: body, lid, handle, stencilled band
       g.add(prim(new THREE.BoxGeometry(0.3, 0.17, 0.15), 18, 0.2), prim(new THREE.BoxGeometry(0.32, 0.035, 0.17).translate(0, 0.1, 0), 18, 0.5),
         prim(new THREE.TorusGeometry(0.05, 0.012, 5, 10, Math.PI).translate(0, 0.118, 0), 22), prim(new THREE.BoxGeometry(0.302, 0.05, 0.152).translate(0, 0.01, 0), 19, 0.6));
@@ -214,12 +233,20 @@ export function buildWorld(parent) {
       g.add(f);
     },
   };
-  const items = LAYOUT.items.map((it) => {
+  function supplyModel(it, raised = true) {
     const g = new THREE.Group();
     itemModel[it.type](g);
-    const sp = glow(new THREE.Vector3(), 0.8, GLOW[it.type]); scene.remove(sp); sp.material.opacity = 0.55; g.add(sp);
-    g.position.set(it.x, it.y + 0.45, it.z); g.userData.y = it.y + 0.45; g.userData.ph = it.id * 1.7;
-    scene.add(g); return g;
+    g.position.set(it.x, (it.y ?? height(it.x,it.z)) + (raised ? .94 : .2), it.z);
+    scene.add(g);
+    return g;
+  }
+  const items = LAYOUT.items.map(it => supplyModel(it));
+  const droppedCells = new Map();
+  const bloodClues = LAYOUT.blood.map(source => {
+    const clue = new THREE.Mesh(new THREE.PlaneGeometry(.18,.07), new THREE.MeshBasicMaterial({ color:0x79372d, transparent:true, opacity:0, depthWrite:false }));
+    clue.position.set(source.x+.08, source.y+.64, source.z+.266);
+    scene.add(clue);
+    return clue;
   });
 
   // ---------- buildings, wrecks and props (rust-to-riches models), baked once they have loaded
@@ -251,7 +278,7 @@ export function buildWorld(parent) {
     l.geometry.setFromPoints([new THREE.Vector3(...a), new THREE.Vector3(...b)]); l.userData.t = 0.12; l.visible = true;
   };
 
-  const TXCOL = [new THREE.Color(0xff4030), new THREE.Color(0xffb040), new THREE.Color(0x60ff90)];
+  const TXCOL = [new THREE.Color(0xff4030), new THREE.Color(0xffb040), new THREE.Color(0x60ff90), new THREE.Color(0x6c7378)];
   function update(dt, t, night, state) {
     environment.update(night);
     // power: path lanterns and windows die in a blackout
@@ -261,22 +288,41 @@ export function buildWorld(parent) {
     for (const g of powerGlows) g.scale.setScalar(g.userData.s * power * (0.6 + 0.05 * Math.sin(t * 9)));
     beacon.material.opacity = beaconMesh.material.opacity = 0.5 + 0.5 * Math.sin(t * 2.2);
     for (const l of tracers) if (l.visible) { l.userData.t -= dt; l.material.opacity = Math.max(0, l.userData.t / 0.12); if (l.userData.t <= 0) l.visible = false; }
-    for (const g of items) if (g.visible) { g.position.y = g.userData.y + Math.sin(t * 2 + g.userData.ph) * 0.06; g.rotation.y = t * 1.2 + g.userData.ph; }
     txLamps.forEach((lamp, i) => {
-      const status = state?.tx[i];
-      lamp.material.color.copy(TXCOL[status?.on ? 2 : status?.fuse ? 1 : 0]);
-      lamp.scale.setScalar(status?.on ? 1.3 : 1 + 0.25 * Math.sin(t * 6 + i));
+      const status = state?.tx[i], locked = state && LAYOUT.tx[i].zone > (state.unlocked ?? 0);
+      lamp.material.color.copy(TXCOL[locked ? 3 : status?.on ? 2 : status?.fuse ? 1 : 0]);
+      lamp.scale.setScalar(locked ? .75 : status?.on ? 1.3 : 1 + .15 * Math.sin(t * 6 + i));
     });
-    for (let i = 0; i < items.length; i++) items[i].visible = !state || state.items[i] === '1';
+    for (let i = 0; i < items.length; i++) {
+      const unlocked = !state || LAYOUT.items[i].zone <= (state.unlocked ?? 0);
+      items[i].visible = unlocked && (!state || state.items[i] === '1');
+    }
+    for (const [i, clue] of bloodClues.entries()) clue.material.opacity = (state?.blood?.[i] ?? 0) > 0 ? .78 : 0;
+    const activeDrops = new Set();
+    for (const cell of state?.extraDrops ?? []) {
+      activeDrops.add(cell.id);
+      let model = droppedCells.get(cell.id);
+      if (!model) {
+        model = supplyModel({ ...cell, type: 'cell' }, false);
+        droppedCells.set(cell.id, model);
+      }
+      model.position.set(cell.x, (cell.y ?? height(cell.x,cell.z)) + .2, cell.z);
+    }
+    for (const [id, model] of droppedCells) if (!activeDrops.has(id)) {
+      scene.remove(model);
+      model.traverse(o => o.geometry?.dispose());
+      droppedCells.delete(id);
+    }
     flares.forEach((f, i) => {
       const s = state?.flares[i]; f.visible = !!s;
       if (s) { f.position.set(s[0], height(s[0], s[1]) + 0.3, s[1]); f.scale.setScalar(4.5 + Math.sin(t * 30 + i) * 0.7); }
     });
-    extract.visible = state?.phase === 'extract';
+    extract.visible = Boolean(state?.extractionOpen);
     ringMat.opacity = 0.55 + 0.3 * Math.sin(t * 3);
   }
   const powerLights = lampPos;
   const dispose = () => {
+    for (const clue of bloodClues) clue.material.dispose();
     environment.dispose();
     parent.remove(scene);
     scene.traverse((o) => { o.geometry?.dispose(); });

@@ -1,0 +1,19 @@
+{
+  "version": "0.5.0",
+  "status": "deployment-in-progress",
+  "intended_game": "https://tomasoliveira.xyz/black-signal/",
+  "intended_review": "https://tomasoliveira.xyz/black-signal/review/",
+  "temporary_origin": "https://black-signal.51-38-190-126.sslip.io",
+  "dns_cutover_required": true,
+  "tests": {
+    "rules": 18,
+    "network": 12,
+    "browser_languages": "passed",
+    "review_languages_and_sector_filters": "passed"
+  },
+  "unvalidated": [
+    "six-human balance",
+    "independent security assessment",
+    "long-distance voice quality under packet loss"
+  ]
+}

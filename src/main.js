@@ -1,9 +1,13 @@
+import { t } from './i18n.js';
 import * as THREE from 'three';
 import { uniforms, updateUnder, setStyle, isNormal, applyTheme, NLIGHTS, SUN } from './paint.js';
 import { buildWorld, buildSky } from './world.js';
 import { createGame } from './game.js';
 import { createMenu } from './menu.js';
 import { createAmbience } from './ambience.js';
+import { createAccount } from './account.js';
+import { createRooms } from './rooms.js';
+import { createLobbyAudio } from './lobby-audio.js';
 import { height, setMap, MAP, MAP_ID, MAPS, BOXES } from '../shared/layout.js';
 import '../shared/maps/index.js';
 
@@ -37,19 +41,24 @@ const keys = new Set();
 const view = { yaw: 2.6, pitch: 0.22, dist: 4.4 };
 function changeMap(id) { // tear the world down and build the other environment
   if (id === MAP_ID || !MAPS[id]) return;
+  ambience.reset();
   world.dispose(); setMap(id); applyTheme(MAP.theme);
   Object.assign(world, buildWorld(scene));
   setQuality(quality);
 }
 const ambience = createAmbience();
+const lobbyAudio=createLobbyAudio(ambience);
 const game = createGame({
-  scene, world, view, keys, changeMap, ambience,
+  scene, world, view, keys, changeMap, ambience, camera, isActive: () => active,
   menu: {
     connection: status => menu.connection(status),
     joined: () => menu.joined(),
-    lobby: message => menu.lobby(message),
+    lobby: message => { menu.lobby(message); roomUI.lobby(message); },
     matchStart: () => menu.matchStart(),
     matchEnd: result => menu.matchEnd(result),
+    roomOptions: () => roomUI.options(),
+    roomJoined: message => roomUI.joined(message),
+    roomLeft: () => roomUI.clear(),
   },
 });
 
@@ -58,7 +67,7 @@ addEventListener('resize', resize); resize();
 
 // ---------- settings
 let quality = 3, active = false;
-const QUALITY = [0.25, 0.5, 0.75, 1], QNAME = ['BAIXO', 'MÉDIO', 'ALTO', 'ULTRA'];
+const QUALITY = [0.25, 0.5, 0.75, 1], QNAME = ['LOW', 'MEDIUM', 'HIGH', 'ULTRA'];
 function setQuality(q) {
   quality = q; const f = QUALITY[q];
   $('quality').value = q;
@@ -76,17 +85,21 @@ function applyStyle(normal) {
 
 // ---------- input
 const menuScreen = $('menu'), chatBox = $('chat');
+function lockPointer() {
+  try { canvas.requestPointerLock?.()?.catch?.(() => {}); } catch {}
+}
 function enter(lock) {
   active = true;
   menuScreen.hidden = true;
   document.body.classList.remove('menu-open');
   if (lock) {
     ambience.wake();
-    canvas.requestPointerLock?.();
+    lockPointer();
   }
 }
 function openMenu() {
   active = false;
+  game.voice.reset();
   keys.clear();
   chatBox.style.display = 'none';
   chatBox.blur();
@@ -95,16 +108,29 @@ function openMenu() {
   document.exitPointerLock?.();
 }
 const menu = createMenu({ game, enter, openMenu, applyStyle, setQuality });
-const sound = $('ambience');
-try { sound.checked = localStorage.getItem('bs.ambience') !== 'off'; } catch {}
-if (!sound.checked) ambience.setEnabled(false);
-sound.addEventListener('change', () => {
-  ambience.setEnabled(sound.checked);
-  try { localStorage.setItem('bs.ambience', sound.checked ? 'on' : 'off'); } catch {}
+const roomUI = createRooms(game,openMenu);
+let identityReady=false;
+createAccount(() => {
+  if(identityReady) { game.reconnect(); openMenu(); }
+  identityReady=true;
 });
+for (const bus of ['effects', 'voices', 'environment']) {
+  const slider = $('volume-' + bus);
+  try {
+    const saved = localStorage.getItem('bs.volume.' + bus);
+    if (saved !== null && Number.isFinite(+saved)) slider.value = saved;
+    else if (bus === 'environment' && localStorage.getItem('bs.ambience') === 'off') slider.value = 0;
+  } catch {}
+  ambience.level(bus, Number(slider.value) / 100);
+  slider.addEventListener('input', () => {
+    ambience.level(bus, Number(slider.value) / 100);
+    try { localStorage.setItem('bs.volume.' + bus, slider.value); } catch {}
+  });
+}
+$('play').addEventListener('click', ambience.wake);
 canvas.addEventListener('mousedown', (e) => {
   if (!active || e.button !== 0) return;
-  if (document.pointerLockElement !== canvas) { ambience.wake(); canvas.requestPointerLock?.(); return; }
+  if (document.pointerLockElement !== canvas) { ambience.wake(); lockPointer(); return; }
   if (game.me.st >= 2 || game.me.spectator) game.nextSpectate(); else game.act('primary', camera);
 });
 addEventListener('keydown', (e) => {
@@ -119,19 +145,26 @@ addEventListener('keydown', (e) => {
   if (!e.repeat && e.code === 'KeyV') applyStyle(!isNormal());
   if (!e.repeat && /^Digit[1-4]$/.test(e.code)) setQuality(+e.code[5] - 1);
   if (!active) return;
+  if (e.code === 'KeyZ' && !e.repeat) { ambience.wake(); game.voice.push(true); }
   if (e.code === 'KeyB') game.toggleSandboxNight();
   if (e.code === 'KeyQ') game.act('heal');
   if (e.code === 'KeyG') game.act('flare');
-  if (e.code === 'KeyF') game.act('transform');
+  if (e.code === 'KeyF' && !e.repeat) game.act('transform');
+  if (e.code === 'KeyR' && !e.repeat) game.act('drop');
   if ((e.code === 'Enter' || (e.code === 'KeyT' && game.me.role === 'echo')) && game.joined) {
+    game.voice.push(false);
     chatBox.dataset.ch = e.code === 'KeyT' ? 'echo' : 'prox';
-    chatBox.placeholder = e.code === 'KeyT' ? 'canal Echo (só o teu parceiro lê)' : 'voz de proximidade (ouve-se até 22 m)';
+    chatBox.placeholder = e.code === 'KeyT' ? t("Private Echo channel (only your partner can read)") : t("Proximity text chat (up to 22 m)");
     chatBox.style.display = 'block'; chatBox.focus(); keys.clear(); e.preventDefault();
   }
   if (e.code === 'Space') e.preventDefault();
 });
-addEventListener('keyup', (e) => keys.delete(e.code));
-addEventListener('blur', () => keys.clear());
+addEventListener('keyup', e => {
+  keys.delete(e.code);
+  if (e.code === 'KeyZ') game.voice.push(false);
+});
+addEventListener('blur', () => { keys.clear(); game.voice.reset(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden) game.voice.reset(); });
 addEventListener('mousemove', (e) => {
   if (document.pointerLockElement !== canvas && !(e.buttons & 2 && active)) return;
   view.yaw -= e.movementX * 0.0026; view.pitch = THREE.MathUtils.clamp(view.pitch + e.movementY * 0.0022, -0.6, 1.2);
@@ -150,17 +183,18 @@ const stats = { acc: 0, n: 0, worst: 0 };
 let autoStart = false, camReach = 1;
 
 function frame() {
-  const raw = clock.getDelta(), dt = Math.min(raw, 0.05), t = clock.elapsedTime, u = uniforms;
+  const raw = clock.getDelta(), dt = Math.min(raw, 0.05), elapsed = clock.elapsedTime, u = uniforms;
   if (autoStart && game.online) { autoStart = false; game.join('Tester'); setTimeout(() => game.start(), 300); enter(false); }
-  const g = game.update(dt, t, active);
-  u.uTime.value = t;
+  const g = game.update(dt, elapsed, active);
+  lobbyAudio.update(!game.state||game.state.phase==='lobby'||game.state.phase==='end');
+  u.uTime.value = elapsed;
   u.uNight.value += (Math.max(g.night, MAP.theme.minNight ?? 0) - u.uNight.value) * (1 - Math.exp(-1.6 * dt));
   const night = u.uNight.value, normal = isNormal();
   u.uSun.value.copy(SUN).lerp(moon, night).normalize();
 
   // camera: over-the-shoulder orbit around the focus
   const preview = !active && !game.state;
-  const yaw = preview ? 0.14 + Math.sin(t * 0.22) * 0.18 : view.yaw;
+  const yaw = preview ? 0.14 + Math.sin(elapsed * 0.22) * 0.18 : view.yaw;
   const pitch = preview ? 0.21 : view.pitch;
   const distance = preview ? 6.2 : view.dist;
   const big = g.focusForm ? 1.35 : 1;
@@ -183,7 +217,7 @@ function frame() {
   if (night < 0.6) for (const p of world.powerLights) lightList.push({ p, r: 10 * (1 - night), c: 0xffb060 });
   for (const source of world.practicals) if (source.r > 2) lightList.push(source);
   lightList.sort((a, b) => a.p.distanceToSquared(camPos) - b.p.distanceToSquared(camPos));
-  const flick = 1 + Math.sin(t * 11) * 0.03 + Math.sin(t * 23.7) * 0.02;
+  const flick = 1 + Math.sin(elapsed * 11) * 0.03 + Math.sin(elapsed * 23.7) * 0.02;
   for (let i = 0; i < NLIGHTS; i++) {
     const l = lightList[i], pl = points[i];
     if (l) { u.uLights.value[i].set(l.p.x, l.p.y, l.p.z, l.r * flick); pl.position.copy(l.p); pl.color.set(l.c); pl.distance = l.r * 1.5; pl.intensity = normal ? (0.8 + 4.2 * night) * flick : 0; }
@@ -195,12 +229,12 @@ function frame() {
   scene.fog.color.copy(fogC);
   const [fogNear, fogFar] = MAP.theme.fog ?? [18, 150];
   const sheltered = MAP.kind === 'factory' || MAP.kind === 'mesh';
-  ambience.update(dt, active && game.playing(), Boolean(g.night), sheltered, g.speed);
+  ambience.update(dt, active && (Boolean(game.state) || !game.joined), Boolean(g.night), g.focus, camera, game.state);
   u.uFog.value.set(fogNear * (1 - night * .23), fogFar * (1 - night * (sheltered ? .27 : .37)));
   scene.fog.near = u.uFog.value.x; scene.fog.far = u.uFog.value.y;
   updateUnder(night);
   world.terrainPaint.color.copy(tDay).lerp(tNight, night);
-  world.update(dt, t, night, game.state && game.state.phase !== 'lobby' ? game.state : null);
+  world.update(dt, elapsed, night, game.state && game.state.phase !== 'lobby' ? game.state : null);
   if (normal) {
     sun.color.copy(sunDay).lerp(sunNight, night);
     sun.intensity = (sheltered ? 1.62 : 1.98) - .92 * night;
@@ -215,7 +249,7 @@ function frame() {
   stats.acc += raw; stats.n++; stats.worst = Math.max(stats.worst, raw);
   if (stats.acc >= 0.5) {
     const drawn = world.meshes.reduce((s, m) => s + (m.visible ? m.geometry.instanceCount : 0), 0);
-    $('stats').textContent = `FPS ${(stats.n / stats.acc).toFixed(0).padStart(3)}  ${(stats.acc / stats.n * 1000).toFixed(1)} ms  PIOR ${(stats.worst * 1000).toFixed(0)} ms\n${normal ? 'NORMAL' : 'PINTURA'} · ${QNAME[quality]} · ${drawn.toLocaleString('pt-PT')} instâncias · ${renderer.info.render.calls} draw calls`;
+    $('stats').textContent = `FPS ${(stats.n / stats.acc).toFixed(0).padStart(3)}  ${(stats.acc / stats.n * 1000).toFixed(1)} ms  ${t('WORST')} ${(stats.worst * 1000).toFixed(0)} ms\n${normal ? 'NORMAL' : t('PAINTERLY')} · ${t(QNAME[quality])} · ${drawn.toLocaleString(document.documentElement.lang)} ${t('instances')} · ${renderer.info.render.calls} draw calls`;
     stats.acc = 0; stats.n = 0; stats.worst = 0;
   }
   requestAnimationFrame(frame);

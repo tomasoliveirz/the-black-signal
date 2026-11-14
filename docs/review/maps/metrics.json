@@ -1,0 +1,582 @@
+{
+  "results": [
+    {
+      "id": "amberwood-overview-day",
+      "boot": 925,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 159,268 instances · 187 draw calls",
+      "cam": [
+        1.9452204899745462,
+        7.199559518237252,
+        10.190276524220074
+      ],
+      "frameMedian": 16.700000000000045,
+      "heap": 107953162,
+      "calls": 187,
+      "triangles": 550461,
+      "geometries": 197,
+      "textures": 10
+    },
+    {
+      "id": "amberwood-player-day",
+      "boot": 798,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 159,268 instances · 173 draw calls",
+      "cam": [
+        3.9542487203369836,
+        3.0458091159712337,
+        -2.194086433939498
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 168856406,
+      "calls": 173,
+      "triangles": 549115,
+      "geometries": 187,
+      "textures": 9
+    },
+    {
+      "id": "amberwood-overview-night",
+      "boot": 904,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 159,268 instances · 187 draw calls",
+      "cam": [
+        1.9452204899745462,
+        7.199559518237252,
+        10.190276524220074
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 236898539,
+      "calls": 187,
+      "triangles": 550461,
+      "geometries": 197,
+      "textures": 10
+    },
+    {
+      "id": "amberwood-player-night",
+      "boot": 792,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 159,268 instances · 173 draw calls",
+      "cam": [
+        3.9542487203369836,
+        3.0458091159712337,
+        -2.194086433939498
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 286083392,
+      "calls": 173,
+      "triangles": 549115,
+      "geometries": 187,
+      "textures": 9
+    },
+    {
+      "id": "amberwood-landmark-day",
+      "boot": 899,
+      "fps": "FPS  60  16.7 ms  WORST 20 ms\nNORMAL · ULTRA · 159,268 instances · 75 draw calls",
+      "cam": [
+        -0.18111792928523318,
+        2.048561036444597,
+        -8.492988900965688
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 330943464,
+      "calls": 75,
+      "triangles": 535155,
+      "geometries": 101,
+      "textures": 8
+    },
+    {
+      "id": "amberwood-chase-night",
+      "boot": 906,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 159,268 instances · 136 draw calls",
+      "cam": [
+        -0.8076586215783783,
+        2.1143503952348803,
+        -16.22698786992901
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 463527951,
+      "calls": 136,
+      "triangles": 547167,
+      "geometries": 155,
+      "textures": 8
+    },
+    {
+      "id": "hollow-overview-day",
+      "boot": 884,
+      "fps": "FPS  60  16.7 ms  WORST 26 ms\nNORMAL · ULTRA · 140,016 instances · 186 draw calls",
+      "cam": [
+        -8.030018285978286,
+        6.24425538604203,
+        10.732506949551048
+      ],
+      "frameMedian": 16.700000000000045,
+      "heap": 493040216,
+      "calls": 186,
+      "triangles": 537896,
+      "geometries": 195,
+      "textures": 9
+    },
+    {
+      "id": "hollow-player-day",
+      "boot": 914,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 140,016 instances · 156 draw calls",
+      "cam": [
+        -11.286174748441901,
+        2.8888531173916174,
+        -10.774485997756893
+      ],
+      "frameMedian": 16.700000000000045,
+      "heap": 584253089,
+      "calls": 156,
+      "triangles": 535792,
+      "geometries": 172,
+      "textures": 8
+    },
+    {
+      "id": "hollow-overview-night",
+      "boot": 922,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 140,016 instances · 186 draw calls",
+      "cam": [
+        -8.030018285978286,
+        6.24425538604203,
+        10.732506949551048
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 615175404,
+      "calls": 186,
+      "triangles": 537896,
+      "geometries": 195,
+      "textures": 9
+    },
+    {
+      "id": "hollow-player-night",
+      "boot": 838,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 140,016 instances · 156 draw calls",
+      "cam": [
+        -11.286174748441901,
+        2.8888531173916174,
+        -10.774485997756893
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 532025935,
+      "calls": 156,
+      "triangles": 535792,
+      "geometries": 172,
+      "textures": 8
+    },
+    {
+      "id": "hollow-landmark-day",
+      "boot": 924,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 140,016 instances · 149 draw calls",
+      "cam": [
+        -22.248489741550024,
+        3.549013051377578,
+        -7.975932095733974
+      ],
+      "frameMedian": 16.700000000000045,
+      "heap": 607989422,
+      "calls": 149,
+      "triangles": 534918,
+      "geometries": 168,
+      "textures": 8
+    },
+    {
+      "id": "hollow-chase-night",
+      "boot": 899,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 140,016 instances · 130 draw calls",
+      "cam": [
+        -4.474194705333517,
+        2.289752851371895,
+        -24.89597550570105
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 635456996,
+      "calls": 130,
+      "triangles": 533426,
+      "geometries": 151,
+      "textures": 8
+    },
+    {
+      "id": "frost-overview-day",
+      "boot": 809,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 85,280 instances · 185 draw calls",
+      "cam": [
+        2.5849302449883345,
+        6.418801378437368,
+        14.549942045426981
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 544935584,
+      "calls": 185,
+      "triangles": 341452,
+      "geometries": 195,
+      "textures": 10
+    },
+    {
+      "id": "frost-player-day",
+      "boot": 781,
+      "fps": "FPS  60  16.7 ms  WORST 23 ms\nNORMAL · ULTRA · 85,280 instances · 155 draw calls",
+      "cam": [
+        4.259766124742262,
+        2.9944810933134907,
+        -7.030522207768644
+      ],
+      "frameMedian": 16.700000000000045,
+      "heap": 586710218,
+      "calls": 155,
+      "triangles": 339724,
+      "geometries": 171,
+      "textures": 8
+    },
+    {
+      "id": "frost-overview-night",
+      "boot": 791,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 85,280 instances · 185 draw calls",
+      "cam": [
+        2.5849302449883345,
+        6.418801378437368,
+        14.549942045426981
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 508473688,
+      "calls": 185,
+      "triangles": 341452,
+      "geometries": 195,
+      "textures": 10
+    },
+    {
+      "id": "frost-player-night",
+      "boot": 894,
+      "fps": "FPS  60  16.7 ms  WORST 18 ms\nNORMAL · ULTRA · 85,280 instances · 155 draw calls",
+      "cam": [
+        4.259766124742262,
+        2.9944810933134907,
+        -7.030522207768644
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 551910274,
+      "calls": 155,
+      "triangles": 339724,
+      "geometries": 171,
+      "textures": 8
+    },
+    {
+      "id": "frost-landmark-day",
+      "boot": 801,
+      "fps": "FPS  60  16.7 ms  WORST 23 ms\nNORMAL · ULTRA · 85,280 instances · 119 draw calls",
+      "cam": [
+        12.26713726888148,
+        4.7135902632133755,
+        -12.579099513300415
+      ],
+      "frameMedian": 16.700000000000045,
+      "heap": 426628021,
+      "calls": 119,
+      "triangles": 336728,
+      "geometries": 141,
+      "textures": 7
+    },
+    {
+      "id": "frost-chase-night",
+      "boot": 796,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 85,280 instances · 134 draw calls",
+      "cam": [
+        0.1918734594949496,
+        1.498714858628138,
+        -24.79431303841264
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 436498292,
+      "calls": 134,
+      "triangles": 338232,
+      "geometries": 154,
+      "textures": 8
+    },
+    {
+      "id": "ashfall-overview-day",
+      "boot": 665,
+      "fps": "FPS  60  16.7 ms  WORST 26 ms\nNORMAL · ULTRA · 0 instances · 207 draw calls",
+      "cam": [
+        -0.6339078958611989,
+        6.333429176620718,
+        13.851536948948338
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 476066622,
+      "calls": 207,
+      "triangles": 194860,
+      "geometries": 218,
+      "textures": 14
+    },
+    {
+      "id": "ashfall-player-day",
+      "boot": 665,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 0 instances · 191 draw calls",
+      "cam": [
+        0.6568262018449996,
+        2.2048875259225515,
+        -4.664902284761702
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 438539438,
+      "calls": 191,
+      "triangles": 193448,
+      "geometries": 205,
+      "textures": 13
+    },
+    {
+      "id": "ashfall-overview-night",
+      "boot": 669,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 0 instances · 207 draw calls",
+      "cam": [
+        -0.6339078958611989,
+        6.333429176620718,
+        13.851536948948338
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 454753976,
+      "calls": 207,
+      "triangles": 194860,
+      "geometries": 218,
+      "textures": 14
+    },
+    {
+      "id": "ashfall-player-night",
+      "boot": 702,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 0 instances · 191 draw calls",
+      "cam": [
+        0.6568262018449996,
+        2.2048875259225515,
+        -4.664902284761702
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 452600180,
+      "calls": 191,
+      "triangles": 193448,
+      "geometries": 205,
+      "textures": 13
+    },
+    {
+      "id": "ashfall-landmark-day",
+      "boot": 660,
+      "fps": "FPS  60  16.7 ms  WORST 30 ms\nNORMAL · ULTRA · 0 instances · 125 draw calls",
+      "cam": [
+        4.054653190085777,
+        2.111134127360444,
+        -3.429138551314753
+      ],
+      "frameMedian": 16.700000000000045,
+      "heap": 445330040,
+      "calls": 125,
+      "triangles": 190044,
+      "geometries": 147,
+      "textures": 9
+    },
+    {
+      "id": "ashfall-chase-night",
+      "boot": 668,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 0 instances · 155 draw calls",
+      "cam": [
+        0.1135958909949511,
+        2.0928488125700904,
+        -24.62299248109087
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 452196332,
+      "calls": 155,
+      "triangles": 191850,
+      "geometries": 171,
+      "textures": 11
+    },
+    {
+      "id": "foundry-overview-day",
+      "boot": 714,
+      "fps": "FPS  60  16.7 ms  WORST 25 ms\nNORMAL · ULTRA · 0 instances · 180 draw calls",
+      "cam": [
+        2.364739231671208,
+        5.618708024292108,
+        1.0034360239710738
+      ],
+      "frameMedian": 16.700000000000045,
+      "heap": 425286844,
+      "calls": 180,
+      "triangles": 178662,
+      "geometries": 194,
+      "textures": 9
+    },
+    {
+      "id": "foundry-player-day",
+      "boot": 645,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 0 instances · 178 draw calls",
+      "cam": [
+        0.8696478163942614,
+        2.203532819078877,
+        -4.695435836375269
+      ],
+      "frameMedian": 16.700000000000045,
+      "heap": 340634029,
+      "calls": 178,
+      "triangles": 178638,
+      "geometries": 192,
+      "textures": 9
+    },
+    {
+      "id": "foundry-overview-night",
+      "boot": 641,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 0 instances · 180 draw calls",
+      "cam": [
+        2.364739231671208,
+        5.618708024292108,
+        1.0034360239710738
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 340149825,
+      "calls": 180,
+      "triangles": 178662,
+      "geometries": 194,
+      "textures": 9
+    },
+    {
+      "id": "foundry-player-night",
+      "boot": 658,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 0 instances · 178 draw calls",
+      "cam": [
+        0.8696478163942614,
+        2.203532819078877,
+        -4.695435836375269
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 328715245,
+      "calls": 178,
+      "triangles": 178638,
+      "geometries": 192,
+      "textures": 9
+    },
+    {
+      "id": "foundry-landmark-day",
+      "boot": 643,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 0 instances · 135 draw calls",
+      "cam": [
+        5.742949968134746,
+        1.9591504248988234,
+        -1.0700011533396223
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 307622693,
+      "calls": 135,
+      "triangles": 177636,
+      "geometries": 151,
+      "textures": 8
+    },
+    {
+      "id": "foundry-chase-night",
+      "boot": 660,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 0 instances · 134 draw calls",
+      "cam": [
+        3.9809086908108773,
+        2.1510001091026822,
+        -29.73280923940238
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 306543485,
+      "calls": 134,
+      "triangles": 176704,
+      "geometries": 153,
+      "textures": 8
+    },
+    {
+      "id": "mall-overview-day",
+      "boot": 758,
+      "fps": "FPS  60  16.7 ms  WORST 22 ms\nNORMAL · ULTRA · 0 instances · 230 draw calls",
+      "cam": [
+        -5.9967929517863645,
+        5.631497831445274,
+        19.84233626771297
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 303536317,
+      "calls": 230,
+      "triangles": 169198,
+      "geometries": 252,
+      "textures": 9
+    },
+    {
+      "id": "mall-player-day",
+      "boot": 730,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 0 instances · 209 draw calls",
+      "cam": [
+        -5.881918219392023,
+        1.8815393474335325,
+        17.40946674679724
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 350894645,
+      "calls": 209,
+      "triangles": 166476,
+      "geometries": 238,
+      "textures": 8
+    },
+    {
+      "id": "mall-overview-night",
+      "boot": 762,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 0 instances · 230 draw calls",
+      "cam": [
+        -5.9967929517863645,
+        5.631497831445274,
+        19.84233626771297
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 378107932,
+      "calls": 230,
+      "triangles": 169198,
+      "geometries": 252,
+      "textures": 9
+    },
+    {
+      "id": "mall-player-night",
+      "boot": 869,
+      "fps": "FPS  60  16.7 ms  WORST 17 ms\nNORMAL · ULTRA · 0 instances · 209 draw calls",
+      "cam": [
+        -5.881918219392023,
+        1.8815393474335325,
+        17.40946674679724
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 329660206,
+      "calls": 209,
+      "triangles": 166476,
+      "geometries": 238,
+      "textures": 8
+    },
+    {
+      "id": "mall-landmark-day",
+      "boot": 758,
+      "fps": "FPS  60  16.7 ms  WORST 24 ms\nNORMAL · ULTRA · 0 instances · 248 draw calls",
+      "cam": [
+        -7.553716737183022,
+        1.7138416285095561,
+        27.391615348596552
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 322831130,
+      "calls": 248,
+      "triangles": 171528,
+      "geometries": 265,
+      "textures": 9
+    },
+    {
+      "id": "mall-chase-night",
+      "boot": 742,
+      "fps": "FPS  60  16.7 ms  WORST 19 ms\nNORMAL · ULTRA · 0 instances · 132 draw calls",
+      "cam": [
+        -3.8444588887327584,
+        1.889267033246044,
+        0.25843506627428736
+      ],
+      "frameMedian": 16.699999999999818,
+      "heap": 395425458,
+      "calls": 132,
+      "triangles": 122982,
+      "geometries": 205,
+      "textures": 7
+    }
+  ],
+  "errors": [],
+  "failed": []
+}
