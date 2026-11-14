@@ -46,11 +46,21 @@ const triArea = (geo) => {
 
 // Bakes many placed models into one mesh per material (plus one dab mesh), so scenery costs a handful of draw calls.
 // placements: [{ key, x, y, z, rot, s, big, center }]
-export async function buildStatic(scene, placements) {
+export async function buildStatic(scene, placements, onProgress = () => {}) {
   const buckets = new Map(), M = new THREE.Matrix4(), T = new THREE.Matrix4(), box = new THREE.Box3();
-  const srcs = await Promise.all(placements.map((p) => (p.url ? loadModel(p.url) : R2R(p.key)).catch((e) => { console.warn('Model missing', p.key, e); return null; })));
+  const urls = [...new Set(placements.map(p => p.url || `./assets/r2r/${p.key}.gltf`))];
+  let loaded = 0;
+  onProgress(0, urls.length);
+  const sources = new Map(await Promise.all(urls.map(async url => {
+    try {
+      const source = await loadModel(url);
+      onProgress(++loaded, urls.length);
+      return [url, source];
+    } catch (cause) { throw new Error(`Required model failed: ${url}`, { cause }); }
+  })));
+  const srcs = placements.map(p => sources.get(p.url || `./assets/r2r/${p.key}.gltf`));
   placements.forEach((p, i) => {
-    const src = srcs[i]; if (!src) return;
+    const src = srcs[i];
     box.setFromObject(src);
     const k = p.scale ?? STUD * (p.s ?? 1);
     M.compose(new THREE.Vector3(p.x, p.y, p.z), new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), p.rot ?? 0), new THREE.Vector3(k, k, k));

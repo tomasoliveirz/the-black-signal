@@ -242,6 +242,10 @@
 </script>
 </head>
 <body class="menu-open">
+<div id="asset-status" role="status" aria-live="polite" style="position:fixed;inset:0;z-index:1000;display:grid;place-content:center;gap:20px;padding:32px;background:#161714;color:#f1eadc;text-align:center;overflow:auto">
+  <p id="asset-message" data-i18n="Loading game assets">Loading game assets</p>
+  <button id="asset-reload" type="button" data-i18n="Reload" hidden>Reload</button>
+</div>
 <canvas id="view"></canvas>
 <div class="vignette" id="vignette"></div>
 <div class="hud" id="stats"></div>

@@ -1,0 +1,7 @@
+{
+  "requiredFailureRejects": true,
+  "visibleBilingualError": true,
+  "reloadRecovers": true,
+  "blockedFile": "assets/r2r/portable_generator.gltf",
+  "expectedRequestFailureCount": 1
+}

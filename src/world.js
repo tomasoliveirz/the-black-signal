@@ -261,7 +261,8 @@ export function buildWorld(parent) {
     ...LAYOUT.props.map((p) => ({ ...p, y: p.y - 0.03, big: p.key === 'env_water_tower' })),
     ...LAYOUT.tx.flatMap((t) => [{ key: 'portable_generator', x: t.x, y: t.y - 0.03, z: t.z, rot: t.id * 1.3 }, { key: 'portable_radio', x: t.x - 0.08, y: t.y + 0.69, z: t.z, rot: t.id * 1.3 + 0.3, s: 0.9 }]),
   ];
-  const ready = buildStatic(scene, placements).then((m) => { meshes.push(m); }).catch((e) => console.warn('adereços não carregaram', e));
+  const loading = { loaded: 0, total: 0 };
+  const ready = buildStatic(scene, placements, (loaded, total) => Object.assign(loading, { loaded, total })).then(m => { meshes.push(m); });
 
   // ---------- extraction zone
   const extract = new THREE.Group();
@@ -332,7 +333,7 @@ export function buildWorld(parent) {
     scene.traverse((o) => { o.geometry?.dispose(); });
     pruneDetached();
   };
-  return { dispose, meshes, ready, practicals:environment.practicals, litDabs, glow, tracer, update, powerLights, terrain, terrainPaint, mountainMat, dabCount: meshes.reduce((s, m) => s + m.userData.fullCount, 0) };
+  return { dispose, meshes, ready, loading, practicals:environment.practicals, litDabs, glow, tracer, update, powerLights, terrain, terrainPaint, mountainMat, dabCount: meshes.reduce((s, m) => s + m.userData.fullCount, 0) };
 }
 
 // ---------- sky (painted bands in paint mode, smooth gradient in normal mode)

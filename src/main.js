@@ -38,6 +38,33 @@ buildSky(scene);
 const world = {};
 setMap(qp.get('map') || 'amberwood'); applyTheme(MAP.theme);
 Object.assign(world, buildWorld(scene));
+observeAssets();
+function observeAssets() {
+  const pending = world.ready;
+  world.assetError = false;
+  world.assetPending = true;
+  $('menu').inert = true;
+  $('asset-status').hidden = false;
+  $('asset-reload').hidden = true;
+  pending.then(() => {
+    if (world.ready !== pending) return;
+    world.assetPending = false;
+    $('asset-status').hidden = true;
+    $('menu').inert = false;
+  }, error => {
+    if (world.ready !== pending) return;
+    world.assetError = true;
+    $('asset-status').hidden = false;
+    $('asset-reload').hidden = false;
+    $('asset-message').textContent = t('Required game assets could not load. Reload to try again.');
+    $('asset-reload').focus();
+    console.error('Required world assets failed', error);
+  });
+}
+$('asset-reload').addEventListener('click', () => location.reload());
+addEventListener('language-change', () => {
+  if (world.assetError) $('asset-message').textContent = t('Required game assets could not load. Reload to try again.');
+});
 const keys = new Set();
 const view = { yaw: 2.6, pitch: 0.22, dist: 4.4 };
 function changeMap(id) { // tear the world down and build the other environment
@@ -45,12 +72,13 @@ function changeMap(id) { // tear the world down and build the other environment
   ambience.reset();
   world.dispose(); setMap(id); applyTheme(MAP.theme);
   Object.assign(world, buildWorld(scene));
+  observeAssets();
   setQuality(quality);
 }
 const ambience = createAmbience();
 const lobbyAudio=createLobbyAudio(ambience);
 const game = createGame({
-  scene, world, view, keys, changeMap, ambience, camera, isActive: () => active,
+  scene, world, view, keys, changeMap, ambience, camera, isActive: () => active && !world.assetPending,
   menu: {
     connection: status => menu.connection(status),
     joined: () => menu.joined(),
@@ -128,7 +156,7 @@ for (const bus of ['effects', 'voices', 'environment']) {
 }
 $('play').addEventListener('click', ambience.wake);
 canvas.addEventListener('mousedown', (e) => {
-  if (!active || e.button !== 0) return;
+  if (!active || world.assetPending || e.button !== 0) return;
   if (document.pointerLockElement !== canvas) { ambience.wake(); lockPointer(); return; }
   if (game.me.st >= 2 || game.me.spectator) game.nextSpectate(); else game.act('primary', camera);
 });
@@ -142,7 +170,7 @@ addEventListener('keydown', (e) => {
   keys.add(e.code);
   if (e.code === 'Escape' && active) return openMenu();
   if (!e.repeat && /^Digit[1-4]$/.test(e.code)) setQuality(+e.code[5] - 1);
-  if (!active) return;
+  if (!active || world.assetPending) return;
   if (e.code === 'KeyZ' && !e.repeat) { ambience.wake(); game.voice.push(true); }
   if (e.code === 'KeyB') game.toggleSandboxNight();
   if (e.code === 'KeyQ') game.act('heal');
@@ -181,9 +209,10 @@ const stats = { acc: 0, n: 0, worst: 0 };
 let autoStart = false, camReach = 1;
 
 function frame() {
+  if (!$('asset-status').hidden && !world.assetError) $('asset-message').textContent = t('Loading game assets · {loaded}/{total}', world.loading);
   const raw = clock.getDelta(), dt = Math.min(raw, 0.05), elapsed = clock.elapsedTime, u = uniforms;
   if (autoStart && game.online) { autoStart = false; game.join('Tester'); setTimeout(() => game.start(), 300); enter(false); }
-  const g = game.update(dt, elapsed, active);
+  const g = game.update(dt, elapsed, active && !world.assetPending);
   lobbyAudio.update(!game.state||game.state.phase==='lobby'||game.state.phase==='end');
   u.uTime.value = elapsed;
   u.uNight.value += (Math.max(g.night, MAP.theme.minNight ?? 0) - u.uNight.value) * (1 - Math.exp(-1.6 * dt));

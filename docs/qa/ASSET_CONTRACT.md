@@ -1,0 +1,13 @@
+# Required asset contract
+
+`npm run check:assets` checks the committed SHA-256 inventory of all 117 bundled files (41 glTF/GLB models, including the regression fixture). It resolves external buffer/image files inside the asset directory, rejects missing/unbundled references and checks that textured primitives carry each referenced UV set. Regenerate intentionally with `node tools/validate-assets.mjs --write` after reviewing source/rights and model changes. Hashes identify bytes, not redistribution rights; `ASSET_LICENSES.md` remains uncleared.
+
+The validator initially failed on `knocker_hd.glb`: material `kn_face` pointed four textures at UV set -1 although its primitive has only TEXCOORD_0. Those four indices are now 0. Source SHA-256 before correction: `4eb01089e641f203c7e189814849a577d1366549482868e966eca1792f126a3b`. JSON/chunk lengths were updated; geometry and embedded image binary chunks are byte-identical. The existing figure shader still intentionally simplifies normal/roughness maps; the art calibration gate remains open and this inventory does not certify all rig rendering.
+
+World static imports no longer catch a required model failure and pretend loading succeeded. The ready promise rejects, gameplay input waits while assets load, and a bilingual, keyboard-reachable blocking error explains the failure and offers Reload. Model progress counts unique required URLs. Menu controls are inert until the current world's required load succeeds, including map switches. A stale previous world's completion cannot dismiss the new world's error.
+
+The actual Chrome regression blocked `portable_generator.gltf`, observed rejection and visible EN/PT failure, then restored requests and reloaded successfully. `assets/failure-evidence.json` records that deliberately failed request; `assets/required-error.png` is the rendered failure. Two offline regression cases reject removed UVs, missing local buffers and unbundled remote buffers. Material pipeline and all-six-world browser checks pass.
+
+The GitHub workflow runs server/asset tests, then a real Chromium/WebGL model and six-world check. Checkout is pinned to the commit resolved from the upstream v7.0.1 tag, with read-only repository permissions and no persisted credentials. Remote workflow results must be observed before calling CI passed.
+
+Limits: this is not the full scene validator. Hovering props, all collision/mesh mismatches, authored-route fairness, scale/colour calibration and legal grants still have their own open issues. Required static world assets fail visibly; procedural character fallbacks have not been removed by this PR. Rollback this commit as a unit, including the source face-UV correction and manifest. No production change.
