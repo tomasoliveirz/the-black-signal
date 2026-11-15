@@ -3,7 +3,7 @@ import { MAPS, MAP, MAP_ID } from '../shared/layout.js';
 import { PHASES, RULES } from '../shared/rules.js';
 
 const $ = (id) => document.getElementById(id);
-const CHARACTERS = ['Dana', 'Eli', 'Maya', 'Porter', 'Vale', 'Member A'];
+const CHARACTERS = ['Dana', 'Eli', 'Maya', 'Porter', 'Vale', 'Rowan'];
 
 
 const clock = seconds => `${Math.floor(seconds / 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
@@ -53,7 +53,7 @@ const guideCopy = {
 export function createMenu({ game, enter, openMenu, setQuality }) {
   const entry = $('entry'), name = $('name'), play = $('play'), start = $('start'), resume = $('resume');
   let onlineStatus='connecting';
-  let host=0;
+  let host=0,canStart=false;
   let phase = 'lobby', players = [], previewChoice = null, member = false;
   try { name.value = localStorage.getItem('bs.name') || ''; } catch {}
 
@@ -206,6 +206,12 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
     entry.hidden = member;
     $('room').hidden = !member;
     start.hidden = running();
+    start.disabled = host !== game.me.id || !canStart;
+    const own = players.find(p => p.id === game.me.id);
+    const ready = $('ready');
+    ready.hidden = running() || game.me.spectator;
+    ready.setAttribute('aria-pressed', String(own?.ready === true));
+    ready.textContent = t(own?.ready ? 'Not ready' : 'Ready');
     resume.hidden = !running();
     if (!member) return;
     resume.textContent = game.me.spectator ? t("WATCH MATCH") : t("RETURN TO MATCH");
@@ -215,8 +221,8 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
       seat.className = player ? (ownSlot ? 'seat mine' : 'seat') : 'seat free';
       playerName.textContent = player?.bot ? player.name.replace(/^BOT\s+/, '') : player?.name || t("Empty seat");
       playerName.title = playerName.textContent;
-      tag.hidden = !player?.bot && !ownSlot;
-      tag.textContent = player?.bot ? 'BOT' : ownSlot ? t("YOU") : '';
+      tag.hidden = !player;
+      tag.textContent = player?.bot ? 'BOT' : !player?.connected ? t("Disconnected") : running() ? (ownSlot ? t("YOU") : '') : t(player?.ready ? "Ready" : "Not ready");
       mute.hidden = !player || player.bot || ownSlot;
       if (mute.dataset.player !== String(player?.id)) {
         mute.dataset.player = String(player?.id);
@@ -229,7 +235,7 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
     $('room-count').textContent = t('{count} / {total} SEATS',{count:occupied,total:seats.length});
     $('room-status').textContent = running() ? t("Match in progress")
       : game.me.spectator ? t("Waiting for a seat in the room.")
-      : seats.length > occupied ? t("Bots fill empty seats when the match starts.") : t("Room ready.");
+      : t("{ready}/{total} human players ready. Empty seats use bots.",{ready:players.filter(p=>!p.bot&&p.slot<6&&p.ready).length,total:players.filter(p=>!p.bot&&p.slot<6).length});
   }
 
   function connection(status) {
@@ -255,7 +261,7 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
   }
 
   function lobby(message) {
-    phase = message.phase; host=message.host??game.me.id;
+    phase = message.phase; host=message.host??game.me.id; canStart=Boolean(message.canStart);
     players = message.players;
     renderRoom();
     renderMap();
@@ -287,10 +293,8 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
     if (game.online) { play.disabled = true; game.join(playerName); }
     else enter(true);
   });
-  start.addEventListener('click', () => {
-    game.start();
-    if (!game.me.spectator) enter(true);
-  });
+  $('ready').addEventListener('click',()=>game.ready(!players.find(p=>p.id===game.me.id)?.ready));
+  start.addEventListener('click', () => game.start());
   resume.addEventListener('click', () => enter(true));
   $('quality').addEventListener('change', (event) => setQuality(Number(event.target.value)));
   renderMap();

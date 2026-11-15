@@ -30,8 +30,8 @@ export function createRooms(game,openMenu) {
   }
   function lobby(message) {
     const own=game.me.id;
-    $('start').disabled=message.host!==undefined && message.host!==own;
-    if($('start').disabled && ['lobby','end'].includes(message.phase))$('room-status').textContent=t("Wait for the room host to start the match.");
+    $('start').disabled=message.host!==own || !message.canStart;
+    if(message.host!==own && ['lobby','end'].includes(message.phase))$('room-status').textContent=t("Wait for the room host to start the match.");
   }
   function clear(){
     room=null;leave.hidden=true;$('room-options').hidden=false;

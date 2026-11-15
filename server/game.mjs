@@ -52,7 +52,7 @@ export class Game {
     Object.assign(p,{s:newMove(sp.x,sp.z),inp:{mx:0,mz:0,use:false,target:null},face:Math.PI,st:p.spectator?2:0,
       form:0,hp:100,mhp:0,role:'operative',partner:null,energy:0,ammo:R.ammoStart,med:0,flare:1,cell:0,
       cdFire:0,cdAtk:0,cdEmpty:0,stun:0,protect:0,bleed:0,rv:0,extT:0,nightUsed:-1,
-      visibilityCache:null,watch:null,footDistance:0,footSample:0,interaction:null,executing:null,windup:0,damageVersion:0,ai:{},connected:p.conn?true:p.connected});
+      ready:false,visibilityCache:null,watch:null,footDistance:0,footSample:0,interaction:null,executing:null,windup:0,damageVersion:0,ai:{},connected:p.conn?true:p.connected});
   }
   addPlayer(name,bot=false,conn=null){
     const used=new Set([...this.players.values()].map(p=>p.slot));let slot=0;while(used.has(slot))slot++;
@@ -70,8 +70,8 @@ export class Game {
     setMap(id);this.layout=captureLayout();this.reset();this.lobby();return true;
   }
   lobby(){
-    this.broadcast({t:'lobby',version:'0.5.0',map:MAP_ID,phase:this.phase,host:this.roomInfo?.host,players:[...this.players.values()].map(p=>({
-      id:p.id,name:p.name,bot:p.bot,slot:p.slot,spectator:p.spectator,connected:p.connected!==false
+    this.broadcast({t:'lobby',version:'0.5.0',map:MAP_ID,phase:this.phase,host:this.roomInfo?.host,canStart:this.canStart(),players:[...this.players.values()].map(p=>({
+      id:p.id,name:p.name,bot:p.bot,slot:p.slot,spectator:p.spectator,connected:p.connected!==false,ready:p.ready===true
     }))});
   }
   observer(p) {
@@ -119,6 +119,10 @@ export class Game {
       if(!actor||actor===p||this.canObserve(observer,actor))this.send(p,msg);
       else if(observer&&distance(observer.s,actor.s)<(msg.k==='shot'?50:24))this.send(p,{t:'ev',k:'sound',sound:cue,...this.soundPoint({...actor.s,y:actor.s.y+1})});
     }
+  }
+  canStart(){
+    const humans=[...this.players.values()].filter(p=>!p.bot&&p.slot<6);
+    return humans.length>0&&humans.every(p=>p.connected!==false&&p.ready===true);
   }
   start(){
     if(this.running)return;

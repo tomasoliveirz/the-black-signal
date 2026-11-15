@@ -82,6 +82,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
   function join(name,options=menu.roomOptions()) {
     if(online&&!joined)send({t:'join',name,...options});
   }
+  function ready(value){send({t:'ready',value});}
   function leave(){
     send({t:'leave'});
     rememberRoom(null);reconnecting=false;restorePending=false;joined=false;clearMatch();
@@ -464,5 +465,5 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
   }
   window.addEventListener('language-change', () => {renderRole();hintUntil=0;lastHint=-30;shownHints.clear();hudAcc=2;hud(playing());});
   connect();
-  return { voice, leave, reconnect, setMap, update, lights, act, chat, join, start: () => send({ t: 'start' }), nextSpectate, toggleSandboxNight, toast, me, playing, get state() { return state; }, get joined() { return joined; }, get online() { return online; } };
+  return { voice, leave, ready, reconnect, setMap, update, lights, act, chat, join, start: () => send({ t: 'start' }), nextSpectate, toggleSandboxNight, toast, me, playing, get state() { return state; }, get joined() { return joined; }, get online() { return online; } };
 }
