@@ -1,0 +1,22 @@
+{
+  "privateInvite": true,
+  "publicCreateAndJoin": true,
+  "serverOwnedReadiness": true,
+  "chatIsPlainText": true,
+  "guideKeyboardNavigation": true,
+  "leaveClearsMembership": true,
+  "settingsAndAccountReachable": true,
+  "emptyRoomList": true,
+  "invalidInviteHandled": true,
+  "englishAndPortuguese": true,
+  "desktop": [
+    1440,
+    900
+  ],
+  "mobileMenu": [
+    390,
+    844
+  ],
+  "horizontalOverflow": false,
+  "errors": []
+}
