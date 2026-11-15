@@ -253,7 +253,7 @@ function frame() {
   scene.fog.color.copy(fogC);
   const [fogNear, fogFar] = MAP.theme.fog ?? [18, 150];
   const sheltered = MAP.kind === 'factory' || MAP.kind === 'mesh';
-  ambience.update(dt, active && (Boolean(game.state) || !game.joined), Boolean(g.night), g.focus, camera, game.state);
+  ambience.update(dt, active && (Boolean(game.state) || !game.joined), Boolean(g.night), g.focus, camera, game.state, game.me);
   u.uFog.value.set(fogNear * (1 - night * .23), fogFar * (1 - night * (sheltered ? .27 : .37)));
   scene.fog.near = u.uFog.value.x; scene.fog.far = u.uFog.value.y;
   updateUnder(night);

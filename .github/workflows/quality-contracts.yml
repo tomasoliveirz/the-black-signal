@@ -39,3 +39,4 @@ jobs:
           JS
           npm run test:models
           npm run test:worlds
+          npm run test:audio

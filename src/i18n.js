@@ -3,6 +3,7 @@ const portuguese = {
   "Loading game assets · {loaded}/{total}": "A carregar recursos do jogo · {loaded}/{total}",
   "Required game assets could not load. Reload to try again.": "Não foi possível carregar recursos essenciais do jogo. Recarrega para tentar novamente.",
   "Reload": "Recarregar",
+  "Lobby music pauses during the match.": "A música da sala pausa durante a partida.",
   "Language": "Idioma",
   "Invalid recovery request.": "Pedido de recuperação inválido.",
   "Recovery expired or not authorised. Join the room again.": "A recuperação expirou ou não foi autorizada. Volta a entrar na sala.",

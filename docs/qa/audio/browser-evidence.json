@@ -1,0 +1,31 @@
+{
+  "realWebAudio": true,
+  "states": [
+    "day",
+    "preblackout",
+    "blackout",
+    "nearby",
+    "chase",
+    "postchase",
+    "extraction"
+  ],
+  "voiceDuckedMusicGain": 0.10488922894001007,
+  "releasedMusicGain": 0.33817625045776367,
+  "overloadSixAlignedSyntheticVoices": {
+    "peak": 0.9166110754013062,
+    "rms": 0.8562103955467791,
+    "limiterCount": 1
+  },
+  "opusRecorderProbe": {
+    "supported": true,
+    "mime": "audio/webm;codecs=opus",
+    "requestedBitsPerSecond": 24000,
+    "elapsedSeconds": 8.016899999999907,
+    "bytes": 25953,
+    "decodedSeconds": 7.98,
+    "decodedSampleRate": 48000,
+    "syntheticTone": true
+  },
+  "notRealtimeTransportLatency": true,
+  "errors": []
+}

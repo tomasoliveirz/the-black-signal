@@ -20,6 +20,7 @@ export function createLobbyAudio(audio) {
     const stored = localStorage.getItem('bs.volume.music');
     if (stored !== null && Number.isFinite(Number(stored))) volume = Math.max(0, Math.min(1, Number(stored) / 100));
   } catch {}
+  audio.level('music',volume);
   if (slider) slider.value = String(Math.round(volume * 100));
 
   function label() {
@@ -101,12 +102,13 @@ export function createLobbyAudio(audio) {
       fade(0, () => {
         if (!waiting) player.pause();
       });
-      message(t("Music paused during the match."));
+      message(t("Lobby music pauses during the match."));
     }
   }
 
   slider?.addEventListener('input', () => {
     volume = Math.max(0, Math.min(1, Number(slider.value) / 100));
+    audio.level('music',volume);
     try { localStorage.setItem('bs.volume.music', slider.value); } catch {}
     if (waiting && unlocked) {
       if (player.paused) play();
@@ -145,7 +147,7 @@ export function createLobbyAudio(audio) {
   });
 
   window.addEventListener('language-change', () => {
-    message(!waiting ? t('Music paused during the match.') : !unlocked ? t('Interact with the menu to hear music.') : t('Now playing · {track}',{track:label()}));
+    message(!waiting ? t('Lobby music pauses during the match.') : !unlocked ? t('Interact with the menu to hear music.') : t('Now playing · {track}',{track:label()}));
   });
   return { update, wake };
 }
