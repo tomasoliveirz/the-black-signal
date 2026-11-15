@@ -12,8 +12,17 @@ const PHASE = {lobby:'Room',prep:'Preparation',day1:'Day 1 — night in',night1:
 
 export function createGame({ scene, world, view, keys, changeMap, menu, ambience, isActive, camera }) {
   const me = { id: 0, slot: 0, role: null, partner: 0, s: newMove(LAYOUT.spawns[0].x, LAYOUT.spawns[0].z), st: 0, form: 0, you: null, spectator: false };
+  const voicePositions = new Map();
   const views = new Map();   // id -> { fig, mon, pos, target, face, st, form, speed, name }
-  let state = null, names = new Map(), ws = null, online = false, joined = false, sandboxNight = 0, sendAcc = 0, attackT = 0, aimT = 0, spectate = 0, reconnectTimer, reconnecting=false, lastRoom=null;
+  let state = null, names = new Map(), ws = null, online = false, joined = false, sandboxNight = 0, sendAcc = 0, attackT = 0, aimT = 0, reconnectTimer, reconnecting=false, lastRoom=null, restorePending=false, resumeAttempts=0;
+  try {
+    const saved=JSON.parse(sessionStorage.getItem('bs.room')||'null');
+    if(saved&&/^(PUBLIC|[A-F0-9]{10})$/.test(saved.room)&&Number.isSafeInteger(saved.player)&&saved.player>0){lastRoom=saved;reconnecting=true;}
+  }catch{}
+  function rememberRoom(value){
+    lastRoom=value;
+    try{if(value)sessionStorage.setItem('bs.room',JSON.stringify(value));else sessionStorage.removeItem('bs.room');}catch{}
+  }
   const focus = new THREE.Vector3(), tmp = new THREE.Vector3();
 
   const getView = (id, slot = 0) => {
@@ -51,7 +60,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     try { const endpoint=new URL('./ws',location.href);endpoint.protocol=location.protocol==='https:'?'wss:':'ws:';ws=new WebSocket(endpoint); } catch { return offline(); }
     ws.onopen = () => {
       online = true; menu.connection('online');
-      if(reconnecting&&lastRoom) { send({t:'join',name:$('name').value||t("Guest"),room:lastRoom.room,resume:lastRoom.resume}); }
+      if(reconnecting&&lastRoom) { send({t:'join',name:$('name').value||t("Guest"),room:lastRoom.room,player:lastRoom.player}); }
     };
     ws.binaryType = 'arraybuffer';
     ws.onclose = offline;
@@ -75,24 +84,16 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
   }
   function leave(){
     send({t:'leave'});
-    lastRoom=null;reconnecting=false;joined=false;clearMatch();
+    rememberRoom(null);reconnecting=false;restorePending=false;joined=false;clearMatch();
     menu.connection('online');menu.roomLeft();
     $('entry').hidden=false;$('room').hidden=true;$('play').disabled=false;
   }
   function reconnect(){
-    lastRoom=null;reconnecting=false;clearTimeout(reconnectTimer);
+    rememberRoom(null);reconnecting=false;restorePending=false;clearTimeout(reconnectTimer);
     if(ws){ws.onclose=null;ws.close();}
     joined=false;online=false;clearMatch();voice.reset();menu.roomLeft();
     $('entry').hidden=false;$('room').hidden=true;$('play').disabled=false;
-    function renderRole() {
-    if (!me.role) return;
-    const panel=$('role'); panel.style.display='block'; panel.className='hud '+me.role;
-    panel.innerHTML=me.role==='echo'
-      ? `<b>ECHO</b>${t('Stop the signal. Eliminate the Operatives.')}<br>${esc(t('Partner: {name}',{name:nameOf(me.partner)}))}`
-      : `<b>${t('OPERATIVE')}</b>${t('Repair the transmitters and evacuate.')}<br>${t('Two of you are no longer human.')}`;
-  }
-  window.addEventListener('language-change', () => {renderRole();hintUntil=0;lastHint=-30;shownHints.clear();hudAcc=2;hud(playing());});
-  connect();
+    connect();
   }
 
   // the room's map is the server's call; offline it is ours
@@ -120,14 +121,17 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     if (m.t === 'welcome') {
       me.id = m.id; me.spectator = m.spectator; joined = true;
       setSlot(m.slot);
-      lastRoom={room:m.room,resume:m.resume};reconnecting=false;
+      restorePending=reconnecting;rememberRoom({room:m.room,player:m.id});reconnecting=false;resumeAttempts=0;
       menu.roomJoined(m);
       menu.joined();
     }
     else if(m.t==='left'){joined=false;clearMatch();menu.roomLeft();}
     else if(m.t==='error'){
+      if(m.code==='resume-active'&&lastRoom&&resumeAttempts++<10){
+        setTimeout(()=>{if(!joined&&lastRoom)send({t:'join',room:lastRoom.room,player:lastRoom.player});},300);return;
+      }
       $('room-connection').textContent=translateText(m.message);$('play').disabled=false;
-      if(!joined){lastRoom=null;reconnecting=false;}
+      if(!joined){rememberRoom(null);reconnecting=false;restorePending=false;}
     }
     else if (m.t === 'lobby') {
       names = new Map(m.players.map((p) => [p.id, p]));
@@ -141,6 +145,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
         resetPosition();
       }
       menu.lobby(m);
+      if(restorePending){restorePending=false;if(!['lobby','end'].includes(m.phase))menu.matchStart();}
     } else if (m.t === 'role') {
       me.role = m.role; me.partner = m.partner;
       renderRole();
@@ -157,6 +162,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     $('toast').style.opacity = 0;
     $('feed').replaceChildren();
     resetViews();
+    voicePositions.clear();
     ambience.reset();
     voice.reset();
   }
@@ -181,7 +187,10 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
 
   function onEvent(m) {
     const k = m.k;
-    const from = m.id === me.id ? null : views.get(m.id)?.pos;
+    if(k==='voice-position'){voicePositions.set(m.id,{x:m.x,y:m.y,z:m.z,heard:performance.now()});return;}
+    if(k==='sound'){ambience.cue(m.sound,{x:m.x,y:m.y,z:m.z});return;}
+    const source=views.get(m.id);
+    const from = m.id === me.id ? null : source?.seen===state?source.pos:undefined;
     const tx = LAYOUT.tx[m.tx];
     if (k === 'step') ambience.step(m, m.id === me.id);
     if (k === 'shot') ambience.cue('shot', m.id === me.id ? null : { x: m.a[0], y: m.a[1], z: m.a[2] });
@@ -246,7 +255,13 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     } else send({t:'act',a});
   }
   function chat(text, ch) { if (joined) send({ t: 'chat', text, ch }); }
-  function nextSpectate() { spectate++; }
+  function nextSpectate() {
+    if(!state||(!me.spectator&&me.st<2))return;
+    const targets=state.players.filter(p=>p.st<2&&p.id!==me.id);
+    if(!targets.length)return;
+    const current=targets.findIndex(p=>p.id===state.watching);
+    send({t:'watch',id:targets[(current+1)%targets.length].id});
+  }
   function toggleSandboxNight() { if (!playing()) { sandboxNight = 1 - sandboxNight; toast(sandboxNight ? t("Blackout — the signal is lost") : t("Signal restored")); } }
 
   // ---------- per-frame
@@ -301,7 +316,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     useHeld = held;
     inp.use = held && Boolean(focused);
     inp.target = focused ? heldTarget : null;
-    if (active) inp.aim = Math.atan2(camera.getWorldDirection(aimDirection).x, aimDirection.z);
+    if (active) {inp.aim = Math.atan2(camera.getWorldDirection(aimDirection).x, aimDirection.z);inp.camera=camera.position.toArray();}
 
     const inMatch = playing();
     const frozen = inMatch && (state.phase === 'prep' || me.you?.stun || (me.form && me.you?.action?.kind === 'player'));
@@ -355,7 +370,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     focus.copy(localView.pos); let focusForm = inMatch ? me.form : 0;
     if (joined && state && (me.spectator || me.st >= 2) && state.phase !== 'lobby') {
       const alive = state.players.filter((p) => p.st < 2 && p.id !== me.id);
-      if (alive.length) { const p = alive[spectate % alive.length], v = views.get(p.id); if (v) { focus.copy(v.pos); focusForm = v.form; } }
+      if (alive.length) { const p = alive.find(p=>p.id===state.watching)??alive[0], v = views.get(p.id); if (v) { focus.copy(v.pos); focusForm = v.form; } }
     }
     voice.update();
     hud(inMatch, t);
@@ -435,7 +450,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     frame => { if (ws?.readyState === 1 && ws.bufferedAmount < 8192) ws.send(frame); },
     id => {
       const v = views.get(id);
-      return v && v.seen === state && v.st < 2 ? { x: v.pos.x, y: v.pos.y + (v.st === 1 ? .45 : v.form ? 1.9 : v.cr ? .95 : 1.55), z: v.pos.z } : null;
+      return v && v.seen === state && v.st < 2 ? { x: v.pos.x, y: v.pos.y + (v.st === 1 ? .45 : v.form ? 1.9 : v.cr ? .95 : 1.55), z: v.pos.z } : performance.now()-(voicePositions.get(id)?.heard??-1000)<500?voicePositions.get(id):null;
     },
     nameOf
   );

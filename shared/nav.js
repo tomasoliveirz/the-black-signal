@@ -28,9 +28,28 @@ function freeNear(c) { // nearest unblocked cell (targets usually sit on a colli
   return -1;
 }
 function clearLine(ax, az, bx, bz) {
-  const d = Math.hypot(bx - ax, bz - az), steps = Math.ceil(d / (CELL * 0.5));
-  for (let s = 1; s < steps; s++) { const c = cellOf(ax + ((bx - ax) * s) / steps, az + ((bz - az) * s) / steps); if (c < 0 || grid.block[c]) return false; }
+  const distance = Math.hypot(bx - ax, bz - az), steps = Math.max(1, Math.ceil(distance / (CELL * .5)));
+  let previous = cellOf(ax, az);
+  if (previous < 0) return false;
+  for (let step = 1; step <= steps; step++) {
+    const cell = cellOf(ax + (bx - ax) * step / steps, az + (bz - az) * step / steps);
+    if (cell < 0 || grid.block[cell]) return false;
+    if (cell !== previous && !navigationNeighbours(previous, grid.n, grid.block, true).includes(cell)) return false;
+    previous = cell;
+  }
   return true;
+}
+export function navigationNeighbours(cell, size, blocked, diagonal = false) {
+  if (cell < 0 || cell >= size * size) return [];
+  const column = cell % size, row = Math.floor(cell / size), result = [];
+  for (const [dx, dz] of diagonal ? [[0,-1],[0,1],[-1,0],[1,0],[-1,-1],[1,-1],[-1,1],[1,1]] : [[0,-1],[0,1],[-1,0],[1,0]]) {
+    const x = column + dx, z = row + dz;
+    if (x < 0 || z < 0 || x >= size || z >= size) continue;
+    const next = z * size + x;
+    if (blocked[next] || (dx && dz && (blocked[row * size + x] || blocked[z * size + column]))) continue;
+    result.push(next);
+  }
+  return result;
 }
 function field(target) {
   let f = grid.fields.get(target);
@@ -39,8 +58,8 @@ function field(target) {
   const q = new Int32Array(n * n); let h = 0, t = 0;
   f[target] = 0; q[t++] = target;
   while (h < t) {
-    const c = q[h++], d = f[c] + 1, i = c % n;
-    for (const nb of [c - n, c + n, i > 0 ? c - 1 : -1, i < n - 1 ? c + 1 : -1]) if (nb >= 0 && nb < n * n && !grid.block[nb] && f[nb] > d) { f[nb] = d; q[t++] = nb; }
+    const c = q[h++], d = f[c] + 1;
+    for (const nb of navigationNeighbours(c, n, grid.block)) if (f[nb] > d) { f[nb] = d; q[t++] = nb; }
   }
   if (grid.fields.size > 48) grid.fields.delete(grid.fields.keys().next().value);
   grid.fields.set(target, f);
@@ -50,19 +69,19 @@ function field(target) {
 export function navStep(from, to) {
   if (owner !== LAYOUT) build();
   const a = freeNear(cellOf(from.x, from.z)), b = freeNear(cellOf(to.x, to.z));
-  if (a < 0 || b < 0) return to;
+  if (a < 0 || b < 0) return {x:from.x,z:from.z};
   const n = grid.n, pos = (c) => ({ x: -grid.R + ((c % n) + 0.5) * CELL, z: -grid.R + (((c / n) | 0) + 0.5) * CELL });
   const end = pos(b);
   if (clearLine(from.x, from.z, end.x, end.z)) return to;
   const f = field(b);
-  if (f[a] === 65535) return to;
+  if (f[a] === 65535) return {x:from.x,z:from.z};
   let c = a, best = pos(a);
   for (let k = 0; k < 12 && f[c] > 0; k++) { // walk down the field, keeping the farthest cell still in straight sight
     let nx = c, nd = f[c];
-    for (const nb of [c - n, c + n, c - 1, c + 1, c - n - 1, c - n + 1, c + n - 1, c + n + 1]) if (nb >= 0 && nb < n * n && f[nb] < nd && !grid.block[nb]) { nd = f[nb]; nx = nb; }
+    for (const nb of navigationNeighbours(c, n, grid.block, true)) if (f[nb] < nd) { nd = f[nb]; nx = nb; }
     if (nx === c) break;
     c = nx; const p = pos(c);
-    if (k > 1 && !clearLine(from.x, from.z, p.x, p.z)) break;
+    if (!clearLine(from.x, from.z, p.x, p.z)) break;
     best = p;
   }
   return best;
