@@ -13,3 +13,18 @@ All connectivity samples were online; no runtime exceptions or failed requests. 
 For this explicitly named 1280×720/Ultra hardware profile: at least 1,800 visible seconds, frame p95 ≤20 ms and p99 ≤25 ms, sampled GPU p95 ≤6 ms/p99 ≤10 ms, every sampled JS heap ≤256 MiB, zero unplanned disconnections/runtime/request errors. Record worst frame and all resource ranges even if percentile targets pass. Require the separate repeated-figure resource plateau and shared-source safety test; inspect dynamic resource changes by round/phase rather than interpreting one heap sample as a leak.
 
 These are the proposed gate for the next run, not retroactive acceptance of the old measurements. A detached source snapshot protects the rerun from ongoing layout work. Low-end physical devices, other five maps, actual six humans, Internet jitter/loss and sustained real microphones remain separate required profiles. No claim of universal 60 FPS or complete Definition of Done.
+
+
+## Post-fix 30-minute result: percentile gate failed
+
+Source 72c40e7, same hardware/resolution/quality, detached immutable source; 1,809.01 visible seconds over 1,809.03 wall seconds, 106,579 frames. Frame median 16.7 ms, p95 18.6 ms, **p99 29.9 ms** (budget ≤25 ms), maximum 1,095.8 ms. Render-submission CPU p95 9.1 ms/p99 19.3 ms, maximum 963.7 ms. 1,776 GPU samples: p95 3.289 ms/p99 6.619 ms, maximum 43.04 ms. The frame-p99 gate failed; all other declared percentile/heap/connectivity/error gates passed. Full record: `soaks/runtime-foundry-post-lifetime.json`.
+
+Heap ranged 78.94–129.37 MB; geometry 402–428, textures 14–34 across live phases/rounds. This does not replace the controlled repeated-figure plateau test. No runtime exceptions, failed requests or unplanned disconnections were observed.
+
+A host process inspection near this period showed Blender using roughly 758% CPU. That establishes competing work on this shared machine, not the cause of a particular frame spike. No user process was stopped or modified. The run stays published as a failed result; thresholds are unchanged.
+
+## Dedicated-browser diagnostic: eight minutes, not a replacement gate
+
+A separate Chromium process and profile, same detached source and server, recorded 480.65 visible seconds/480.66 wall seconds and 28,809 frames. Frame median 16.7 ms, p95 17.4 ms, p99 19.4 ms, maximum 333.6 ms. GPU p95 3.175 ms/p99 5.062 ms, maximum 6.076 ms. No runtime/request/connectivity errors. The numerical percentile thresholds passed for this short diagnostic, but the required 1,800-second duration did not run. Full record, including host load and per-window values: `soaks/runtime-foundry-dedicated-browser-8min.json`.
+
+The host workload changed as well as the browser arrangement, so this is not a controlled causal comparison. Long frame spikes remain unresolved. Required next evidence: trace a reproducible long frame, then rerun the full declared duration with the host workload recorded. Low-end hardware, all-map coverage, six-human and real-microphone/Internet impairment gates remain open. Do not close QA-02 or describe this branch as a full performance pass.

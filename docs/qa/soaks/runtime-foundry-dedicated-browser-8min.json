@@ -1,0 +1,2070 @@
+{
+  "requestedVisibleSeconds": 480,
+  "elapsedSeconds": 480.656892579,
+  "profile": "One actual Chromium/WebGL Foundry client with five bots, rotating camera, localhost. No human, low-end-device or Internet impairment claim.",
+  "sourceCommit": "72c40e7",
+  "node": "v24.18.0",
+  "cpu": "AMD Ryzen 9 7940HS w/ Radeon 780M Graphics",
+  "systemMemoryBytes": 32819310592,
+  "hardware": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 4070 Laptop GPU/PCIe/SSE2, OpenGL 4.5.0)",
+    "vendor": "Google Inc. (NVIDIA Corporation)",
+    "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "resolution": [
+      1280,
+      720
+    ],
+    "quality": "3"
+  },
+  "frameMs": {
+    "count": 28809,
+    "p50": 16.699999999254942,
+    "p95": 17.399999999441206,
+    "p99": 19.40000000037253,
+    "max": 333.59999999962747
+  },
+  "renderSubmissionMs": {
+    "count": 28809,
+    "p50": 2.2000000001862645,
+    "p95": 7,
+    "p99": 10.700000000186265,
+    "max": 332
+  },
+  "gpuMsSampled": {
+    "count": 480,
+    "p50": 0.72192,
+    "p95": 3.175424,
+    "p99": 5.061632,
+    "max": 6.076416
+  },
+  "samples": [
+    {
+      "hostLoad": [
+        2.92,
+        5.45,
+        8.68
+      ],
+      "elapsedSeconds": 10.004330880000001,
+      "visibleSeconds": 10.000099999999627,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 89350570,
+      "calls": 298,
+      "triangles": 246848,
+      "geometries": 402,
+      "textures": 14,
+      "online": true,
+      "phase": "prep",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 17,
+        "p99": 17.100000000558794,
+        "max": 17.200000000186265
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 2.3999999994412065,
+        "p95": 3,
+        "p99": 3.400000000372529,
+        "max": 4.099999999627471
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.184768,
+        "p95": 1.358848,
+        "p99": 1.358848,
+        "max": 1.763328
+      },
+      "rendererTaskSeconds": 1.998684
+    },
+    {
+      "hostLoad": [
+        3,
+        5.39,
+        8.63
+      ],
+      "elapsedSeconds": 20.008233353,
+      "visibleSeconds": 19.999700000000185,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 105696820,
+      "calls": 299,
+      "triangles": 247064,
+      "geometries": 402,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 17,
+        "p99": 17.100000000558794,
+        "max": 17.200000000186265
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 2.300000000745058,
+        "p95": 2.8999999994412065,
+        "p99": 3.099999999627471,
+        "max": 3.400000000372529
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.158144,
+        "p95": 1.332224,
+        "p99": 1.332224,
+        "max": 1.744896
+      },
+      "rendererTaskSeconds": 3.933246
+    },
+    {
+      "hostLoad": [
+        2.77,
+        5.26,
+        8.55
+      ],
+      "elapsedSeconds": 30.011313027,
+      "visibleSeconds": 29.9995,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 79926601,
+      "calls": 72,
+      "triangles": 174956,
+      "geometries": 402,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.700000000186265,
+        "p95": 17,
+        "p99": 17.09999999962747,
+        "max": 22.700000000186265
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 1.7000000001862645,
+        "p95": 2.400000000372529,
+        "p99": 2.6000000005587935,
+        "max": 3.099999999627471
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.530432,
+        "p95": 1.042432,
+        "p99": 1.042432,
+        "max": 1.62816
+      },
+      "rendererTaskSeconds": 5.531702
+    },
+    {
+      "hostLoad": [
+        2.98,
+        5.22,
+        8.5
+      ],
+      "elapsedSeconds": 40.015575629,
+      "visibleSeconds": 39.99889999999944,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 79803764,
+      "calls": 70,
+      "triangles": 173698,
+      "geometries": 402,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.600000000558794,
+        "p95": 17,
+        "p99": 18.200000000186265,
+        "max": 21.200000000186265
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 1.599999999627471,
+        "p95": 2.3999999994412065,
+        "p99": 5.3999999994412065,
+        "max": 13.299999999813735
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.492544,
+        "p95": 0.52224,
+        "p99": 0.52224,
+        "max": 0.523264
+      },
+      "rendererTaskSeconds": 7.15945
+    },
+    {
+      "hostLoad": [
+        3.06,
+        5.16,
+        8.45
+      ],
+      "elapsedSeconds": 50.019166594999994,
+      "visibleSeconds": 50.015200000000185,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 82247850,
+      "calls": 70,
+      "triangles": 173698,
+      "geometries": 402,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.700000000186265,
+        "p95": 17.199999999254942,
+        "p99": 18.800000000745058,
+        "max": 19.700000000186265
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 1.7000000001862645,
+        "p95": 4.2000000001862645,
+        "p99": 7.599999999627471,
+        "max": 8.900000000372529
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.447488,
+        "p95": 0.937984,
+        "p99": 0.937984,
+        "max": 2.025472
+      },
+      "rendererTaskSeconds": 8.963299
+    },
+    {
+      "hostLoad": [
+        5.04,
+        5.51,
+        8.52
+      ],
+      "elapsedSeconds": 60.023924609999995,
+      "visibleSeconds": 60.01489999999944,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 80688624,
+      "calls": 72,
+      "triangles": 173762,
+      "geometries": 404,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 18.40000000037253,
+        "p99": 20.200000000186265,
+        "max": 23
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 2.300000000745058,
+        "p95": 7.5,
+        "p99": 11.600000000558794,
+        "max": 20.5
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.423936,
+        "p95": 1.774592,
+        "p99": 1.774592,
+        "max": 2.190336
+      },
+      "rendererTaskSeconds": 11.895075
+    },
+    {
+      "hostLoad": [
+        4.8,
+        5.44,
+        8.47
+      ],
+      "elapsedSeconds": 70.029229142,
+      "visibleSeconds": 70.01439999999944,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 79774264,
+      "calls": 71,
+      "triangles": 173426,
+      "geometries": 405,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 17.300000000745058,
+        "p99": 19.200000000186265,
+        "max": 24.699999999254942
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 1.8999999994412065,
+        "p95": 5.099999999627471,
+        "p99": 8.700000000186265,
+        "max": 20.09999999962747
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.475136,
+        "p95": 0.524288,
+        "p99": 0.524288,
+        "max": 0.540672
+      },
+      "rendererTaskSeconds": 13.982542
+    },
+    {
+      "hostLoad": [
+        6.99,
+        5.87,
+        8.58
+      ],
+      "elapsedSeconds": 80.034241834,
+      "visibleSeconds": 80.0305,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 82873152,
+      "calls": 71,
+      "triangles": 173426,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 18.700000000186265,
+        "p99": 20.600000000558794,
+        "max": 28.90000000037253
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 2.6000000005587935,
+        "p95": 7.900000000372529,
+        "p99": 10.900000000372529,
+        "max": 23.5
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.433152,
+        "p95": 2.245632,
+        "p99": 2.245632,
+        "max": 2.538496
+      },
+      "rendererTaskSeconds": 17.055539
+    },
+    {
+      "hostLoad": [
+        7.01,
+        5.91,
+        8.56
+      ],
+      "elapsedSeconds": 90.041720208,
+      "visibleSeconds": 90.03059999999962,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 80725806,
+      "calls": 73,
+      "triangles": 173786,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 17.100000000558794,
+        "p99": 18.299999999813735,
+        "max": 19.899999999441206
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 1.7999999998137355,
+        "p95": 4.7999999998137355,
+        "p99": 7.199999999254942,
+        "max": 13.700000000186265
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.495616,
+        "p95": 0.854016,
+        "p99": 0.854016,
+        "max": 1.938432
+      },
+      "rendererTaskSeconds": 18.955805
+    },
+    {
+      "hostLoad": [
+        8.24,
+        6.22,
+        8.63
+      ],
+      "elapsedSeconds": 100.07449920200001,
+      "visibleSeconds": 100.06020000000018,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 82021909,
+      "calls": 75,
+      "triangles": 175258,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 18.09999999962747,
+        "p99": 20.09999999962747,
+        "max": 29.200000000186265
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 2.099999999627471,
+        "p95": 6.599999999627471,
+        "p99": 9,
+        "max": 23
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.432128,
+        "p95": 0.5632,
+        "p99": 0.5632,
+        "max": 0.631808
+      },
+      "rendererTaskSeconds": 21.448891
+    },
+    {
+      "hostLoad": [
+        9.34,
+        6.54,
+        8.71
+      ],
+      "elapsedSeconds": 110.083714556,
+      "visibleSeconds": 110.0795,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 82967178,
+      "calls": 77,
+      "triangles": 175584,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 602,
+        "p50": 16.700000000186265,
+        "p95": 17.700000000186265,
+        "p99": 19.5,
+        "max": 25.299999999813735
+      },
+      "submissionMs": {
+        "count": 602,
+        "p50": 2,
+        "p95": 6.400000000372529,
+        "p99": 8.899999999441206,
+        "max": 13.700000000186265
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.512,
+        "p95": 1.342464,
+        "p99": 1.342464,
+        "max": 3.513344
+      },
+      "rendererTaskSeconds": 23.868669
+    },
+    {
+      "hostLoad": [
+        8.37,
+        6.42,
+        8.65
+      ],
+      "elapsedSeconds": 120.09431200200001,
+      "visibleSeconds": 120.07939999999944,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 82590281,
+      "calls": 78,
+      "triangles": 175586,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 17.299999999813735,
+        "p99": 18.5,
+        "max": 23.59999999962747
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 1.900000000372529,
+        "p95": 5.7999999998137355,
+        "p99": 8,
+        "max": 11
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.454656,
+        "p95": 1.928192,
+        "p99": 1.928192,
+        "max": 2.880512
+      },
+      "rendererTaskSeconds": 25.938134
+    },
+    {
+      "hostLoad": [
+        10.72,
+        6.99,
+        8.81
+      ],
+      "elapsedSeconds": 130.10148199600002,
+      "visibleSeconds": 130.09539999999944,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 82178007,
+      "calls": 79,
+      "triangles": 175588,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.700000000186265,
+        "p95": 18.5,
+        "p99": 21,
+        "max": 30
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 2.7000000001862645,
+        "p95": 7.5,
+        "p99": 10.799999999813735,
+        "max": 26.799999999813735
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.733184,
+        "p95": 1.891328,
+        "p99": 1.891328,
+        "max": 2.789376
+      },
+      "rendererTaskSeconds": 28.84782
+    },
+    {
+      "hostLoad": [
+        9.53,
+        6.86,
+        8.75
+      ],
+      "elapsedSeconds": 140.10856613700003,
+      "visibleSeconds": 140.09489999999943,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 81898508,
+      "calls": 88,
+      "triangles": 175822,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 16.90000000037253,
+        "p99": 17.09999999962747,
+        "max": 17.200000000186265
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 1.7999999998137355,
+        "p95": 2.2000000001862645,
+        "p99": 2.5,
+        "max": 3.599999999627471
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.55296,
+        "p95": 1.594368,
+        "p99": 1.594368,
+        "max": 1.855488
+      },
+      "rendererTaskSeconds": 30.41205
+    },
+    {
+      "hostLoad": [
+        8.69,
+        6.76,
+        8.7
+      ],
+      "elapsedSeconds": 150.114587538,
+      "visibleSeconds": 150.1112999999998,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 82311911,
+      "calls": 100,
+      "triangles": 175916,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 16.90000000037253,
+        "p99": 17,
+        "max": 17.40000000037253
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 1.8999999994412065,
+        "p95": 2.400000000372529,
+        "p99": 2.7000000001862645,
+        "max": 3.6000000005587935
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.822272,
+        "p95": 1.584128,
+        "p99": 1.584128,
+        "max": 1.671168
+      },
+      "rendererTaskSeconds": 32.040366
+    },
+    {
+      "hostLoad": [
+        7.97,
+        6.67,
+        8.64
+      ],
+      "elapsedSeconds": 160.12163696500002,
+      "visibleSeconds": 160.11089999999945,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 83867584,
+      "calls": 151,
+      "triangles": 189308,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 16.90000000037253,
+        "p99": 17,
+        "max": 17.09999999962747
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 2.2000000001862645,
+        "p95": 2.7000000001862645,
+        "p99": 3,
+        "max": 3.300000000745058
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.915456,
+        "p95": 1.52576,
+        "p99": 1.52576,
+        "max": 1.557504
+      },
+      "rendererTaskSeconds": 33.869061
+    },
+    {
+      "hostLoad": [
+        7.06,
+        6.52,
+        8.57
+      ],
+      "elapsedSeconds": 170.128597644,
+      "visibleSeconds": 170.1105,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 82364606,
+      "calls": 206,
+      "triangles": 205290,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 16.90000000037253,
+        "p99": 17,
+        "max": 17.200000000186265
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 2.199999999254942,
+        "p95": 2.7999999998137355,
+        "p99": 3,
+        "max": 3.6000000005587935
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.617472,
+        "p95": 1.2032,
+        "p99": 1.2032,
+        "max": 1.327104
+      },
+      "rendererTaskSeconds": 35.68926
+    },
+    {
+      "hostLoad": [
+        6.92,
+        6.5,
+        8.55
+      ],
+      "elapsedSeconds": 180.136752782,
+      "visibleSeconds": 180.12729999999982,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 81547364,
+      "calls": 336,
+      "triangles": 249326,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.700000000186265,
+        "p95": 17,
+        "p99": 17.299999999813735,
+        "max": 23.59999999962747
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 2.8999999994412065,
+        "p95": 6.6000000005587935,
+        "p99": 10.099999999627471,
+        "max": 19.799999999813735
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.700864,
+        "p95": 2.838528,
+        "p99": 2.838528,
+        "max": 2.880512
+      },
+      "rendererTaskSeconds": 38.397019
+    },
+    {
+      "hostLoad": [
+        6.54,
+        6.43,
+        8.5
+      ],
+      "elapsedSeconds": 190.148777034,
+      "visibleSeconds": 190.14309999999963,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 82599257,
+      "calls": 331,
+      "triangles": 249184,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 17,
+        "p99": 17.200000000186265,
+        "max": 17.700000000186265
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 3.7999999998137355,
+        "p95": 6.7000000001862645,
+        "p99": 8,
+        "max": 9.300000000745058
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 2.064384,
+        "p95": 2.679808,
+        "p99": 2.679808,
+        "max": 2.801664
+      },
+      "rendererTaskSeconds": 41.514089
+    },
+    {
+      "hostLoad": [
+        6.15,
+        6.35,
+        8.45
+      ],
+      "elapsedSeconds": 200.15892843,
+      "visibleSeconds": 200.1427000000002,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 81633664,
+      "calls": 331,
+      "triangles": 249184,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 17,
+        "p99": 17.600000000558794,
+        "max": 21.299999999813735
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 2.7999999998137355,
+        "p95": 6,
+        "p99": 8.300000000745058,
+        "max": 12.299999999813735
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.439744,
+        "p95": 2.601984,
+        "p99": 2.601984,
+        "max": 5.951488
+      },
+      "rendererTaskSeconds": 43.993312
+    },
+    {
+      "hostLoad": [
+        6.3,
+        6.38,
+        8.44
+      ],
+      "elapsedSeconds": 210.172168531,
+      "visibleSeconds": 210.15889999999945,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 84659612,
+      "calls": 281,
+      "triangles": 233816,
+      "geometries": 406,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 17.399999999441206,
+        "p99": 19.5,
+        "max": 25.5
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 2.7000000001862645,
+        "p95": 8.700000000186265,
+        "p99": 12.099999999627471,
+        "max": 16.100000000558794
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.654784,
+        "p95": 3.54304,
+        "p99": 3.54304,
+        "max": 5.233664
+      },
+      "rendererTaskSeconds": 46.875143
+    },
+    {
+      "hostLoad": [
+        9.5,
+        7.06,
+        8.64
+      ],
+      "elapsedSeconds": 220.187944766,
+      "visibleSeconds": 220.17539999999943,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 82644976,
+      "calls": 337,
+      "triangles": 250366,
+      "geometries": 410,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 19.299999999813735,
+        "p99": 23.399999999441206,
+        "max": 28.40000000037253
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 4.7999999998137355,
+        "p95": 13.099999999627471,
+        "p99": 18.40000000037253,
+        "max": 26
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.60256,
+        "p95": 5.0176,
+        "p99": 5.0176,
+        "max": 5.061632
+      },
+      "rendererTaskSeconds": 51.286623
+    },
+    {
+      "hostLoad": [
+        10.01,
+        7.24,
+        8.68
+      ],
+      "elapsedSeconds": 230.201731827,
+      "visibleSeconds": 230.19159999999962,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 85235731,
+      "calls": 339,
+      "triangles": 250498,
+      "geometries": 410,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 17.299999999813735,
+        "p99": 18.399999999441206,
+        "max": 19.600000000558794
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 2.7000000001862645,
+        "p95": 8.5,
+        "p99": 11.600000000558794,
+        "max": 16.300000000745058
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.783808,
+        "p95": 1.862656,
+        "p99": 1.862656,
+        "max": 2.748416
+      },
+      "rendererTaskSeconds": 54.066965
+    },
+    {
+      "hostLoad": [
+        10.52,
+        7.43,
+        8.73
+      ],
+      "elapsedSeconds": 240.21209903899998,
+      "visibleSeconds": 240.20759999999962,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 83692791,
+      "calls": 288,
+      "triangles": 231564,
+      "geometries": 411,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.700000000186265,
+        "p95": 18.59999999962747,
+        "p99": 20.40000000037253,
+        "max": 23.5
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 5,
+        "p95": 11.799999999813735,
+        "p99": 13.799999999813735,
+        "max": 19.100000000558794
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 2.880512,
+        "p95": 4.63872,
+        "p99": 4.63872,
+        "max": 4.70016
+      },
+      "rendererTaskSeconds": 58.311564
+    },
+    {
+      "hostLoad": [
+        9.28,
+        7.27,
+        8.66
+      ],
+      "elapsedSeconds": 250.229111492,
+      "visibleSeconds": 250.2075,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 83841629,
+      "calls": 275,
+      "triangles": 234934,
+      "geometries": 411,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 17.299999999813735,
+        "p99": 18.700000000186265,
+        "max": 20.90000000037253
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 2.199999999254942,
+        "p95": 6.3999999994412065,
+        "p99": 8.100000000558794,
+        "max": 11.599999999627471
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.572416,
+        "p95": 1.892352,
+        "p99": 1.892352,
+        "max": 1.90464
+      },
+      "rendererTaskSeconds": 60.51151
+    },
+    {
+      "hostLoad": [
+        8.24,
+        7.11,
+        8.59
+      ],
+      "elapsedSeconds": 260.25226817199996,
+      "visibleSeconds": 260.24059999999963,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 82750793,
+      "calls": 318,
+      "triangles": 250170,
+      "geometries": 411,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 602,
+        "p50": 16.700000000186265,
+        "p95": 17.799999999813735,
+        "p99": 19.799999999813735,
+        "max": 30.5
+      },
+      "submissionMs": {
+        "count": 602,
+        "p50": 3,
+        "p95": 10.400000000372529,
+        "p99": 13.5,
+        "max": 27.700000000186265
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.583104,
+        "p95": 3.862528,
+        "p99": 3.862528,
+        "max": 5.117952
+      },
+      "rendererTaskSeconds": 63.856976
+    },
+    {
+      "hostLoad": [
+        8.77,
+        7.27,
+        8.63
+      ],
+      "elapsedSeconds": 270.277155109,
+      "visibleSeconds": 270.273,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 86593461,
+      "calls": 230,
+      "triangles": 224852,
+      "geometries": 411,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 602,
+        "p50": 16.699999999254942,
+        "p95": 17.59999999962747,
+        "p99": 19.299999999813735,
+        "max": 29.700000000186265
+      },
+      "submissionMs": {
+        "count": 602,
+        "p50": 2.599999999627471,
+        "p95": 8.399999999441206,
+        "p99": 11,
+        "max": 19.59999999962747
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.225728,
+        "p95": 3.109888,
+        "p99": 3.109888,
+        "max": 4.757504
+      },
+      "rendererTaskSeconds": 66.845834
+    },
+    {
+      "hostLoad": [
+        7.81,
+        7.11,
+        8.56
+      ],
+      "elapsedSeconds": 280.28887519799997,
+      "visibleSeconds": 280.27409999999963,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 82582893,
+      "calls": 223,
+      "triangles": 218776,
+      "geometries": 411,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 17.200000000186265,
+        "p99": 18.40000000037253,
+        "max": 20.100000000558794
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 2.3999999994412065,
+        "p95": 6.599999999627471,
+        "p99": 9.5,
+        "max": 15.299999999813735
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.102848,
+        "p95": 2.270208,
+        "p99": 2.270208,
+        "max": 5.347328
+      },
+      "rendererTaskSeconds": 69.218207
+    },
+    {
+      "hostLoad": [
+        10.48,
+        7.7,
+        8.74
+      ],
+      "elapsedSeconds": 290.309546339,
+      "visibleSeconds": 290.3057000000002,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 80812606,
+      "calls": 88,
+      "triangles": 176910,
+      "geometries": 411,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 602,
+        "p50": 16.700000000186265,
+        "p95": 19.09999999962747,
+        "p99": 22.09999999962747,
+        "max": 29.299999999813735
+      },
+      "submissionMs": {
+        "count": 602,
+        "p50": 3.2999999998137355,
+        "p95": 8.899999999441206,
+        "p99": 13.599999999627471,
+        "max": 22.600000000558794
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.526784,
+        "p95": 4.560896,
+        "p99": 4.560896,
+        "max": 6.076416
+      },
+      "rendererTaskSeconds": 72.631315
+    },
+    {
+      "hostLoad": [
+        9.41,
+        7.56,
+        8.68
+      ],
+      "elapsedSeconds": 300.31977561199994,
+      "visibleSeconds": 300.30509999999964,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 84805374,
+      "calls": 87,
+      "triangles": 176528,
+      "geometries": 411,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 16.90000000037253,
+        "p99": 17.09999999962747,
+        "max": 17.59999999962747
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 1.7999999998137355,
+        "p95": 2.2000000001862645,
+        "p99": 2.3999999994412065,
+        "max": 2.699999999254942
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.487424,
+        "p95": 1.06496,
+        "p99": 1.06496,
+        "max": 1.13152
+      },
+      "rendererTaskSeconds": 74.199991
+    },
+    {
+      "hostLoad": [
+        8.12,
+        7.35,
+        8.6
+      ],
+      "elapsedSeconds": 310.331295805,
+      "visibleSeconds": 310.32159999999965,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 83171509,
+      "calls": 84,
+      "triangles": 176288,
+      "geometries": 411,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 16.90000000037253,
+        "p99": 17,
+        "max": 17.200000000186265
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 1.7999999998137355,
+        "p95": 2.1000000005587935,
+        "p99": 2.2999999998137355,
+        "max": 2.400000000372529
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.484352,
+        "p95": 0.509952,
+        "p99": 0.509952,
+        "max": 1.503232
+      },
+      "rendererTaskSeconds": 75.738921
+    },
+    {
+      "hostLoad": [
+        7.4,
+        7.22,
+        8.54
+      ],
+      "elapsedSeconds": 320.34409637799996,
+      "visibleSeconds": 320.3375999999996,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 104506069,
+      "calls": 105,
+      "triangles": 409220,
+      "geometries": 423,
+      "textures": 34,
+      "online": true,
+      "phase": "night1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 576,
+        "p50": 16.699999999254942,
+        "p95": 16.90000000037253,
+        "p99": 17,
+        "max": 333.59999999962747
+      },
+      "submissionMs": {
+        "count": 576,
+        "p50": 1.7000000001862645,
+        "p95": 2.199999999254942,
+        "p99": 2.400000000372529,
+        "max": 332
+      },
+      "gpuMs": {
+        "count": 9,
+        "p50": 0.514048,
+        "p95": 1.125376,
+        "p99": 1.125376,
+        "max": 1.150976
+      },
+      "rendererTaskSeconds": 77.655736
+    },
+    {
+      "hostLoad": [
+        7.12,
+        7.16,
+        8.51
+      ],
+      "elapsedSeconds": 330.35768686899996,
+      "visibleSeconds": 330.354,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 110893601,
+      "calls": 74,
+      "triangles": 173834,
+      "geometries": 427,
+      "textures": 34,
+      "online": true,
+      "phase": "night1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.700000000186265,
+        "p95": 17,
+        "p99": 17.199999999254942,
+        "max": 17.5
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 1.900000000372529,
+        "p95": 2.400000000372529,
+        "p99": 2.699999999254942,
+        "max": 3.099999999627471
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.75776,
+        "p95": 1.133568,
+        "p99": 1.133568,
+        "max": 1.476608
+      },
+      "rendererTaskSeconds": 79.34884
+    },
+    {
+      "hostLoad": [
+        6.42,
+        7.01,
+        8.45
+      ],
+      "elapsedSeconds": 340.37047799399994,
+      "visibleSeconds": 340.35359999999963,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 87281194,
+      "calls": 81,
+      "triangles": 292048,
+      "geometries": 427,
+      "textures": 34,
+      "online": true,
+      "phase": "night1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 17,
+        "p99": 17,
+        "max": 17.200000000186265
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 1.699999999254942,
+        "p95": 2.099999999627471,
+        "p99": 2.300000000745058,
+        "max": 2.599999999627471
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.493568,
+        "p95": 0.607232,
+        "p99": 0.607232,
+        "max": 0.630784
+      },
+      "rendererTaskSeconds": 80.828121
+    },
+    {
+      "hostLoad": [
+        5.66,
+        6.83,
+        8.37
+      ],
+      "elapsedSeconds": 350.384980031,
+      "visibleSeconds": 350.37,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 84101867,
+      "calls": 69,
+      "triangles": 173696,
+      "geometries": 427,
+      "textures": 34,
+      "online": true,
+      "phase": "night1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 17,
+        "p99": 17,
+        "max": 18.700000000186265
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 1.5,
+        "p95": 2,
+        "p99": 2.3999999994412065,
+        "max": 4.300000000745058
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.45056,
+        "p95": 0.600064,
+        "p99": 0.600064,
+        "max": 0.62464
+      },
+      "rendererTaskSeconds": 82.186854
+    },
+    {
+      "hostLoad": [
+        5.48,
+        6.75,
+        8.33
+      ],
+      "elapsedSeconds": 360.40050083499995,
+      "visibleSeconds": 360.386,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 87275088,
+      "calls": 69,
+      "triangles": 173696,
+      "geometries": 427,
+      "textures": 34,
+      "online": true,
+      "phase": "night1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 17,
+        "p99": 17.200000000186265,
+        "max": 17.40000000037253
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 1.7999999998137355,
+        "p95": 3,
+        "p99": 3.7999999998137355,
+        "max": 4.3999999994412065
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.449536,
+        "p95": 0.459776,
+        "p99": 0.459776,
+        "max": 0.461824
+      },
+      "rendererTaskSeconds": 83.887382
+    },
+    {
+      "hostLoad": [
+        5.25,
+        6.66,
+        8.28
+      ],
+      "elapsedSeconds": 370.416485643,
+      "visibleSeconds": 370.40220000000016,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 87957461,
+      "calls": 177,
+      "triangles": 179684,
+      "geometries": 417,
+      "textures": 14,
+      "online": true,
+      "phase": "between rounds",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 597,
+        "p50": 16.699999999254942,
+        "p95": 17.09999999962747,
+        "p99": 18,
+        "max": 72.30000000074506
+      },
+      "submissionMs": {
+        "count": 597,
+        "p50": 2,
+        "p95": 3.7999999998137355,
+        "p99": 5.6000000005587935,
+        "max": 7.2999999998137355
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.616448,
+        "p95": 0.646144,
+        "p99": 0.646144,
+        "max": 0.649216
+      },
+      "rendererTaskSeconds": 85.833279
+    },
+    {
+      "hostLoad": [
+        6.59,
+        6.89,
+        8.34
+      ],
+      "elapsedSeconds": 380.42960637999994,
+      "visibleSeconds": 380.4187000000002,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 93676671,
+      "calls": 196,
+      "triangles": 216630,
+      "geometries": 427,
+      "textures": 14,
+      "online": true,
+      "phase": "prep",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 17.299999999813735,
+        "p99": 18.699999999254942,
+        "max": 40.799999999813735
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 2.400000000372529,
+        "p95": 6.2999999998137355,
+        "p99": 9.799999999813735,
+        "max": 13.899999999441206
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.667648,
+        "p95": 2.098176,
+        "p99": 2.098176,
+        "max": 2.596864
+      },
+      "rendererTaskSeconds": 88.217695
+    },
+    {
+      "hostLoad": [
+        8.52,
+        7.27,
+        8.45
+      ],
+      "elapsedSeconds": 390.443620057,
+      "visibleSeconds": 390.43509999999964,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 92418619,
+      "calls": 196,
+      "triangles": 216280,
+      "geometries": 427,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 18.799999999813735,
+        "p99": 21.799999999813735,
+        "max": 27.09999999962747
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 4.1000000005587935,
+        "p95": 9.599999999627471,
+        "p99": 13.5,
+        "max": 20.5
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.472512,
+        "p95": 1.732608,
+        "p99": 1.732608,
+        "max": 4.528128
+      },
+      "rendererTaskSeconds": 92.011002
+    },
+    {
+      "hostLoad": [
+        7.82,
+        7.16,
+        8.4
+      ],
+      "elapsedSeconds": 400.45693302499996,
+      "visibleSeconds": 400.45129999999983,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 90535407,
+      "calls": 72,
+      "triangles": 173570,
+      "geometries": 427,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 17.200000000186265,
+        "p99": 18.300000000745058,
+        "max": 21.5
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 2,
+        "p95": 5.199999999254942,
+        "p99": 7.7000000001862645,
+        "max": 14.200000000186265
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.526336,
+        "p95": 0.779264,
+        "p99": 0.779264,
+        "max": 1.942528
+      },
+      "rendererTaskSeconds": 94.237058
+    },
+    {
+      "hostLoad": [
+        7,
+        7.01,
+        8.34
+      ],
+      "elapsedSeconds": 410.482304795,
+      "visibleSeconds": 410.4678999999994,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 90189483,
+      "calls": 74,
+      "triangles": 175042,
+      "geometries": 427,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 17.5,
+        "p99": 19,
+        "max": 23.199999999254942
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 1.900000000372529,
+        "p95": 5.6000000005587935,
+        "p99": 7.400000000372529,
+        "max": 10.099999999627471
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.45568,
+        "p95": 1.473536,
+        "p99": 1.473536,
+        "max": 3.245056
+      },
+      "rendererTaskSeconds": 96.414438
+    },
+    {
+      "hostLoad": [
+        9.86,
+        7.62,
+        8.52
+      ],
+      "elapsedSeconds": 420.51167966099996,
+      "visibleSeconds": 420.5005,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 91708495,
+      "calls": 77,
+      "triangles": 175584,
+      "geometries": 427,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 602,
+        "p50": 16.699999999254942,
+        "p95": 18.299999999813735,
+        "p99": 21.299999999813735,
+        "max": 27.600000000558794
+      },
+      "submissionMs": {
+        "count": 602,
+        "p50": 3.199999999254942,
+        "p95": 7.7999999998137355,
+        "p99": 9.799999999813735,
+        "max": 16.40000000037253
+      },
+      "gpuMs": {
+        "count": 11,
+        "p50": 0.470016,
+        "p95": 3.074048,
+        "p99": 3.074048,
+        "max": 4.74624
+      },
+      "rendererTaskSeconds": 99.777992
+    },
+    {
+      "hostLoad": [
+        8.96,
+        7.5,
+        8.47
+      ],
+      "elapsedSeconds": 430.52722212599997,
+      "visibleSeconds": 430.517,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 91808362,
+      "calls": 77,
+      "triangles": 175584,
+      "geometries": 427,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 17.59999999962747,
+        "p99": 19.100000000558794,
+        "max": 19.700000000186265
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 1.900000000372529,
+        "p95": 6.7999999998137355,
+        "p99": 8.799999999813735,
+        "max": 11.800000000745058
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.42496,
+        "p95": 0.512,
+        "p99": 0.512,
+        "max": 0.52736
+      },
+      "rendererTaskSeconds": 102.15856
+    },
+    {
+      "hostLoad": [
+        8.28,
+        7.4,
+        8.43
+      ],
+      "elapsedSeconds": 440.54664878399996,
+      "visibleSeconds": 440.5353999999994,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 80863266,
+      "calls": 79,
+      "triangles": 175588,
+      "geometries": 427,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.699999999254942,
+        "p95": 18.799999999813735,
+        "p99": 22.700000000186265,
+        "max": 27.700000000186265
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 2.400000000372529,
+        "p95": 7.699999999254942,
+        "p99": 14,
+        "max": 23.899999999441206
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.649216,
+        "p95": 2.176,
+        "p99": 2.176,
+        "max": 2.332672
+      },
+      "rendererTaskSeconds": 105.272024
+    },
+    {
+      "hostLoad": [
+        9.08,
+        7.61,
+        8.49
+      ],
+      "elapsedSeconds": 450.604831323,
+      "visibleSeconds": 450.5992999999998,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 83353257,
+      "calls": 83,
+      "triangles": 175674,
+      "geometries": 427,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 604,
+        "p50": 16.700000000186265,
+        "p95": 18.09999999962747,
+        "p99": 19.699999999254942,
+        "max": 23.600000000558794
+      },
+      "submissionMs": {
+        "count": 604,
+        "p50": 2.099999999627471,
+        "p95": 7.599999999627471,
+        "p99": 10.900000000372529,
+        "max": 17.799999999813735
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.539648,
+        "p95": 1.50016,
+        "p99": 1.50016,
+        "max": 4.953088
+      },
+      "rendererTaskSeconds": 107.979301
+    },
+    {
+      "hostLoad": [
+        9.58,
+        7.76,
+        8.53
+      ],
+      "elapsedSeconds": 460.62222520399996,
+      "visibleSeconds": 460.6155,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 84837863,
+      "calls": 92,
+      "triangles": 175860,
+      "geometries": 427,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 17.200000000186265,
+        "p99": 18.90000000037253,
+        "max": 20.200000000186265
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 2.099999999627471,
+        "p95": 5.900000000372529,
+        "p99": 8.300000000745058,
+        "max": 10.399999999441206
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 0.477184,
+        "p95": 1.87904,
+        "p99": 1.87904,
+        "max": 2.833408
+      },
+      "rendererTaskSeconds": 110.211012
+    },
+    {
+      "hostLoad": [
+        9.81,
+        7.9,
+        8.56
+      ],
+      "elapsedSeconds": 470.63818783999994,
+      "visibleSeconds": 470.63189999999946,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 85628280,
+      "calls": 105,
+      "triangles": 175976,
+      "geometries": 427,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 600,
+        "p50": 16.700000000186265,
+        "p95": 18.700000000186265,
+        "p99": 21.799999999813735,
+        "max": 40.5
+      },
+      "submissionMs": {
+        "count": 600,
+        "p50": 3.7999999998137355,
+        "p95": 8.799999999813735,
+        "p99": 12.299999999813735,
+        "max": 38
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.236992,
+        "p95": 3.30752,
+        "p99": 3.30752,
+        "max": 4.176896
+      },
+      "rendererTaskSeconds": 113.958886
+    },
+    {
+      "hostLoad": [
+        8.68,
+        7.73,
+        8.5
+      ],
+      "elapsedSeconds": 480.65687171999997,
+      "visibleSeconds": 480.6480999999996,
+      "hiddenFrames": 0,
+      "gpuTimerAvailable": true,
+      "disjointSamples": 0,
+      "heap": 92353305,
+      "calls": 333,
+      "triangles": 249310,
+      "geometries": 427,
+      "textures": 14,
+      "online": true,
+      "phase": "day1",
+      "visibility": "visible",
+      "frameMs": {
+        "count": 601,
+        "p50": 16.699999999254942,
+        "p95": 17,
+        "p99": 17.90000000037253,
+        "max": 19.5
+      },
+      "submissionMs": {
+        "count": 601,
+        "p50": 2.5,
+        "p95": 4.1000000005587935,
+        "p99": 7.400000000372529,
+        "max": 13.100000000558794
+      },
+      "gpuMs": {
+        "count": 10,
+        "p50": 1.303552,
+        "p95": 1.92512,
+        "p99": 1.92512,
+        "max": 1.968128
+      },
+      "rendererTaskSeconds": 116.241009
+    }
+  ],
+  "errors": [],
+  "failedRequests": [],
+  "budget": {
+    "frameP95": true,
+    "frameP99": true,
+    "gpuP95": true,
+    "gpuP99": true,
+    "heap": true,
+    "connected": true,
+    "noRuntimeOrRequestErrors": true
+  }
+}
