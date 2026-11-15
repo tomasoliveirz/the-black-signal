@@ -87,7 +87,7 @@ const game = createGame({
     matchEnd: result => menu.matchEnd(result),
     roomOptions: () => roomUI.options(),
     roomJoined: message => roomUI.joined(message),
-    roomLeft: () => roomUI.clear(),
+    roomLeft: () => {roomUI.clear();menu.left();},
   },
 });
 

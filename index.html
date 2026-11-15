@@ -44,7 +44,7 @@
     box-sizing:border-box; min-width:0; border:1px solid var(--line); border-radius:4px; background:#1a1916; color:var(--canvas);
     padding:10px 12px; min-height:42px; user-select:text; caret-color:var(--gold);
   }
-  #name::placeholder { color:var(--muted); }
+  #name::placeholder, #room-code::placeholder { color:var(--muted); opacity:1; }
   #name[readonly] { color:var(--gold); background:#29241d; }
   #menu .primary {
     min-height:44px; border:1px solid transparent; border-radius:4px; padding:10px 14px; cursor:pointer;
@@ -192,7 +192,7 @@
     .menu-layout { grid-template-columns:minmax(0,1fr); width:min(100%,600px); align-content:start; }
     .identity h1 { font-size:clamp(3.25rem,9vw,5rem); }
     .tag { margin-bottom:20px; }
-    #menu.showing-guide .identity { display:none; }
+
   }
   @media (max-width:450px) {
     .menu-layout { padding:22px 16px; }
@@ -233,6 +233,91 @@
   #toast span { display:block; margin-top:4px; font:500 13px var(--mono); color:#f3c98c; }
 .language-setting { display:flex; align-items:center; gap:12px; margin:14px 0; font-size:14px; color:var(--muted); }
 .language-setting select { min-height:36px; padding:4px 8px; color:var(--canvas); background:#211e19; border:1px solid var(--line); font:inherit; }
+
+  #menu { background:#171614d4; }
+  #menu .primary { letter-spacing:.02em; }
+  #room-connection { font-size:12px; overflow-wrap:anywhere; }
+  #menu :is(.map-count,.seat-number,.net) { font-size:12px; letter-spacing:.04em; }
+  .menu-layout { grid-template-columns:220px minmax(0,1fr); align-items:start; align-content:start; gap:48px; max-width:1440px; padding:40px; }
+  .identity h1 { font-size:3.1rem; }
+  .identity .tag { font-size:17px; margin-bottom:24px; }
+  .menu-nav { display:grid; gap:6px; }
+  #menu .menu-nav button { text-align:left; min-height:44px; background:transparent; border-color:transparent; }
+  #menu .menu-nav button[aria-current="page"] { background:#382c20; color:var(--gold); border-color:var(--line); }
+  #menu .menu-nav button:disabled { color:var(--muted); opacity:.55; cursor:default; }
+  .menu-content { min-width:0; padding-top:4px; }
+  .menu-content > section > h2 { font:400 2.4rem/1.15 var(--serif); margin:0 0 22px; letter-spacing:-.02em; }
+  #home-view { max-width:690px; padding-top:50px; }
+  #home-view h2 { font-size:3.4rem; max-width:16ch; }
+  .home-intro { color:var(--muted); font-size:20px; line-height:1.6; max-width:45ch; margin:24px 0; }
+  .home-rules { display:grid; grid-template-columns:170px minmax(0,1fr); gap:20px 24px; line-height:1.55; margin:50px 0 0; }
+  .home-rules dt { color:var(--gold); font-weight:600; }
+  .home-rules dd { margin:0; color:var(--muted); }
+  #play-view, #account-view { max-width:600px; }
+  .view-intro { max-width:60ch; color:var(--muted); line-height:1.6; margin-bottom:24px; }
+  #entry { gap:12px; }
+  #room-options { display:grid; gap:10px; }
+  #menu #entry label { font-size:12px; }
+  #menu #entry :is(input,select,button) { min-height:44px; }
+  #map-preview { margin-top:28px; border-top:1px solid var(--line); padding-top:16px; }
+  #map-preview > summary { cursor:pointer; min-height:44px; }
+  #map-preview .maps { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  #match-menu { display:grid; grid-template-columns:minmax(0,1fr) minmax(320px,.9fr); align-items:start; gap:32px; }
+  #match-menu #result { grid-column:1/-1; }
+  #match-menu .maps { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  #match-menu .map-caption strong { font-size:20px; }
+  #match-menu .map-caption small { font-size:13px; }
+  #match-menu .room { margin:0; padding:0; border:0; }
+  #lobby { grid-template-columns:minmax(0,1fr); gap:6px; }
+  .seat { min-height:45px; }
+  .seat-player { font-size:15px; }
+  .seat-tag { font-family:'IBM Plex Sans',sans-serif; font-size:12px; letter-spacing:0; }
+  .room-actions { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  #room-status { grid-column:1/-1; line-height:1.5; min-height:2.9em; }
+  #menu .room-actions #resume { grid-column:1/-1; }
+  #settings-view { max-width:680px; }
+  #settings { border-top:0; padding-top:0; }
+  #settings > summary { display:none; }
+  #settings .audio-setting { min-height:42px; font-size:15px; }
+  #settings .controls-heading { font-size:25px; margin-top:24px; }
+  #account-panel { margin-top:0; }
+  #guide { padding:0; border:0; border-radius:0; background:transparent; }
+  #guide h2 { margin-top:24px; }
+  @media(max-width:1100px) {
+    .menu-layout { grid-template-columns:190px minmax(0,1fr); padding:28px; gap:28px; }
+    .identity h1 { font-size:2.7rem; }
+    #match-menu { grid-template-columns:minmax(0,1fr); }
+    #match-menu #room { order:1; }
+    #match-menu #maps-panel { order:2; }
+    #match-menu .maps { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  }
+  @media(max-width:760px) {
+    .menu-layout { grid-template-columns:minmax(0,1fr); width:100%; padding:22px 18px; gap:28px; }
+    .identity { display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"brand brand" "navigation navigation" "language network" "connection leave"; gap:10px; }
+    .identity h1 { grid-area:brand; font-size:1.75rem; }
+    .identity h1 br { display:none; }
+    .identity .menu-nav { grid-area:navigation; margin:0; }
+    .identity .language-setting { grid-area:language; margin:0; font-size:13px; gap:8px; }
+    #room-connection { grid-area:connection; margin:0; }
+    #room-leave { grid-area:leave; }
+    .identity #net { grid-area:network; font-size:12px; margin:0; white-space:nowrap; }
+
+    .identity .tag { display:none; }
+    .menu-nav { grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:20px; }
+    #menu .menu-nav button { padding:8px; font-size:14px; }
+    .language-setting { margin:12px 0; }
+    .net { margin-bottom:0; }
+    #home-view { padding-top:0; }
+    #home-view h2 { font-size:2.4rem; }
+    .home-intro { font-size:17px; }
+    .home-rules { grid-template-columns:minmax(0,1fr); gap:8px; margin-top:30px; }
+    .home-rules dd { margin-bottom:12px; }
+    .menu-content > section > h2 { font-size:2rem; }
+    #match-menu .maps { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .room-select { flex-wrap:wrap; }
+    #menu #entry :is(input,select), #menu .account-input, #room-chat-text { font-size:16px; }
+  }
+
 </style>
 <script type="importmap">
 { "imports": {
@@ -267,31 +352,39 @@
 <div class="hud" id="cross"></div>
 <div class="hud" id="toast"></div>
 <div class="hud" id="keys" data-i18n="WASD move · SHIFT sprint · C crouch · E interact · R drop cell">WASD move · SHIFT sprint · C crouch · E interact · R drop cell<br data-i18n="CLICK fire or attack · Z talk · ESC menu">CLICK fire or attack · Z talk · ESC menu</div>
-<main id="menu" aria-labelledby="title">
+<main id="menu" aria-labelledby="title" data-menu-view="home">
   <div class="menu-layout">
-    <div class="identity">
-      <h1 id="title">The Black<br>Signal</h1>
-      <label class="language-setting" for="language"><span data-i18n="Language">Language</span> <select id="language"><option value="en" lang="en">English</option><option value="pt-PT" lang="pt-PT">Português</option></select></label>
+    <aside class="identity">
+      <h1 id="title">The Black<br> Signal</h1>
       <p class="tag" data-i18n="Some voices should never be answered.">Some voices should never be answered.</p>
-      <details id="account-panel">
-        <summary><span data-i18n="Account">Account</span> · <span id="account-user" data-i18n="Guest">Guest</span></summary>
-        <form id="account-form" autocomplete="on">
-          <label for="account-username" data-i18n="Username">Username</label>
-          <input class="account-input" id="account-username" name="username" autocomplete="username"
-            minlength="3" maxlength="20" pattern="[A-Za-z0-9_]{3,20}" required spellcheck="false"
-            aria-describedby="account-status" data-i18n-title="Use 3–20 ASCII letters, numbers or underscores." title="Use 3–20 ASCII letters, numbers or underscores.">
-          <label for="account-password" data-i18n="Password">Password</label>
-          <input class="account-input" id="account-password" name="password" type="password" autocomplete="current-password"
-            minlength="10" maxlength="128" required aria-describedby="account-status">
-          <div class="account-actions">
-            <button class="secondary" id="account-login" type="submit" value="login" data-i18n="Sign in">Sign in</button>
-            <button class="secondary" id="account-register" type="submit" value="register" data-i18n="Create account">Create account</button>
-          </div>
-        </form>
-        <button class="secondary" id="account-logout" type="button" hidden data-i18n="Sign out">Sign out</button>
-        <p id="account-status" role="status" data-i18n="You can join a room as a guest.">You can join a room as a guest.</p>
-      </details>
-      <form id="entry">
+      <nav class="menu-nav" aria-label="Main menu" data-i18n-aria-label="Main menu">
+        <button type="button" class="secondary" data-menu-view="home" aria-current="page" data-i18n="Home">Home</button>
+        <button type="button" class="secondary" id="nav-play" data-menu-view="play" data-i18n="Play">Play</button>
+        <button type="button" class="secondary" id="nav-room" data-menu-view="room" disabled data-i18n="Room">Room</button>
+        <button type="button" class="secondary" id="how-to-play" aria-controls="guide" aria-expanded="false" data-i18n="How to play">How to play</button>
+        <button type="button" class="secondary" data-menu-view="settings" data-i18n="Settings">Settings</button>
+        <button type="button" class="secondary" data-menu-view="account" data-i18n="Account">Account</button>
+      </nav>
+      <label class="language-setting" for="language"><span data-i18n="Language">Language</span> <select id="language"><option value="en" lang="en">English</option><option value="pt-PT" lang="pt-PT">Português</option></select></label>
+      <p id="room-connection" role="status"></p>
+      <button type="button" id="room-leave" class="secondary" hidden data-i18n="Leave room">Leave room</button>
+      <p class="net" id="net" role="status" data-i18n="CONNECTING TO SERVER…">CONNECTING TO SERVER…</p>
+    </aside>
+    <div class="menu-content">
+      <section id="home-view" aria-labelledby="home-heading">
+        <h2 id="home-heading" tabindex="-1" data-i18n="Four Operatives. Two Echoes.">Four Operatives. Two Echoes.</h2>
+        <p class="home-intro" data-i18n="Repair the transmitters. Survive the nights. Decide who to trust.">Repair the transmitters. Survive the nights. Decide who to trust.</p>
+        <button type="button" class="primary" data-menu-view="play" data-i18n="Find or create a room">Find or create a room</button>
+        <dl class="home-rules">
+          <dt data-i18n="Explore together">Explore together</dt><dd data-i18n="The first day gives you five minutes before combat opens.">The first day gives you five minutes before combat opens.</dd>
+          <dt data-i18n="Listen carefully">Listen carefully</dt><dd data-i18n="Proximity voice and directional sounds reveal what is happening nearby.">Proximity voice and directional sounds reveal what is happening nearby.</dd>
+          <dt data-i18n="Prepare to leave">Prepare to leave</dt><dd data-i18n="Power all three transmitters and reach extraction during the final hunt.">Power all three transmitters and reach extraction during the final hunt.</dd>
+        </dl>
+      </section>
+      <section id="play-view" aria-labelledby="play-heading" hidden>
+        <h2 id="play-heading" tabindex="-1" data-i18n="Enter a room">Enter a room</h2>
+        <p class="view-intro" data-i18n="Join a public room, enter an invitation code, or create a room for your group.">Join a public room, enter an invitation code, or create a room for your group.</p>
+        <form id="entry">
         <label for="name" data-i18n="PLAYER NAME">PLAYER NAME</label>
         <input id="name" maxlength="24" data-i18n-placeholder="Player" placeholder="Player" autocomplete="nickname">
         <div id="room-options">
@@ -303,35 +396,9 @@
         </div>
         <button class="primary" id="play" type="submit" disabled data-i18n="JOIN ROOM">JOIN ROOM</button>
       </form>
-      <p id="room-connection" role="status"></p>
-      <button type="button" id="room-leave" class="secondary" hidden data-i18n="Leave room">Leave room</button>
-      <p class="net" id="net" role="status" data-i18n="CONNECTING TO SERVER…">CONNECTING TO SERVER…</p>
-      <button class="secondary guide-entry" id="how-to-play" type="button" aria-controls="guide" aria-expanded="false" data-i18n="How to play">How to play</button>
-      <details class="settings" id="settings">
-        <summary data-i18n="Settings & controls">Settings & controls</summary>
-        <div class="settings-grid">
-          <div class="setting">
-            <label for="quality" data-i18n="QUALITY">QUALITY</label>
-            <select id="quality"><option value="0" data-i18n="1 · Low">1 · Low</option><option value="1" data-i18n="2 · Medium">2 · Medium</option><option value="2" data-i18n="3 · High">3 · High</option><option value="3">4 · Ultra</option></select>
-          </div>
-        </div>
-        <label class="audio-setting"><input id="tips-enable" type="checkbox" checked> <span data-i18n="Show in-game tips">Show in-game tips</span></label>
-        <h2 class="controls-heading" data-i18n="Audio">Audio</h2>
-        <label class="audio-setting"><span data-i18n="Music">Music</span> <input id="volume-music" type="range" min="0" max="100" value="35"></label>
-        <div class="music-controls"><span id="music-status"></span><button id="music-next" type="button" data-i18n="Next track">Next track</button></div>
-        <div class="audio-mix">
-          <label class="audio-setting"><span data-i18n="Effects">Effects</span> <input id="volume-effects" type="range" min="0" max="100" value="80"></label>
-          <label class="audio-setting"><span data-i18n="Ambience">Ambience</span> <input id="volume-environment" type="range" min="0" max="100" value="68"></label>
-          <label class="audio-setting"><span data-i18n="Voices">Voices</span> <input id="volume-voices" type="range" min="0" max="100" value="85"></label>
-        </div>
-        <label class="audio-setting"><input id="voice-listen" type="checkbox" checked> <span data-i18n="Hear proximity voice">Hear proximity voice</span></label>
-        <button id="mic" class="audio-setting" type="button" aria-describedby="mic-status" data-i18n="Enable microphone">Enable microphone</button>
-        <p id="mic-status" role="status" data-i18n="Hold Z to talk. Range: 22 m.">Hold Z to talk. Range: 22 m.</p>
-        <a class="audio-credits" href="./assets/audio/CREDITS.md" target="_blank" rel="noopener" data-i18n="Sound effect credits">Sound effect credits</a>
-        <div><button id="guide-controls" class="secondary guide-link" type="button" aria-controls="guide" data-i18n="View controls">View controls</button></div>
-      </details>
-    </div>
-    <div id="match-menu">
+        <details id="map-preview"><summary data-i18n="Preview the maps">Preview the maps</summary><div id="map-preview-content"></div></details>
+      </section>
+      <div id="match-menu">
       <section id="result" aria-labelledby="endTitle" aria-live="polite" hidden>
         <h2 id="endTitle"></h2>
         <p id="result-map"></p>
@@ -367,7 +434,54 @@
         </section>
       </section>
     </div>
-    <section id="guide" aria-labelledby="guide-heading" hidden>
+      <section id="settings-view" aria-labelledby="settings-heading" hidden>
+        <h2 id="settings-heading" tabindex="-1" data-i18n="Settings">Settings</h2>
+        <details class="settings" id="settings" open>
+        <summary data-i18n="Settings & controls">Settings & controls</summary>
+        <div class="settings-grid">
+          <div class="setting">
+            <label for="quality" data-i18n="QUALITY">QUALITY</label>
+            <select id="quality"><option value="0" data-i18n="1 · Low">1 · Low</option><option value="1" data-i18n="2 · Medium">2 · Medium</option><option value="2" data-i18n="3 · High">3 · High</option><option value="3">4 · Ultra</option></select>
+          </div>
+        </div>
+        <label class="audio-setting"><input id="tips-enable" type="checkbox" checked> <span data-i18n="Show in-game tips">Show in-game tips</span></label>
+        <h2 class="controls-heading" data-i18n="Audio">Audio</h2>
+        <label class="audio-setting"><span data-i18n="Music">Music</span> <input id="volume-music" type="range" min="0" max="100" value="35"></label>
+        <div class="music-controls"><span id="music-status"></span><button id="music-next" type="button" data-i18n="Next track">Next track</button></div>
+        <div class="audio-mix">
+          <label class="audio-setting"><span data-i18n="Effects">Effects</span> <input id="volume-effects" type="range" min="0" max="100" value="80"></label>
+          <label class="audio-setting"><span data-i18n="Ambience">Ambience</span> <input id="volume-environment" type="range" min="0" max="100" value="68"></label>
+          <label class="audio-setting"><span data-i18n="Voices">Voices</span> <input id="volume-voices" type="range" min="0" max="100" value="85"></label>
+        </div>
+        <label class="audio-setting"><input id="voice-listen" type="checkbox" checked> <span data-i18n="Hear proximity voice">Hear proximity voice</span></label>
+        <button id="mic" class="audio-setting" type="button" aria-describedby="mic-status" data-i18n="Enable microphone">Enable microphone</button>
+        <p id="mic-status" role="status" data-i18n="Hold Z to talk. Range: 22 m.">Hold Z to talk. Range: 22 m.</p>
+        <a class="audio-credits" href="./assets/audio/CREDITS.md" target="_blank" rel="noopener" data-i18n="Sound effect credits">Sound effect credits</a>
+        <div><button id="guide-controls" class="secondary guide-link" type="button" aria-controls="guide" data-i18n="View controls">View controls</button></div>
+      </details>
+      </section>
+      <section id="account-view" aria-labelledby="account-heading" hidden>
+        <h2 id="account-heading" tabindex="-1" data-i18n="Account">Account</h2>
+        <details id="account-panel" open>
+        <summary><span data-i18n="Account">Account</span> · <span id="account-user" data-i18n="Guest">Guest</span></summary>
+        <form id="account-form" autocomplete="on">
+          <label for="account-username" data-i18n="Username">Username</label>
+          <input class="account-input" id="account-username" name="username" autocomplete="username"
+            minlength="3" maxlength="20" pattern="[A-Za-z0-9_]{3,20}" required spellcheck="false"
+            aria-describedby="account-status" data-i18n-title="Use 3–20 ASCII letters, numbers or underscores." title="Use 3–20 ASCII letters, numbers or underscores.">
+          <label for="account-password" data-i18n="Password">Password</label>
+          <input class="account-input" id="account-password" name="password" type="password" autocomplete="current-password"
+            minlength="10" maxlength="128" required aria-describedby="account-status">
+          <div class="account-actions">
+            <button class="secondary" id="account-login" type="submit" value="login" data-i18n="Sign in">Sign in</button>
+            <button class="secondary" id="account-register" type="submit" value="register" data-i18n="Create account">Create account</button>
+          </div>
+        </form>
+        <button class="secondary" id="account-logout" type="button" hidden data-i18n="Sign out">Sign out</button>
+        <p id="account-status" role="status" data-i18n="You can join a room as a guest.">You can join a room as a guest.</p>
+      </details>
+      </section>
+      <section id="guide" aria-labelledby="guide-heading" hidden>
       <div class="guide-actions">
         <button id="guide-close" class="secondary" type="button" data-i18n="Back to menu">Back to menu</button>
         <label class="guide-language"><span id="guide-language-label">Idioma do guia</span>
@@ -381,6 +495,7 @@
       <div class="guide-tabs" id="guide-tabs" role="tablist" aria-labelledby="guide-heading"></div>
       <div id="guide-pages"></div>
     </section>
+    </div>
   </div>
 </main>
 <script type="module" src="./src/main.js"></script>

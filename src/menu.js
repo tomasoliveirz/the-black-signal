@@ -52,12 +52,35 @@ const guideCopy = {
 
 export function createMenu({ game, enter, openMenu, setQuality }) {
   const entry = $('entry'), name = $('name'), play = $('play'), start = $('start'), resume = $('resume');
-  let onlineStatus='connecting';
+  let onlineStatus='connecting',currentView='home',guideReturn='home';
   let host=0,canStart=false;
   let phase = 'lobby', players = [], previewChoice = null, member = false;
   try { name.value = localStorage.getItem('bs.name') || ''; } catch {}
 
-  const guide = $('guide'), matchMenu = $('match-menu'), guideOpen = $('how-to-play');
+  const mapPanel=$('maps').closest('section');
+  mapPanel.id='maps-panel';
+  const roomContainer=$('match-menu');
+  function showView(id,focus=true){
+    if(id==='room'&&!member)id='play';
+    if(id==='play'&&member)id='room';
+    currentView=id;$('menu').dataset.menuView=id;
+    for(const view of ['home','play','settings','account'])$(view+'-view').hidden=view!==id;
+    $('match-menu').hidden=id!=='room';$('guide').hidden=id!=='guide';
+    $('how-to-play').setAttribute('aria-expanded',String(id==='guide'));
+    $('menu').classList.toggle('showing-guide',id==='guide');
+    for(const button of document.querySelectorAll('.menu-nav button')){
+      const selected=button.dataset.menuView===id||(button.id==='how-to-play'&&id==='guide');
+      if(selected)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
+    }
+    const destination=member?roomContainer:$('map-preview-content');
+    if(mapPanel.parentElement!==destination)destination.insertBefore(mapPanel,member?$('room'):null);
+    if(id==='settings')$('settings').open=true;
+    if(id==='account')$('account-panel').open=true;
+    if(focus){const heading=id==='room'?$('room-heading'):id==='guide'?$('guide-heading'):$(id+'-heading');if(heading){heading.tabIndex=-1;heading.focus();heading.scrollIntoView({block:'nearest'})}}
+  }
+  for(const button of document.querySelectorAll('[data-menu-view]:not(main)'))button.addEventListener('click',()=>showView(button.dataset.menuView));
+
+  const guide = $('guide'), guideOpen = $('how-to-play');
   const language = $('guide-language'), tabs = $('guide-tabs'), pages = $('guide-pages');
   let guideTab = 0, previousFocus = null;
   try {
@@ -115,8 +138,8 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
   }
 
   function showGuide(index) {
-    previousFocus = document.activeElement;
-    guide.hidden = false; matchMenu.hidden = true;
+    previousFocus = document.activeElement;guideReturn=currentView;
+    showView('guide',false);
     $('menu').classList.add('showing-guide');
     guideOpen.setAttribute('aria-expanded', 'true');
     if (index !== undefined) selectGuideTab(index);
@@ -126,7 +149,7 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
   }
 
   function closeGuide(restoreFocus = true) {
-    guide.hidden = true; matchMenu.hidden = false;
+    showView(guideReturn,false);
     $('menu').classList.remove('showing-guide');
     guideOpen.setAttribute('aria-expanded', 'false');
     if (restoreFocus) previousFocus?.focus();
@@ -213,6 +236,7 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
     ready.setAttribute('aria-pressed', String(own?.ready === true));
     ready.textContent = t(own?.ready ? 'Not ready' : 'Ready');
     resume.hidden = !running();
+    $('nav-room').disabled=!member;
     if (!member) return;
     resume.textContent = game.me.spectator ? t("WATCH MATCH") : t("RETURN TO MATCH");
     for (const [slot, { seat, playerName, tag, mute }] of seats.entries()) {
@@ -222,7 +246,7 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
       playerName.textContent = player?.bot ? player.name.replace(/^BOT\s+/, '') : player?.name || t("Empty seat");
       playerName.title = playerName.textContent;
       tag.hidden = !player;
-      tag.textContent = player?.bot ? 'BOT' : !player?.connected ? t("Disconnected") : running() ? (ownSlot ? t("YOU") : '') : t(player?.ready ? "Ready" : "Not ready");
+      tag.textContent = player?.bot ? 'BOT' : !player?.connected ? t("Disconnected") : running() ? (ownSlot ? t("YOU") : '') : t(player?.ready ? "Ready" : "Not ready")+(player?.id===host?' · '+t('Host'):'');
       mute.hidden = !player || player.bot || ownSlot;
       if (mute.dataset.player !== String(player?.id)) {
         mute.dataset.player = String(player?.id);
@@ -243,6 +267,7 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
     $('net').dataset.state = status;
     $('net').textContent = status === 'online' ? t("SERVER ONLINE") : t("SERVER UNAVAILABLE");
     play.disabled = status === 'connecting';
+    $('room-create-private').disabled=status!=='online';$('room-create-public').disabled=status!=='online';
     play.textContent = status === 'offline' ? t('EXPLORE IN FREE ROAM') : t('JOIN ROOM');
     if (status === 'offline') {
       member = false;
@@ -251,14 +276,18 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
       openMenu();
       renderRoom();
       renderMap();
+      if(currentView==='room')showView('play',false);
     }
   }
 
   function joined() {
     member = true;
+    $('nav-room').disabled=false;showView('room',false);
     if (previewChoice) game.setMap(previewChoice);
     previewChoice = null;
   }
+
+  function left(){member=false;players=[];phase='lobby';canStart=false;renderRoom();renderMap();showView('play',false);}
 
   function lobby(message) {
     phase = message.phase; host=message.host??game.me.id; canStart=Boolean(message.canStart);
@@ -281,7 +310,7 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
     $('result').hidden = false;
     renderRoom();
     renderMap();
-    openMenu();
+    openMenu();showView('room',false);
     $('endTitle').tabIndex = -1;
     $('endTitle').focus();
   }
@@ -290,14 +319,17 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
     event.preventDefault();
     const playerName = name.value.trim() || t("Player");
     try { localStorage.setItem('bs.name', playerName); } catch {}
-    if (game.online) { play.disabled = true; game.join(playerName); }
+    if (game.online) {
+      if(!$('room-code').value.trim()&&!$('public-room').value){$('room-connection').textContent=t('Choose a public room or enter an invitation code.');return;}
+      play.disabled = true; game.join(playerName);
+    }
     else enter(true);
   });
   $('ready').addEventListener('click',()=>game.ready(!players.find(p=>p.id===game.me.id)?.ready));
   start.addEventListener('click', () => game.start());
   resume.addEventListener('click', () => enter(true));
   $('quality').addEventListener('change', (event) => setQuality(Number(event.target.value)));
-  renderMap();
+  renderMap();showView('home',false);
   window.addEventListener('language-change', () => {
     language.value = getLanguage(); renderGuide(); renderMap(); renderRoom();
     $('map-count').textContent = t('{count} MAPS', {count:cards.length});
@@ -308,5 +340,5 @@ export function createMenu({ game, enter, openMenu, setQuality }) {
     }
     connection(onlineStatus);
   });
-  return { connection, joined, lobby, matchStart, matchEnd };
+  return { connection, joined, left, lobby, matchStart, matchEnd };
 }

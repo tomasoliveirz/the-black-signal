@@ -16,6 +16,8 @@ export function createRooms(game,openMenu) {
         option.value=r.code;option.textContent=`${translateText(r.name)} · ${t('{count} players',{count:r.players})} · ${translateText(MAPS[r.map]?.name??r.map)}${r.running?' · '+t('in progress'):''}`;
         return option;
       }));
+      select.disabled=!data.rooms.length;
+      if(!data.rooms.length){const empty=document.createElement('option');empty.value='';empty.textContent=t('No public rooms available. Create one or use an invitation.');select.append(empty);}
       if([...select.options].some(o=>o.value===value))select.value=value;
     }catch{status.textContent=t("Could not refresh the room list.");}
   }
