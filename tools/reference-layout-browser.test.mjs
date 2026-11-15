@@ -37,7 +37,7 @@ try{
   await page.ev("__bs.game.setMap('foundry')");await page.until('document.querySelector("#selection").textContent.includes("Foundry")');await page.ev('__bs.world.ready');await page.until('document.querySelector("#asset-status").hidden');await page.click('#ready');await page.until('!document.querySelector("#start").disabled');await page.click('#start');await page.until('__bs.game.state?.phase==="day1"');await page.ev('__bs.view.yaw=Math.PI/2;__bs.view.pitch=.14');
   const english=kind==='tx'?'Power arrives on Day 2':'Sealed until Day 2',portuguese=kind==='tx'?'A energia chega no Dia 2':'Selado até ao Dia 2';
   await page.until(`document.querySelector('#prompt').textContent===${JSON.stringify(english)}`);
-  await page.ev('__inputPackets.length=0;__bs.keys.add("KeyE")');await sleep(350);await page.ev('__bs.keys.delete("KeyE")');
+  await page.ev('__inputPackets.length=0;__bs.keys.add("KeyE")');await page.until('__inputPackets.length>=6',15000);await page.ev('__bs.keys.delete("KeyE")');
   const packets=await page.ev('__inputPackets');assert.ok(packets.length>3);assert.ok(packets.every(packet=>packet.use===false));assert.equal(await page.ev('__bs.game.state.you.action'),null);
   await page.ev("import('/src/i18n.js').then(m=>m.setLanguage('pt-PT'))");await page.until(`document.querySelector('#prompt').textContent===${JSON.stringify(portuguese)}`);
   if(process.env.QA_OUTPUT_DIR){await fs.mkdir(process.env.QA_OUTPUT_DIR,{recursive:true});await page.capture(path.join(process.env.QA_OUTPUT_DIR,'locked-'+kind+'-pt.png'))}
