@@ -1,0 +1,18 @@
+[
+  {
+    "kind": "tx",
+    "english": "Power arrives on Day 2",
+    "portuguese": "A energia chega no Dia 2",
+    "inputPackets": 7,
+    "allUseDisabled": true,
+    "noServerAction": true
+  },
+  {
+    "kind": "item",
+    "english": "Sealed until Day 2",
+    "portuguese": "Selado até ao Dia 2",
+    "inputPackets": 9,
+    "allUseDisabled": true,
+    "noServerAction": true
+  }
+]

@@ -13,7 +13,8 @@
     "test:worlds": "node tools/world-contract.test.mjs",
     "test:menu": "node tools/menu-flow.test.mjs",
     "test:figures": "node tools/figure-lifecycle.test.mjs",
-    "test:audio": "node tools/audio-director-browser.test.mjs"
+    "test:audio": "node tools/audio-director-browser.test.mjs",
+    "test:reference": "node tools/reference-layout-browser.test.mjs"
   },
   "dependencies": {
     "ws": "^8.18.0"

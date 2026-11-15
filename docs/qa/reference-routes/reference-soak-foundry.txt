@@ -1,0 +1,30 @@
+✔ 01 completed relays cannot advance the guaranteed 300-second first day (928.695193ms)
+✔ 02 zero completed relays also reaches night1 after five minutes (931.778114ms)
+✔ 03 Fisher–Yates selects two distinct Echoes uniformly across 200,000 deterministic draws (31.314676ms)
+✔ 04 passive power is 36 after day1 and one six-second drain contributes 30 (916.158782ms)
+✔ 05 only one transformation is possible in a night and toggling cannot reset monster HP (2.957435ms)
+✔ 06 walls and large vertical separation block claw damage (2.343369ms)
+✔ 07 stunned human and bot monsters use the same action guard (2.551472ms)
+✔ 08 crouched shooting at a near reticle target hits from the correct muzzle height (2.52965ms)
+✔ 09 revive returns 50 HP and two-second monster protection blocks offensive actions (23.112963ms)
+✔ 10 two simultaneous cell requests result in a single authoritative pickup (2.457044ms)
+✔ 11 invalid mission-cell drops recover to an accessible sector location (2.195821ms)
+✔ 12 sectors unlock on day2 and day3 despite unfinished earlier relays (1825.865293ms)
+✔ 13 extraction waits for three relays, 45 seconds warmup and five seconds inside (113.865306ms)
+✔ 14 valid evacuation on the timeout tick wins before timeout is evaluated (3.046453ms)
+✔ 15 dead-player text and public snapshots cannot reveal private state to living players (2.49793ms)
+✔ 16 first-day combat guard is enforced independently of the client HUD (2.528699ms)
+✔ 17 each map has the same bounded resource budget and valid playable positions (9.568926ms)
+✔ 18 execution is interrupted by damage and ordinary hits never kill a downed player (15.969571ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4893.711435
+foundry    {"echoes":8} · duração média 431.2 s · primeira morte 313.3 s · transformação 300.0 s · transmissores 1.3/3 · sangue 42 · reanimações 0
+fugas de informação: 0 | partidas presas: 0 | blackouts antecipados: 0
+custo do servidor: 683.2 µs por tick (108278 ticks)
+Amostra de simulação com seis bots. A validação com seis jogadores humanos continua pendente.

@@ -37,7 +37,7 @@ Portable generator, portable radio, metal barrel, wooden crate, medical toolbox 
 
 ## Foundry reference
 
-Structural roof datum 8.25 units, .24 thickness, enclosing the 54.4×95.6 hall footprint. Existing lower walls remain; upper clerestory bands and supports close the previous gap. Pillar extensions meet the roof frame. Roof data participates in camera/shot visibility without becoming a 2D movement blocker. No rule, supply count, transmitter coordinate or extraction coordinate is changed by this reference PR.
+Structural roof datum 8.25 units, .24 thickness, enclosing the 54.4×95.6 hall footprint. Existing lower walls remain; upper clerestory bands and supports close the previous gap. Pillar extensions meet the roof frame. Roof data participates in camera/shot visibility without becoming a 2D movement blocker. The initial enclosure reference did not change rule/supply budgets or objective/extraction coordinates. The subsequent authored-route proposal below changes the latter in its own draft.
 
 Work lights, battery egress cues and carried lights form the day/blackout hierarchy. Sky/sun is not a substitute for interior service lighting. Final route reauthoring and T3/extraction separation remain separate design/balance issues and need evidence; a roof fix alone does not fulfil them.
 
@@ -52,3 +52,10 @@ Painting/oil mode; generic red-tipped poles; emergency-red ordinary shop lights;
 ## Approval and measured gates
 
 Required: exact-camera day/night comparisons, player-height and chase views, eight-material/six-prop reference scene, runtime errors/requests, geometry/draw/texture counts, collision/roof rays and canonical-rule regressions. All-six-map migration waits for approval of the Foundry/Ashfall reference. Six-human balance and 30–60-minute specified-hardware soak remain independent gates. Existing 60-FPS captures prove neither.
+
+
+## Authored-route proposal, 15 November 2026
+
+Foundry uses Receiving, Smelting controls, Maintenance and a separate Loading apron, with two actual rear doorways and distinct route loops. Ashfall uses Laundry corner, Motel service yard, Freight dispatch and an Evacuation courtyard, explicit street/block loops, 8 cm sidewalks and 12 cm curbs. Future-sector signs derive day numbers from the phase table. Inaccessible Ashfall entrances are visibly boarded and labelled CLOSED. Materials and fixtures retain the proposed existing palette; no new asset/provider was introduced.
+
+See [authored-reference evidence](../qa/AUTHORED_REFERENCE.md) for exact-camera captures, route diagrams, actual floor/collision/input checks, costs and the 16 all-Echo bot outcomes. This supersedes the initial note that route authoring is entirely unimplemented; reference polish, human balance and approval are still pending. Do not migrate this language to the other four maps or close ART-01 from this proposal alone.

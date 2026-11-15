@@ -5,6 +5,7 @@ import { buildPlayer, buildEcho } from './figures.js';
 import { LAYOUT, EXTRACT, MAP, MAP_ID, height } from '../shared/layout.js';
 import { createVoice } from './voice.js';
 import { eye, obstacle } from '../shared/sight.js';
+import { sectorDay } from '../shared/rules.js';
 import { stepMove, newMove, RULES } from '../shared/sim.js';
 
 const $ = (id) => document.getElementById(id);
@@ -277,14 +278,19 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
       label:me.form?t("Execute"):t("Revive"),range:me.form?RULES.clawRange:RULES.useRange,
     });
     if (!me.form) {
-      for (const tx of LAYOUT.tx) if (tx.zone<=state.unlocked) options.push({
+      for (const tx of LAYOUT.tx) options.push({
         target:{kind:'tx',id:tx.id}, point:{x:tx.x,y:tx.y+.9,z:tx.z},range:RULES.useRange,
-        label:state.tx[tx.id].on?t("Transmitter active"):!state.tx[tx.id].fuse?(me.you?.cell?t("Install cell"):t("Needs an energy cell")):me.role==='echo'?t("Pretend to repair"):t("Hold to repair"),
+        disabled:tx.zone>state.unlocked,
+        label:tx.zone>state.unlocked?t('Power arrives on Day {day}',{day:sectorDay(tx.zone)}):state.tx[tx.id].on?t("Transmitter active"):!state.tx[tx.id].fuse?(me.you?.cell?t("Install cell"):t("Needs an energy cell")):me.role==='echo'?t("Pretend to repair"):t("Hold to repair"),
       });
       const available=LAYOUT.items.filter(item=>state.items[item.id]==='1');
       for (const item of [...available,...state.extraDrops]) if (item.zone<=state.unlocked) options.push({
         target:{kind:'item',id:item.id},point:{x:item.x,y:item.y+.88,z:item.z},range:RULES.pickupRange,
         label:{cell:me.you?.cell?t("Already carrying a cell"):t("Take energy cell"),ammo:t("Take ammunition"),med:t("Take medical kit"),flare:t("Take flare")}[item.type],
+      });
+      for(const item of LAYOUT.items)if(item.zone>state.unlocked)options.push({
+        target:{kind:'item',id:item.id},point:{x:item.x,y:item.y+.7,z:item.z},range:RULES.pickupRange,disabled:true,
+        label:t('Sealed until Day {day}',{day:sectorDay(item.zone)}),
       });
       for (const station of LAYOUT.blood) if (station.zone<=state.unlocked && (me.role==='echo'||state.blood[station.id]>0)) options.push({
         target:{kind:'blood',id:station.id},point:{x:station.x,y:station.y+.9,z:station.z},range:RULES.useRange,
@@ -316,7 +322,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     if (held && !useHeld) heldTarget = found?.target ?? null;
     focused = held ? found?.target?.kind === heldTarget?.kind && found?.target?.id === heldTarget?.id ? found : null : found;
     useHeld = held;
-    inp.use = held && Boolean(focused);
+    inp.use = held && Boolean(focused) && !focused.disabled;
     inp.target = focused ? heldTarget : null;
     if (active) {inp.aim = Math.atan2(camera.getWorldDirection(aimDirection).x, aimDirection.z);inp.camera=camera.position.toArray();}
 
@@ -416,7 +422,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     if(me.role==='echo'){$('enn').textContent=Math.floor(y.energy);$('energy').firstChild.style.width=`${y.energy}%`;}
     $('inv').innerHTML=`<span>${t('ROUNDS')} <b>${y.ammo}</b></span><span>${t('KIT')} <b>${y.med}</b></span><span>${t('FLARE')} <b>${y.flare}</b></span><span>${t('CELL')} <b>${y.cell}</b></span>`;
     const progress=y.action?.progress;
-    let prompt=focused?`E — ${focused.label}`:'';
+    let prompt=focused?(focused.disabled?'':"E — " )+focused.label:'';
     if(y.protect>0)prompt=t("Revive protection · offensive actions disabled");
     if(state.extractionOpen&&Math.hypot(me.s.x-EXTRACT.x,me.s.z-EXTRACT.z)<EXTRACT.r)prompt=t('Evacuating · {seconds}/5 s',{seconds:Math.round(y.ext*5)});
     $('prompt').textContent=prompt;show('prompt',Boolean(prompt));

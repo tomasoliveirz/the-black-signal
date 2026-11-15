@@ -1,0 +1,554 @@
+[
+  {
+    "id": "foundry-player-day-before",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        0.8696478163942614,
+        2.203532819078877,
+        -4.695435836375269
+      ],
+      "quaternion": [
+        -0.06991137541673118,
+        0.029922041230096993,
+        0.0020979706914760875,
+        0.9971021359695018
+      ],
+      "fov": 72
+    },
+    "calls": 177,
+    "triangles": 179684,
+    "textures": 9
+  },
+  {
+    "id": "foundry-player-day-after",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        0.8696478163942614,
+        2.203532819078877,
+        -4.695435836375269
+      ],
+      "quaternion": [
+        -0.06991137541673118,
+        0.029922041230096993,
+        0.0020979706914760875,
+        0.9971021359695018
+      ],
+      "fov": 72
+    },
+    "calls": 171,
+    "triangles": 182958,
+    "textures": 12
+  },
+  {
+    "id": "foundry-player-night-before",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        0.8696478163942614,
+        2.203532819078877,
+        -4.695435836375269
+      ],
+      "quaternion": [
+        -0.06991137541673118,
+        0.029922041230096993,
+        0.0020979706914760875,
+        0.9971021359695018
+      ],
+      "fov": 72
+    },
+    "calls": 177,
+    "triangles": 179684,
+    "textures": 9
+  },
+  {
+    "id": "foundry-player-night-after",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        0.8696478163942614,
+        2.203532819078877,
+        -4.695435836375269
+      ],
+      "quaternion": [
+        -0.06991137541673118,
+        0.029922041230096993,
+        0.0020979706914760875,
+        0.9971021359695018
+      ],
+      "fov": 72
+    },
+    "calls": 171,
+    "triangles": 182958,
+    "textures": 12
+  },
+  {
+    "id": "foundry-loading-day-before",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        17.55,
+        2.0639897044346407,
+        -73.6430496166644
+      ],
+      "quaternion": [
+        -0.06994284733753281,
+        0,
+        0,
+        0.9975510002532796
+      ],
+      "fov": 72
+    },
+    "calls": 64,
+    "triangles": 171718,
+    "textures": 5
+  },
+  {
+    "id": "foundry-loading-day-after",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        17.55,
+        2.0639897044346407,
+        -73.6430496166644
+      ],
+      "quaternion": [
+        -0.06994284733753281,
+        0,
+        0,
+        0.9975510002532796
+      ],
+      "fov": 72
+    },
+    "calls": 67,
+    "triangles": 175246,
+    "textures": 6
+  },
+  {
+    "id": "foundry-loading-night-before",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        17.55,
+        2.0639897044346407,
+        -73.6430496166644
+      ],
+      "quaternion": [
+        -0.06994284733753281,
+        0,
+        0,
+        0.9975510002532796
+      ],
+      "fov": 72
+    },
+    "calls": 64,
+    "triangles": 171718,
+    "textures": 5
+  },
+  {
+    "id": "foundry-loading-night-after",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        17.55,
+        2.0639897044346407,
+        -73.6430496166644
+      ],
+      "quaternion": [
+        -0.06994284733753281,
+        0,
+        0,
+        0.9975510002532796
+      ],
+      "fov": 72
+    },
+    "calls": 67,
+    "triangles": 175246,
+    "textures": 6
+  },
+  {
+    "id": "foundry-maintenance-day-before",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        -9.45,
+        2.0639897044346407,
+        -57.6430496166644
+      ],
+      "quaternion": [
+        -0.06994284733753281,
+        0,
+        0,
+        0.9975510002532796
+      ],
+      "fov": 72
+    },
+    "calls": 90,
+    "triangles": 175788,
+    "textures": 6
+  },
+  {
+    "id": "foundry-maintenance-day-after",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        -9.45,
+        2.0639897044346407,
+        -57.6430496166644
+      ],
+      "quaternion": [
+        -0.06994284733753281,
+        0,
+        0,
+        0.9975510002532796
+      ],
+      "fov": 72
+    },
+    "calls": 90,
+    "triangles": 180338,
+    "textures": 7
+  },
+  {
+    "id": "foundry-maintenance-night-before",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        -9.45,
+        2.0639897044346407,
+        -57.6430496166644
+      ],
+      "quaternion": [
+        -0.06994284733753281,
+        0,
+        0,
+        0.9975510002532796
+      ],
+      "fov": 72
+    },
+    "calls": 90,
+    "triangles": 175788,
+    "textures": 6
+  },
+  {
+    "id": "foundry-maintenance-night-after",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        -9.45,
+        2.0639897044346407,
+        -57.6430496166644
+      ],
+      "quaternion": [
+        -0.06994284733753281,
+        0,
+        0,
+        0.9975510002532796
+      ],
+      "fov": 72
+    },
+    "calls": 90,
+    "triangles": 180338,
+    "textures": 7
+  },
+  {
+    "id": "ashfall-player-day-before",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        0.6568262018449996,
+        2.2048875259225515,
+        -4.664902284761702
+      ],
+      "quaternion": [
+        -0.06993935022430868,
+        0.009975343744864047,
+        0.0006994168162923908,
+        0.9975011231189117
+      ],
+      "fov": 72
+    },
+    "calls": 189,
+    "triangles": 193690,
+    "textures": 13
+  },
+  {
+    "id": "ashfall-player-day-after",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        0.6568262018449996,
+        2.2048875259225515,
+        -4.664902284761702
+      ],
+      "quaternion": [
+        -0.06993935022430868,
+        0.009975343744864047,
+        0.0006994168162923908,
+        0.9975011231189117
+      ],
+      "fov": 72
+    },
+    "calls": 191,
+    "triangles": 171750,
+    "textures": 18
+  },
+  {
+    "id": "ashfall-player-night-before",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        0.6568262018449996,
+        2.2048875259225515,
+        -4.664902284761702
+      ],
+      "quaternion": [
+        -0.06993935022430868,
+        0.009975343744864047,
+        0.0006994168162923908,
+        0.9975011231189117
+      ],
+      "fov": 72
+    },
+    "calls": 189,
+    "triangles": 193690,
+    "textures": 13
+  },
+  {
+    "id": "ashfall-player-night-after",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        0.6568262018449996,
+        2.2048875259225515,
+        -4.664902284761702
+      ],
+      "quaternion": [
+        -0.06993935022430868,
+        0.009975343744864047,
+        0.0006994168162923908,
+        0.9975011231189117
+      ],
+      "fov": 72
+    },
+    "calls": 191,
+    "triangles": 171750,
+    "textures": 18
+  },
+  {
+    "id": "ashfall-service-yard-day-before",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        -25.45,
+        2.074827395463378,
+        -31.643049616664396
+      ],
+      "quaternion": [
+        -0.06994284733753278,
+        0,
+        0,
+        0.9975510002532796
+      ],
+      "fov": 72
+    },
+    "calls": 123,
+    "triangles": 189258,
+    "textures": 8
+  },
+  {
+    "id": "ashfall-service-yard-day-after",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        -25.45,
+        2.074827395463378,
+        -31.643049616664396
+      ],
+      "quaternion": [
+        -0.06994284733753278,
+        0,
+        0,
+        0.9975510002532796
+      ],
+      "fov": 72
+    },
+    "calls": 139,
+    "triangles": 168922,
+    "textures": 12
+  },
+  {
+    "id": "ashfall-service-yard-night-before",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        -25.45,
+        2.074827395463378,
+        -31.643049616664396
+      ],
+      "quaternion": [
+        -0.06994284733753278,
+        0,
+        0,
+        0.9975510002532796
+      ],
+      "fov": 72
+    },
+    "calls": 123,
+    "triangles": 189258,
+    "textures": 8
+  },
+  {
+    "id": "ashfall-service-yard-night-after",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        -25.45,
+        2.074827395463378,
+        -31.643049616664396
+      ],
+      "quaternion": [
+        -0.06994284733753278,
+        0,
+        0,
+        0.9975510002532796
+      ],
+      "fov": 72
+    },
+    "calls": 139,
+    "triangles": 168922,
+    "textures": 12
+  },
+  {
+    "id": "ashfall-evacuation-day-before",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        -24.55,
+        1.8511814198661165,
+        -66.3569503833356
+      ],
+      "quaternion": [
+        0,
+        0.9975510002532795,
+        0.0699428473375328,
+        0
+      ],
+      "fov": 72
+    },
+    "calls": 157,
+    "triangles": 192360,
+    "textures": 11
+  },
+  {
+    "id": "ashfall-evacuation-day-after",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        -24.55,
+        1.8511814198661165,
+        -66.3569503833356
+      ],
+      "quaternion": [
+        0,
+        0.9975510002532795,
+        0.0699428473375328,
+        0
+      ],
+      "fov": 72
+    },
+    "calls": 171,
+    "triangles": 170592,
+    "textures": 15
+  },
+  {
+    "id": "ashfall-evacuation-night-before",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        -24.55,
+        1.8511814198661165,
+        -66.3569503833356
+      ],
+      "quaternion": [
+        0,
+        0.9975510002532795,
+        0.0699428473375328,
+        0
+      ],
+      "fov": 72
+    },
+    "calls": 157,
+    "triangles": 192360,
+    "textures": 11
+  },
+  {
+    "id": "ashfall-evacuation-night-after",
+    "seed": 345126007,
+    "width": 1024,
+    "height": 576,
+    "camera": {
+      "position": [
+        -24.55,
+        1.8511814198661165,
+        -66.3569503833356
+      ],
+      "quaternion": [
+        0,
+        0.9975510002532795,
+        0.0699428473375328,
+        0
+      ],
+      "fov": 72
+    },
+    "calls": 171,
+    "triangles": 170592,
+    "textures": 15
+  }
+]

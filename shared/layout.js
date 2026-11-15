@@ -1,3 +1,4 @@
+import {REFERENCES} from './maps/reference-layouts.js';
 // Amberwood layout, shared by client and server. Pure JS, deterministic.
 const smooth = (x, a, b) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 export function rng(seed) {
@@ -53,13 +54,14 @@ export const MAPS = {
     },
   },
   ashfall: {
-    zoneNames: ['Lavandaria', 'Loja 24H', 'Armazém'],
-    name: 'Ashfall', sub: 'Cidade apocalíptica', kind: 'city', seed: 4517, pa: 1.5, pb: 0, amp: 0.12, trees: 22, pine: 0, dead: 1, rocks: 14, cabin: false, tower: [30, 6], treeMin: 11,
+    reference: REFERENCES.ashfall,
+    zoneNames: REFERENCES.ashfall.landmarks.slice(0,3).map(place=>place.name),
+    name: 'Ashfall', sub: 'Cidade apocalíptica', kind: 'city', seed: 4517, pa: 1.5, pb: 0, amp: 0, trees: 22, pine: 0, dead: 1, rocks: 14, cabin: false, tower: [30, 6], treeMin: 11,
     structs: (px) => [
       S('env_storefront_old', -17, -14, Q), S('env_motel_closed', -15.5, -40, Q), S('env_garage_detached', -15, 8, Q),
       S('env_house_ranch_b', 18.5, -12, -Q), S('env_storage_office', 14.5, -30, -Q), S('env_house_boarded', 18, -46, -Q), S('env_warehouse_salvage', 20, -68, -Q),
       S('env_house_ranch_a', -38, -64, Q), S('env_trailer_abandoned', -36, -24, 0), S('env_barn_old', 42, -34, 0),
-      ...[[5.4, -12, 0.2], [-5, -24, -0.3], [5.5, -28, 2.9], [4.6, -41, 0.1], [-4.4, -54, 0.6], [5.2, -60, -0.15], [-7.5, -10, 1.4]].map(([x, z, r]) => S('env_derelict_car', px(z) + x, z, r > 1 && r < 2 ? Q : r)),
+      ...[[5.5,-11],[-5.5,-35],[5.5,-43],[-5,-60],[5,-60],[-5.5,0]].map(([x,z])=>S('env_derelict_car',x,z,0)),
     ],
     clusters: [[-9, -14, 2, YARD], [9, -12, 2, FARM], [9, -30, 2, YARD], [-9, -40, 2.5, YARD], [9.5, -46, 2, FARM], [9, -62, 2.5, YARD], [-8, -30, 2, ['prop_cinder_blocks', 'prop_cinder_blocks', 'prop_tire_stack_a']]],
     theme: {
@@ -68,11 +70,13 @@ export const MAPS = {
     },
   },
   foundry: {
-    zoneNames: ['Receção', 'Fornos', 'Manutenção'],
-    overhead: [{ x:0, z:-36, w:54.4, d:95.6, gy:8.25, h:.24 }],
-    name: 'Fundição 9', sub: 'Fábrica abandonada', kind: 'factory', seed: 9009, pa: 0, pb: 0, amp: 0, trees: 0, pine: 0, dead: 0, rocks: 0, cabin: false, tower: null, mastH: 3.8, radius: 92,
+    reference: REFERENCES.foundry,
+    zoneNames: REFERENCES.foundry.landmarks.slice(0,3).map(place=>place.name),
+    overhead: [{ x:0, z:-36, w:54.4, d:95.6, gy:8.25, h:.24 },
+      ...[[0,-26,6,5.4],[16,-26,4,3.2],[0,-56,6,5.4],[-16,-56,4,3.2],[-15,-82.5,4,3.2],[19,-82.5,10,5.4]].map(([x,z,w,gy])=>({x,z,w,d:.6,gy,h:7-gy}))],
+    name: 'Fundição 9', sub: 'Fábrica abandonada', kind: 'factory', seed: 9009, pa: 0, pb: 0, amp: 0, trees: 0, pine: 0, dead: 0, rocks: 0, cabin: false, tower: null, mastH: 3.8, radius: 100,
     structs: () => [
-      wall(0, 10.5, 54, 1), wall(0, -82.5, 54, 1), wall(-26.5, -36, 1, 94), wall(26.5, -36, 1, 94),
+      wall(0, 10.5, 54, 1), wall(-22, -82.5, 10, 1), wall(.5, -82.5, 27, 1), wall(25.5, -82.5, 3, 1), wall(-26.5, -36, 1, 94), wall(26.5, -36, 1, 94),
       // two partitions split the hall into three zones; each has a central gate and a side door
       wall(-14.5, -26, 23, 0.6), wall(8.5, -26, 11, 0.6), wall(22, -26, 8, 0.6), wall(-22, -56, 8, 0.6), wall(-8.5, -56, 11, 0.6), wall(14.5, -56, 23, 0.6),
       machine(14, -10, 6, 4), machine(-17, -12, 5, 8, 4), machine(15, -40, 7, 5), machine(-18, -40, 6, 6, 5), machine(17, -68, 5, 7, 4), machine(-21.5, -74, 5, 6), machine(-14, 5, 8, 3, 2.2), machine(8, -74.5, 6, 4, 2.5),
@@ -100,11 +104,12 @@ export function activateLayout(context) {
 const segDist = (x, z, a, b) => { const dx = b.x - a.x, dz = b.z - a.z, t = Math.max(0, Math.min(1, ((x - a.x) * dx + (z - a.z) * dz) / (dx * dx + dz * dz || 1))); return Math.hypot(x - a.x - dx * t, z - a.z - dz * t); };
 export function pathX(z) { return MAP.pa * Math.sin(z * 0.07) + MAP.pb * Math.sin(z * 0.19 + 1); }
 export function pathDist(x, z) {
+  if(MAP.reference){let distance=Infinity;for(const route of MAP.reference.routes)for(let i=1;i<route.points.length;i++){const a=route.points[i-1],b=route.points[i];distance=Math.min(distance,segDist(x,z,{x:a[0],z:a[1]},{x:b[0],z:b[1]}));}return distance;}
   if (MAP.kind === 'mesh') { const r = MAP.data.route; let d = 99; for (let i = 1; i < r.length; i++) d = Math.min(d, segDist(x, z, r[i - 1], r[i])); return d; }
   return z > 6 || z < -78 ? 99 : Math.abs(x - pathX(z));
 }
 export function height(x, z) {
-  if (!MAP.amp) return 0;
+  if(!MAP.amp)return (MAP.reference?.surfaces??[]).reduce((y,surface)=>Math.abs(x-surface.x)<=surface.w/2&&Math.abs(z-surface.z)<=surface.d/2?Math.max(y,surface.h):y,0);
   const r = Math.hypot(x, z);
   let h = 2.2 * Math.sin(x * 0.045 + 1.3) * Math.cos(z * 0.05) + 1.4 * Math.sin(x * 0.11 + z * 0.08);
   h += (vnoise(x * 0.18, z * 0.18) - 0.5) * 1.3 + (vnoise(x * 0.6, z * 0.6) - 0.5) * 0.25;
@@ -138,8 +143,8 @@ export function setMap(id) {
   for (const b of list) b.gy = 0;
   for (const b of list) b.gy = height(b.x, b.z);   // BOXES is still empty here, so this is the natural ground
   BOXES = list;
-  MAST = { x: pathX(-70), z: -70 };
-  EXTRACT = { x: MAST.x - 9, z: MAST.z + 4, r: 4.5 };
+  MAST = MAP.reference?.mast ? {...MAP.reference.mast} : { x: pathX(-70), z: -70 };
+  EXTRACT = MAP.reference ? {...MAP.reference.extraction} : { x: MAST.x - 9, z: MAST.z + 4, r: 4.5 };
   TOWER = MAP.tower ? { key: 'env_water_tower', x: MAP.tower[0], z: MAP.tower[1], r: 3.2 } : null;
   LAYOUT = build();
   return LAYOUT;
@@ -150,9 +155,16 @@ function build() {
   const rnd = rng(MAP.seed), rr = (a, b) => a + rnd() * (b - a);
   const colliders = [], trees = [], rocks = [];
   const at = (x, z) => ({ x, z, y: height(x, z) });
-  const positions = MAP.kind === 'factory'
+  const signPanels=[];
+  for(const sign of MAP.reference?.signs??[]){
+    if(MAP.kind!=='city')continue;
+    const yaw=sign.yaw??0,gy=height(sign.x,sign.z),turned=Math.abs(Math.sin(yaw))>.5;
+    signPanels.push({x:sign.x,z:sign.z,w:turned?.14:sign.width,d:turned?sign.width:.14,gy:gy+sign.y-sign.width*.13,h:sign.width*.26});
+    if(sign.post)for(const side of [-1,1])colliders.push({x:sign.x+side*Math.cos(yaw)*sign.width*.35,z:sign.z-side*Math.sin(yaw)*sign.width*.35,r:.12,h:sign.y+gy-height(sign.x+side*Math.cos(yaw)*sign.width*.35,sign.z-side*Math.sin(yaw)*sign.width*.35)});
+  }
+  const positions = MAP.reference?.transmitters ?? (MAP.kind === 'factory'
     ? [[-9, -16], [9, -38], [-11, -70]]
-    : [[pathX(-14) - 5, -14], [pathX(-41) + 8, -41], [MAST.x - 4, MAST.z + 2.5]];
+    : [[pathX(-14) - 5, -14], [pathX(-41) + 8, -41], [MAST.x - 4, MAST.z + 2.5]]);
   const tx = positions.map(([x, z], zone) => {
     for (let radius = 0; radius < 12; radius += 1) {
       for (let i = 0; i < 16; i++) {
@@ -162,13 +174,16 @@ function build() {
     }
     throw new Error(`Transmissor sem acesso em ${MAP.name}`);
   });
-  const spawns = [0, 1, 2, 3, 4, 5].map((i) => at(1 + Math.cos(i * 1.047) * 2.6, -5 + Math.sin(i * 1.047) * 2.6));
+  const spawn=MAP.reference?.spawn??{x:1,z:-5};
+  const spawns = Array.from({length:6},(_,i)=>at(spawn.x+Math.cos(i*(MAP.reference?Math.PI/3:1.047))*2.6,spawn.z+Math.sin(i*(MAP.reference?Math.PI/3:1.047))*2.6));
   const clear = [...tx.map((t) => ({ ...t, r: 3.6 })), ...spawns.map((s) => ({ ...s, r: 2 })), { ...EXTRACT, r: 6.5 }];
-  const blocked = (x, z, m = 0) => clear.some((c) => Math.hypot(c.x - x, c.z - z) < c.r + m);
+  for(const zone of MAP.reference?.slots??[])for(const [x,z] of zone)clear.push({x,z,r:2.8});
+  const onRoute=(x,z,r=0)=>MAP.reference?.routes.some(route=>route.points.slice(1).some((b,i)=>{const a=route.points[i];return segDist(x,z,{x:a[0],z:a[1]},{x:b[0],z:b[1]})<route.width/2+r}));
+  const blocked = (x, z, m = 0) => clear.some((c) => Math.hypot(c.x - x, c.z - z) < c.r + m)||onRoute(x,z,Math.max(.75,m));
   // scenery placed before the forest so trees and rocks keep clear of it
   const props = [];
   if (TOWER) { colliders.push({ x: TOWER.x, z: TOWER.z, r: TOWER.r, h: 17 }); props.push({ key: TOWER.key, ...at(TOWER.x, TOWER.z), rot: 0.4, s: 1 }); }
-  if (MAP.kind !== 'factory') for (const z of [-2, -22, -42, -62]) { const x = pathX(z) - 3.4; colliders.push({ x, z, r: 0.3, h: 6.5 }); props.push({ key: 'env_power_pole', ...at(x, z), rot: Math.atan2(pathX(z - 1) - pathX(z + 1), -2), s: 1 }); }
+  if (MAP.kind !== 'factory') for (const [x,z] of MAP.reference?.powerPoles??[-2,-22,-42,-62].map(z=>[pathX(z)-3.4,z])) {colliders.push({x,z,r:.3,h:6.5});props.push({key:'env_power_pole',...at(x,z),rot:MAP.reference?0:Math.atan2(pathX(z-1)-pathX(z+1),-2),s:1});}
   const pillars = (MAP.pillars || []).map(([x, z]) => { colliders.push({ x, z, r: 0.45, h: 7 }); return { x, z }; });
   const scatter = (cx, cz, spread, keys) => {
     for (const key of keys) for (let k = 0; k < 30; k++) {
@@ -200,13 +215,13 @@ function build() {
     rocks.push({ x, z, y: height(x, z), s, seed: Math.floor(rnd() * 1e9) });
     colliders.push({ x, z, r: s * 0.95, h: s * 0.9 });
   }
-  const lanterns = [-9, -30, -52].map((z) => { const x = pathX(z) + 1.9; colliders.push({ x, z, r: 0.25, h: 2.5 }); return at(x, z); });
+  const lanterns = (MAP.reference?.lanterns??[-9,-30,-52].map(z=>[pathX(z)+1.9,z])).map(([x,z])=>{colliders.push({x,z,r:.25,h:2.5});return at(x,z)});
   const mh = MAP.mastH ?? 18;
   colliders.push({ x: MAST.x, z: MAST.z, r: 1.4, h: mh }, { x: MAST.x + 3.2, z: MAST.z, r: 1.9, h: 2.2 });
   for (const t of tx) colliders.push({ x: t.x, z: t.z, r: 0.6, h: 1.3 });
 
-  const sectorDepths = [[-25, 8], [-55, -27], [-80, -57]];
-  const positionsByZone = [
+  const sectorDepths = MAP.reference?.sectorDepths??[[-25, 8], [-55, -27], [-80, -57]];
+  const positionsByZone = MAP.reference?.slots??[
     [[-17,-17], [15,-18], [-11,-3], [19,-24], [-20,-7], [12,-8], [-16,3], [20,-9], [-21,-24], [11,-23], [0,-22]],
     [[-19,-37], [18,-43], [-13,-30], [21,-48], [12,-31], [-18,-47], [21,-35], [-20,-52], [15,-53], [-20,-29], [0,-49]],
     [[-16,-66], [19,-68], [-13,-59], [12,-75], [18,-58], [-12,-75], [22,-77], [-21,-73], [16,-61], [-19,-59], [0,-77]],
@@ -215,12 +230,12 @@ function build() {
   function place(near, zone) {
     const [cx, cz] = near;
     const [low, high] = sectorDepths[zone];
-    for (let offset = 0; offset <= 22; offset += 1) {
+    for (let offset = 0; offset <= (MAP.reference?0:22); offset += 1) {
       const points = Math.max(1, Math.ceil(2 * Math.PI * offset));
       for (let i = 0; i < points; i++) {
         const angle = i / points * 2 * Math.PI;
         const x = cx + offset * Math.cos(angle), z = cz + offset * Math.sin(angle);
-        if (z < low || z > high || Math.abs(x) > 24 || inBox(x, z, 1) || Math.hypot(x, z) > MAP_RADIUS - 2
+        if (z < low || z > high || Math.abs(x) > (MAP.reference?MAP_RADIUS-2:24) || inBox(x, z, 1) || Math.hypot(x, z) > MAP_RADIUS - 2
           || colliders.some(c => Math.hypot(c.x - x, c.z - z) < c.r + .85)
           || occupied.some(p => Math.hypot(p.x - x, p.z - z) < (p.r ? p.r + 1 : 2.45))) continue;
         const point = at(x, z);
@@ -236,7 +251,7 @@ function build() {
     const z = -17 - zone * 26 + Math.sin(t * .2 + id) * 4;
     return { x: pathX(z) + Math.cos(id) * 3, z };
   };
-  return { trees, rocks, lanterns, colliders, tx, ...resources, spawns, props, pillars, hint, overhead: MAP.overhead ?? [], zoneNames: MAP.zoneNames };
+  return { trees, rocks, lanterns, colliders, tx, ...resources, spawns, props, pillars, hint, reference: MAP.reference ?? null, overhead: [...(MAP.overhead??[]),...signPanels], zoneNames: MAP.zoneNames };
 }
 
 const resourceTypes = ['cell', 'cell', 'ammo', 'ammo', 'med', 'flare'];

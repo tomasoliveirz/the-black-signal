@@ -1,3 +1,4 @@
+import { sectorDay } from '../shared/rules.js';
 import { t } from './i18n.js';
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
@@ -36,8 +37,12 @@ export function colorGround(geometry) {
     const macro = Math.sin(x * .13 + Math.sin(z * .08)) * Math.cos(z * .15);
     const variation = 1 + .075 * macro + .024 * Math.sin(x * .61 + z * .27);
     if (MAP.kind === 'city') {
-      const edge = Math.abs(x - pathX(z));
-      color.copy(asphalt).lerp(surface, THREE.MathUtils.smoothstep(edge, 4.7, 6.5));
+      let edge=Math.abs(x-pathX(z));
+      if(MAP.reference){edge=Infinity;for(const route of MAP.reference.routes)for(let n=1;n<route.points.length;n++){
+        const a=route.points[n-1],b=route.points[n],dx=b[0]-a[0],dz=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(z-a[1])*dz)/(dx*dx+dz*dz||1)));
+        edge=Math.min(edge,Math.hypot(x-a[0]-dx*t,z-a[1]-dz*t)-(route.pavedWidth??route.width)/2);
+      }}
+      color.copy(asphalt).lerp(surface,THREE.MathUtils.smoothstep(edge,MAP.reference?0:4.7,MAP.reference?1.1:6.5));
     } else if (MAP.kind === 'factory') {
       const lane = THREE.MathUtils.smoothstep(Math.abs(x), 2.4, 4);
       const seam = Math.min(Math.abs(Math.sin(x*Math.PI/6)),Math.abs(Math.sin((z+2)*Math.PI/6)));
@@ -70,22 +75,22 @@ export function buildEnvironment(scene) {
   const block = (family, ...args) => piece(family, box, ...args);
   const tube = (family, ...args) => piece(family, pipe, ...args);
   const stone = (family, ...args) => piece(family, round, ...args);
-  function sign(words, x, y, z, width, yaw = 0, tone = '#2c4446') {
-    const style = `${words}|${tone}`;
+  function sign(words, x, y, z, width, yaw = 0, tone = '#2c4446', values = {}) {
+    const style = `${words}|${tone}|${JSON.stringify(values)}`;
     let texture = plates.get(style);
     if (!texture) {
       texture = canvasTexture(256, (g, s) => {
         g.fillStyle = tone; g.fillRect(0, 0, s, s);
         g.strokeStyle = '#b2a283'; g.lineWidth = 5; g.strokeRect(9, 19, s - 18, s - 38);
         g.fillStyle = '#e5d7ad'; g.textAlign = 'center'; g.textBaseline = 'middle';
-        g.font = 'bold 43px sans-serif'; g.fillText(t(words), s / 2, s / 2 + 2, s - 33);
+        g.font = 'bold 43px sans-serif'; g.fillText(t(words,values), s / 2, s / 2 + 2, s - 33);
       });
       texture.userData.redraw = () => {
         const g=texture.image.getContext('2d'), s=texture.image.width;
         g.fillStyle=tone;g.fillRect(0,0,s,s);
         g.strokeStyle='#b2a283';g.lineWidth=5;g.strokeRect(9,19,s-18,s-38);
         g.fillStyle='#e5d7ad';g.textAlign='center';g.textBaseline='middle';
-        g.font='bold 43px sans-serif';g.fillText(t(words),s/2,s/2+2,s-33);
+        g.font='bold 43px sans-serif';g.fillText(t(words,values),s/2,s/2+2,s-33);
         texture.needsUpdate=true;
       };
       plates.set(style, texture);
@@ -189,14 +194,14 @@ export function buildEnvironment(scene) {
       }
       for(const h of [4.36,4.95])block('rust',x-side*3.06,h,z,.10,.09,12.3);
     }
-    for (const [label,z] of [['RECEPTION',-25.64],['FURNACES',-55.64],['MAINTENANCE',-81.94]]) {
-      sign(label,0,5.6,z,4.0,0,'#414638');
-      light(-2.8,3.8,z+.17,'egress'); light(2.8,3.8,z+.17,'egress');
+    for(const marker of MAP.reference?.signs??[['RECEPTION',-25.64],['FURNACES',-55.64],['MAINTENANCE',-81.94]].map(([label,z])=>({label,x:0,y:5.6,z,width:4}))){
+      sign(marker.label,marker.x,marker.y,marker.z,marker.width,0,'#414638',{day:sectorDay(marker.zone)});
+      for(const side of [-1,1])light(marker.x+side*(marker.width*.5-.25),marker.y-.9,marker.z+.17,'egress');
     }
   }
 
   if (MAP.kind === 'city') {
-    for(let z=12;z>-76;z-=2.8){
+    if(!MAP.reference)for(let z=12;z>-76;z-=2.8){
       const x=pathX(z), a=Math.atan2(pathX(z+1)-pathX(z-1),2);
       for(const side of [-1,1]){
         block('concrete',x+side*5.35,height(x+side*5.35,z)+.04,z,1.36,.12,2.81,a);
@@ -204,7 +209,8 @@ export function buildEnvironment(scene) {
       }
       if(Math.round(z/2.8)%2===0)lane(x,z,.085,1.65);
     }
-    for(const z of [0,-22,-43])for(let x=-3.6;x<4;x+=1.1)lane(pathX(z)+x,z,.47,1.75,'porcelain');
+    for(const surface of MAP.reference?.surfaces??[])block(surface.family,surface.x,surface.h/2,surface.z,surface.w,surface.h,surface.d);
+    for(const z of [0,-22,-43])for(let x=-3.6;x<4;x+=1.1)lane(MAP.reference?x:pathX(z)+x,z,.47,1.75,'porcelain');
     const labels = {
       env_storefront_old:['LAUNDRY', 'plaster', 'painted'], env_motel_closed:['MOTEL', 'plaster','rust'],
       env_garage_detached:['WORKSHOP','brick','steel'], env_house_ranch_b:['STATION 06','porcelain','rust'],
@@ -233,6 +239,10 @@ export function buildEnvironment(scene) {
       f(trim,.41,2.68,0,.86,.18,d*.84);
       sign(name,front+s*.31,gy+3.15,z,Math.min(5.1,d*.69),s*Math.PI/2,trim==='rust'?'#77483d':'#2c4446');
       light(front+s*.56,gy+2.53,z+door,'street');
+      if(MAP.reference){
+        for(const y of [.82,1.55])f('wood',.28,y,door,.16,.14,1.7);
+        sign('CLOSED',front+s*.38,gy+1.16,z+door,1.1,s*Math.PI/2,'#414638');
+      }
     }
     const station = STRUCTS.find(b => b.key === 'env_house_ranch_b');
     const sf = station.x - station.w / 2;
@@ -254,6 +264,18 @@ export function buildEnvironment(scene) {
         scene.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.QuadraticBezierCurve3(start,middle,end),12,.021,5,false),cordMat));
       }
     }
+  }
+
+  if(MAP.kind==='city'&&MAP.reference)for(const marker of MAP.reference.signs){
+    const yaw=marker.yaw??0,gy=height(marker.x,marker.z);
+    block('steel',marker.x,gy+marker.y,marker.z,marker.width,marker.width*.26,.14,yaw);
+    if(marker.post)for(const side of [-1,1]){
+      const x=marker.x+side*Math.cos(yaw)*marker.width*.35,z=marker.z-side*Math.sin(yaw)*marker.width*.35;
+      const base=height(x,z),top=gy+marker.y;
+      block('steel',x,(base+top)/2,z,.13,top-base,.13);
+      block('concrete',x,base+.04,z,.3,.08,.3);
+    }
+    sign(marker.label,marker.x+Math.sin(yaw)*.081,gy+marker.y,marker.z+Math.cos(yaw)*.081,marker.width,yaw,'#414638',{day:sectorDay(marker.zone)});
   }
 
   if (MAP.kind === 'mesh') {
@@ -337,6 +359,15 @@ export function buildEnvironment(scene) {
     }
   }
 
+  if(MAP.reference)for(const route of MAP.reference.routes)for(let i=1;i<route.points.length;i++){
+    const a=route.points[i-1],b=route.points[i],dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz),yaw=Math.atan2(dx,dz),steps=Math.max(1,Math.ceil(length/1.2));
+    for(let n=0;n<steps;n++){
+      const t=(n+.5)/steps,x=a[0]+dx*t,z=a[1]+dz*t,y=height(x,z);
+      if(MAP.kind==='factory')for(const side of [-1,1])block('marking',x+side*Math.cos(yaw)*route.width/2,y+.007,z-side*Math.sin(yaw)*route.width/2,.055,.012,length/steps,yaw);
+      else if(route.id==='high-street'&&n%3===0)block('marking',x,y+.007,z,.08,.012,length/steps,yaw);
+    }
+  }
+
   for(const [family,geometries] of grouped) {
     const [hex,roughness]=materials[family];
     const color = new THREE.Color(hex);
@@ -354,6 +385,7 @@ export function buildEnvironment(scene) {
       source.intensity = source.power * level;
     }
   }
+
   function dispose() {
     for (const material of owned) material.dispose();
   }

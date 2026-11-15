@@ -1,0 +1,14 @@
+{
+  samples: [
+    { cycle: 0, geometries: 139, textures: 5 },
+    { cycle: 1, geometries: 139, textures: 5 },
+    { cycle: 2, geometries: 139, textures: 5 },
+    { cycle: 3, geometries: 139, textures: 5 },
+    { cycle: 4, geometries: 139, textures: 5 }
+  ],
+  sourceGeometryDisposals: 0,
+  survivorStillAttached: true,
+  prematureDisposed: true,
+  disposalAPI: true
+}
+PASS bounded figure geometry/skeleton lifetime and safe shared source reuse
