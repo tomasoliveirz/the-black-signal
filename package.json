@@ -10,7 +10,8 @@
     "test:models": "node tools/model-pipeline.test.mjs",
     "check:assets": "node tools/validate-assets.mjs",
     "test:assets": "node --test tools/asset-manifest.test.mjs",
-    "test:worlds": "node tools/world-contract.test.mjs"
+    "test:worlds": "node tools/world-contract.test.mjs",
+    "test:audio": "node tools/audio-director-browser.test.mjs"
   },
   "dependencies": {
     "ws": "^8.18.0"

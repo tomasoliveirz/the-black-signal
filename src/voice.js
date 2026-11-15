@@ -71,7 +71,7 @@ export function createVoice(audio, canSpeak, send, positionOf, nameOf) {
       if (!stream || track.readyState !== 'live') return release(t("Microphone unavailable."));
       input = context.createMediaStreamSource(stream);
       capture = new AudioWorkletNode(context, 'proximity-microphone');
-      capture.port.onmessage = ({ data }) => { if (talking && canSpeak()) send(data); };
+      capture.port.onmessage = ({ data }) => { if (talking && canSpeak()) {const pcm=new Int16Array(data);audio.voiceActivity(Math.sqrt(pcm.reduce((sum,v)=>sum+(v/32768)**2,0)/pcm.length));send(data);} };
       silent = context.createGain();
       silent.gain.value = 0;
       input.connect(capture).connect(silent).connect(context.destination);
@@ -104,7 +104,9 @@ export function createVoice(audio, canSpeak, send, positionOf, nameOf) {
     const pcm = new Int16Array(packet, 4);
     const buffer = context.createBuffer(1, pcm.length, VOICE_RATE);
     const output = buffer.getChannelData(0);
-    for (let i = 0; i < pcm.length; i++) output[i] = pcm[i] / 32768;
+    let energy=0;
+    for (let i = 0; i < pcm.length; i++) {output[i] = pcm[i] / 32768;energy+=output[i]*output[i];}
+    audio.voiceActivity(Math.sqrt(energy/pcm.length));
     const source = context.createBufferSource();
     source.buffer = buffer;
     source.connect(channel.emitter.input);
