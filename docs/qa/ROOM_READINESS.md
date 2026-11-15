@@ -1,0 +1,9 @@
+# Explicit room readiness
+
+Every seated human must mark Ready before the host's network start request is accepted. The server owns each member's readiness; a supplied target ID cannot ready another player. Empty seats still use bots. Spectators do not block seated participants. Changing map, resetting a round or disconnecting clears the affected readiness. A disconnected seated player remains unready during their 45-second recovery grace; after expiry the existing removal policy applies.
+
+The UI shows ready counts/status and disables Start until the authoritative lobby says everyone is ready. Starting enters the match on the server's phase event; a rejected start leaves the menu accessible. A small burst allowance permits ordinary withdrawal/map-change interactions, while rate limiting repeated toggles. Character slot six is now labelled Rowan rather than the placeholder Member A; the supplied asset filename and user names are preserved.
+
+Validation: 54 integrated server/asset tests pass, including two focused readiness cases and a real WebSocket permission/forged-target case. Two actual Chrome clients verified blocked early start, withdrawal, forged start rejection, map-change reset, both-ready start and EN/PT labels. `readiness/browser-evidence.json` and screenshots record it. The browser check exposed an overly strict cooldown that silently dropped a legitimate toggle; replaced with a bounded burst budget and explicit rate-limit error before the passing rerun.
+
+No protected phase timing/resource/balance changes. This is preparation flow, not proof of six-human onboarding or gameplay balance. The dense menu itself remains for the next thematic UI change. Rollback this whole commit so protocol, server gate and client affordance agree. No main merge or production change.

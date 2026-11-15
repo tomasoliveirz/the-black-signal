@@ -81,7 +81,7 @@ server.on('upgrade',(req,socket,head)=>{
 });
 const number=n=>Number.isFinite(n)?Math.max(-1,Math.min(1,n)):0;
 wss.on('connection',(ws,req)=>{
-  let membership=null,budget=90,updated=performance.now(),voiceBudget=6,voiceAt=updated,chatAt=-1000,lastAuthAt=0,watchAt=-1000;
+  let membership=null,budget=90,updated=performance.now(),voiceBudget=6,voiceAt=updated,chatAt=-1000,lastAuthAt=0,watchAt=-1000,readyAt=updated,readyBudget=3;
   const voicePositions=new Map();
   ws.alive=true;ws.on('pong',()=>{ws.alive=true;});
   const failure=(message,code)=>ws.readyState===1&&ws.send(JSON.stringify({t:'error',message,code}));
@@ -121,7 +121,12 @@ wss.on('connection',(ws,req)=>{
     const {room,player:p}=membership,g=room.game;g.activate();
     if(m.t==='start'||m.t==='map'){
       if(room.host!==p.id)return failure('Só quem criou a sala pode iniciar ou escolher o mapa.');
-      if(m.t==='start')g.start();else g.setMap(String(m.id));
+      if(m.t==='start'){if(!g.canStart())return failure('Every seated player must be ready before starting.');g.start();}else g.setMap(String(m.id));
+    }else if(m.t==='ready'){
+      if(g.running||p.spectator||p.slot>=6||typeof m.value!=='boolean'||p.ready===m.value)return;
+      readyBudget=Math.min(3,readyBudget+(now-readyAt)*.004);readyAt=now;
+      if(readyBudget<1)return failure('Please wait before changing readiness again.');
+      readyBudget--;p.ready=m.value;g.lobby();
     }else if(m.t==='leave'){
       rooms.leave(room,p);membership=null;ws.send(JSON.stringify({t:'left'}));
     }else if(m.t==='watch'){

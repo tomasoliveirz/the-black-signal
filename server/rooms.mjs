@@ -62,7 +62,7 @@ export class Rooms {
   }
   disconnect(room,p){
     if(!room||!p)return;
-    p.connected=false;p.conn=null;p.disconnectAt=Date.now();
+    p.connected=false;p.ready=false;p.conn=null;p.disconnectAt=Date.now();
     p.inp={mx:0,mz:0,use:false,target:null};p.interaction=null;p.executing=null;
     const next=[...room.game.players.values()].find(q=>!q.bot&&q.connected);
     if(room.host===p.id&&next)room.host=next.id;

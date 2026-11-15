@@ -1,0 +1,11 @@
+{
+  "twoActualBrowserClients": true,
+  "hostAloneCannotStart": true,
+  "withdrawalDisablesStart": true,
+  "forgedStartRejected": true,
+  "mapChangeResetsReady": true,
+  "bothReadyStarts": true,
+  "bilingual": true,
+  "placeholderRemoved": true,
+  "errors": []
+}

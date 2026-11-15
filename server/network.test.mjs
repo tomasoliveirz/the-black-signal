@@ -158,6 +158,14 @@ Game.prototype.snapshot = function () {
       await until(() => host.messages.find(m => m.t === 'lobby' && m.map === 'mall'), 'host map');
       await until(() => publicHost.messages.find(m => m.t === 'lobby' && m.map === 'frost'), 'second host map');
     });
+    await t.test('start waits for each human and a player cannot ready another identity', async () => {
+      const startAt=host.messages.length;host.send({t:'start'});
+      await until(()=>host.messages.slice(startAt).find(m=>m.t==='error'&&m.message.includes('must be ready')),'readiness guard');
+      const hostId=member.messages.find(m=>m.t==='lobby').host;
+      member.send({t:'ready',value:true,id:hostId});
+      const lobby=await until(()=>host.messages.find(m=>m.t==='lobby'&&m.players.some(p=>p.ready)),'own ready state');
+      assert.equal(lobby.players.find(p=>p.id===hostId).ready,false);assert.equal(lobby.canStart,false);
+    });
     await t.test('room text carries plain text with no room-to-room delivery', async () => {
       await pause(900);
       const text = '<img src=x onerror=alert(1)> & raw text';
@@ -173,6 +181,9 @@ Game.prototype.snapshot = function () {
       far = await open(); far.send({ t: 'join', room: privateCode, name: 'FixtureFar' });
       dead = await open(); dead.send({ t: 'join', room: privateCode, name: 'FixtureDead' });
       for (const client of [near, far, dead]) await until(() => client.messages.find(m => m.t === 'welcome'), 'voice participant');
+      for(const client of [host,member,near,far,dead,publicHost])client.send({t:'ready',value:true});
+      await until(()=>host.messages.find(m=>m.t==='lobby'&&m.canStart),'all private humans ready');
+      await until(()=>publicHost.messages.find(m=>m.t==='lobby'&&m.canStart),'public host ready');
       host.send({ t: 'start' }); publicHost.send({ t: 'start' });
       const a = await until(() => host.messages.find(m => m.t === 'snap' && m.phase === 'prep'), 'private snapshot');
       const b = await until(() => publicHost.messages.find(m => m.t === 'snap' && m.phase === 'prep'), 'public snapshot');
