@@ -1,0 +1,1 @@
+PASS 117 bundled files; 41 models; hashes, resource references and textured UVs validated. Rights clearance is separate.

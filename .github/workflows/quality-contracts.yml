@@ -39,6 +39,7 @@ jobs:
           JS
           npm run test:models
           npm run test:worlds
+          npm run test:reference
           npm run test:menu
           npm run test:figures
           npm run test:audio

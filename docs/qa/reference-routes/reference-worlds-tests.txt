@@ -1,0 +1,13 @@
+amberwood { drawCalls: 89, practicals: true, style: true }
+hollow { drawCalls: 78, practicals: true, style: true }
+frost { drawCalls: 84, practicals: true, style: true }
+Ashfall actual floor rays [
+  { x: 0, z: -39, movement: 0, rendered: 0 },
+  { x: 8.4, z: -39, movement: 0.08, rendered: 0.07999999821186066 },
+  { x: 6.88, z: -39, movement: 0.12, rendered: 0.11999999731779099 },
+  { x: 10.5, z: -39, movement: 0, rendered: 0 }
+]
+ashfall { drawCalls: 85, practicals: true, style: true }
+foundry { drawCalls: 72, practicals: true, style: true }
+mall { drawCalls: 93, practicals: true, style: true }
+PASS all six actual WebGL worlds, fixture contracts and required requests

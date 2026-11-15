@@ -130,7 +130,7 @@ export function buildWorld(parent) {
   // ---------- terrain
   const N = 150, SIZE = 200, tg = new THREE.PlaneGeometry(SIZE, SIZE, N, N); tg.rotateX(-Math.PI / 2);
   const tp = tg.attributes.position;
-  for (let i = 0; i < tp.count; i++) tp.setY(i, height(tp.getX(i), tp.getZ(i)) - (bd ? .09 : 0));
+  for (let i = 0; i < tp.count; i++) tp.setY(i, (MAP.reference?.baseHeight??height(tp.getX(i),tp.getZ(i))) - (bd?.09:0));
   colorGround(tg);
   tg.computeVertexNormals();
   const terrainPaint = new THREE.MeshBasicMaterial({ color:0xffffff, vertexColors:true });
@@ -246,6 +246,11 @@ export function buildWorld(parent) {
     return g;
   }
   const items = LAYOUT.items.map(it => supplyModel(it));
+  const latchMaterial=new THREE.MeshBasicMaterial({color:0xffffff});
+  const latches=new THREE.InstancedMesh(new THREE.BoxGeometry(.07,.11,.035),latchMaterial,LAYOUT.items.length);
+  const latchTransform=new THREE.Matrix4(),latchColor=new THREE.Color();let latchSector=-2;
+  LAYOUT.items.forEach((item,i)=>latches.setMatrixAt(i,latchTransform.makeTranslation(item.x,item.y+.51,item.z+.31)));
+  scene.add(latches);
   const droppedCells = new Map();
   const bloodClues = LAYOUT.blood.map(source => {
     const clue = new THREE.Mesh(new THREE.PlaneGeometry(.18,.07), new THREE.MeshBasicMaterial({ color:0x79372d, transparent:true, opacity:0, depthWrite:false }));
@@ -287,6 +292,9 @@ export function buildWorld(parent) {
   const TXCOL = [new THREE.Color(0x424a4c), new THREE.Color(0xc9984c), new THREE.Color(0x79bf94), new THREE.Color(0x6c7378)];
   function update(dt, t, night, state) {
     environment.update(night);
+    const sector=state?.unlocked??2;
+    if(latchSector!==sector){latchSector=sector;LAYOUT.items.forEach((item,i)=>latches.setColorAt(i,latchColor.setHex(item.zone>sector?0x3b4142:0x667d6a)));latches.instanceColor.needsUpdate=true;}
+
     // power: path lanterns and windows die in a blackout
     const power = 1 - night;
     litMat.color.setRGB(1 * (0.12 + 0.88 * power), 0.82 * (0.1 + 0.9 * power), 0.44 * (0.1 + 0.9 * power));
@@ -328,7 +336,7 @@ export function buildWorld(parent) {
   const powerLights = lampPos;
   const dispose = () => {
     for (const clue of bloodClues) clue.material.dispose();
-    environment.dispose();
+    environment.dispose();latches.dispose();latchMaterial.dispose();
     parent.remove(scene);
     scene.traverse((o) => { o.geometry?.dispose(); });
     pruneDetached();

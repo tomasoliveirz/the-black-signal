@@ -7,6 +7,10 @@ export const PHASES = [
   { id: 'day3', duration: 180, zone: 2, night: -1 },
   { id: 'final', duration: 140, zone: 2, night: 2 },
 ];
+export function sectorDay(zone) {
+  const phase = PHASES.find(p => p.zone === zone && p.id.startsWith('day'));
+  return phase ? Number(phase.id.slice(3)) : null;
+}
 export const RULES = {
   repairTime: 8, cooperativeRepairTime: 5, reviveTime: 5, reviveHp: 50, reviveShield: 2,
   bleedTime: 40, executeTime: 2.5, useRange: 2.6, pickupRange: 1.9,

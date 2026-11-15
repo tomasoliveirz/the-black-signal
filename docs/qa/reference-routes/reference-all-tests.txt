@@ -1,0 +1,79 @@
+✔ Foundry ceiling blocks overhead camera/shot rays while preserving the floor route (41.170352ms)
+✔ Mall includes authored ceiling triangles and prevents rays escaping the main hall roof (4.290624ms)
+✔ day, final-day warning, blackout and extraction follow the authoritative snapshot (1.38203ms)
+✔ a stationary nearby monster is not a chase; visible closing movement can trigger one (0.324541ms)
+✔ occlusion removes tracking immediately and only a bounded post-chase release remains (0.307308ms)
+✔ self/spectated monster, ordinary humans and dead bodies never masquerade as nearby threats (0.435549ms)
+✔ navigation cannot smooth a diagonal between two blocked cardinal cells (4.10214ms)
+✔ an unreachable target does not tell the bot to walk into the separating wall (0.413689ms)
+✔ neighbours never wrap across a row or leave the grid at any boundary (38.785655ms)
+✔ diagonal neighbours require both cardinal neighbours to be open (0.233579ms)
+▶ HTTP, authenticated accounts, separate rooms and authoritative voice routing
+  ✔ HTTP health, headers, HEAD, malformed paths and traversal (60.143174ms)
+  ✔ HTTP credentials and WebSocket upgrades reject foreign origins (5.652687ms)
+  ✔ registration and login use private persistent sessions and validated usernames (231.850345ms)
+  ✔ private rooms stay unlisted and account identity overrides the supplied display name (56.348824ms)
+  ✔ only a room host can change its map or start it (91.99409ms)
+  ✔ start waits for each human and a player cannot ready another identity (41.248981ms)
+  ✔ room text carries plain text with no room-to-room delivery (1022.702101ms)
+  ✔ two active maps keep distinct authoritative spawns and timers (280.592986ms)
+  ✔ voice is routed only to near living participants in the same room (223.707491ms)
+  ✔ authenticated reconnect preserves player id and private role without a bearer token (126.267635ms)
+  ✔ guest recovery uses an HttpOnly upgrade cookie and rejects pointer replay (162.987091ms)
+  ✔ logout invalidates the persisted session cookie (8.713798ms)
+✔ HTTP, authenticated accounts, separate rooms and authoritative voice routing (2588.603867ms)
+✔ a disconnected player keeps the same role before grace expires and is removed after 45 seconds (35.949198ms)
+✔ each seated human must explicitly ready; bots do not need consent (5.893701ms)
+✔ map/reset clears readiness and spectators cannot block seated players (22.384151ms)
+✔ a guest reload restores the same player through its protected browser identity (12.420142ms)
+✔ knowing a room and player id does not let another guest resume that player (6.032631ms)
+✔ an active connection cannot be displaced by a reload admission request (7.911748ms)
+✔ authenticated recovery requires the same account and does not send a bearer token (26.789181ms)
+foundry {
+  lastRelayStraight: 37.013511046643494,
+  finalTravelMetres: 33.36000000000021
+}
+ashfall {
+  lastRelayStraight: 32.7566787083184,
+  finalTravelMetres: 31.920000000000066
+}
+✔ foundry authored routes are actually traversable and keep the final relay away from extraction (303.611852ms)
+✔ ashfall authored routes are actually traversable and keep the final relay away from extraction (150.605251ms)
+✔ Foundry evacuation stays reachable through either real rear door (127.157388ms)
+✔ Ashfall pavement uses the same authored surface heights for movement and rendering (9.772049ms)
+✔ 01 completed relays cannot advance the guaranteed 300-second first day (1834.980526ms)
+✔ 02 zero completed relays also reaches night1 after five minutes (1556.259181ms)
+✔ 03 Fisher–Yates selects two distinct Echoes uniformly across 200,000 deterministic draws (34.146395ms)
+✔ 04 passive power is 36 after day1 and one six-second drain contributes 30 (1731.229142ms)
+✔ 05 only one transformation is possible in a night and toggling cannot reset monster HP (4.05988ms)
+✔ 06 walls and large vertical separation block claw damage (2.971201ms)
+✔ 07 stunned human and bot monsters use the same action guard (2.912951ms)
+✔ 08 crouched shooting at a near reticle target hits from the correct muzzle height (2.714428ms)
+✔ 09 revive returns 50 HP and two-second monster protection blocks offensive actions (30.11551ms)
+✔ 10 two simultaneous cell requests result in a single authoritative pickup (3.702987ms)
+✔ 11 invalid mission-cell drops recover to an accessible sector location (2.080065ms)
+✔ 12 sectors unlock on day2 and day3 despite unfinished earlier relays (2770.965796ms)
+✔ 13 extraction waits for three relays, 45 seconds warmup and five seconds inside (135.102279ms)
+✔ 14 valid evacuation on the timeout tick wins before timeout is evaluated (3.399026ms)
+✔ 15 dead-player text and public snapshots cannot reveal private state to living players (2.626001ms)
+✔ 16 first-day combat guard is enforced independently of the client HUD (2.404866ms)
+✔ 17 each map has the same bounded resource budget and valid playable positions (12.378312ms)
+✔ 18 execution is interrupted by damage and ordinary hits never kill a downed player (19.64116ms)
+✔ living clients receive visible entities and their own state, not a hidden position (5.295225ms)
+✔ reveal and occlusion update immediately without retaining hidden tracking (1.161245ms)
+✔ forged camera origins across cover or outside its range cannot reveal a player (2.132452ms)
+✔ hidden shots and transformation events do not expose actor identity or exact position (0.758938ms)
+✔ occluded footsteps are coarse hearing cues rather than exact hidden tracking (0.687003ms)
+✔ spectators follow one authorised viewpoint rather than receiving the whole map (0.326294ms)
+✔ dropped cells behind cover are absent from recipient-specific world state (0.442924ms)
+✔ static interest cache invalidates when the authorised observer moves (0.358545ms)
+✔ a real textured model validates and missing UVs are rejected (49.766007ms)
+✔ missing local resources and unbundled remote resources fail closed (16.598654ms)
+ℹ tests 62
+ℹ suites 0
+ℹ pass 62
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8451.850444

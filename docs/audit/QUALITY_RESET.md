@@ -105,3 +105,12 @@ Do not call the whole reset complete while any supplied acceptance criterion rem
 ## External gates
 
 Owner art approval, six human participants/session feedback, real microphone/network testing, authorised encrypted off-site destination, rights confirmation for unknown asset sources and independent security review. These require actual evidence or an owner decision; they cannot be supplied by labelling simulated results as real.
+
+
+## Checkpoint — 15 November, authored references and runtime evidence
+
+Draft integration #68 contains the ready-room gate, separated menu views, audio director and figure-resource lifetime fix. Its local source snapshot is frozen at 72c40e7. QA evidence #69 retains the failed post-fix 30-minute frame-p99 result (29.9 ms versus the predefined 25 ms budget), plus an eight-minute diagnostic that is not a replacement acceptance run.
+
+The subsequent authored Foundry/Ashfall proposal is documented in [AUTHORED_REFERENCE.md](../qa/AUTHORED_REFERENCE.md), with a [complete HTML review](../qa/reference-routes/index.html). It separates T3/extraction, introduces explicit route/landmark/resource/sign data, real Foundry rear exits, shared Ashfall pavement heights and non-actionable future-sector feedback. It does not migrate the other four maps. 62 source/server/asset cases, actual six-world/floor/input checks and 16 six-bot rounds were executed. All 16 bot games were Echo victories, so human balance and bot decision quality remain open. Per-image rendering costs increased at some Ashfall viewpoints; no new-layout long-run performance pass is claimed.
+
+No supplied issue is closed by these checkpoint PRs. Owner art approval, individual-bot stall audit, remaining movement/animation/camera work, broader schemas/scene validation, all-map migration, independent security, account lifecycle/moderation, real voice transport evaluation, rights and human/hardware/network gates still need their stated evidence.
