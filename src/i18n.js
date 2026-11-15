@@ -28,6 +28,7 @@ const portuguese = {
   "No public rooms available. Create one or use an invitation.": "Não há salas públicas disponíveis. Cria uma ou usa um convite.",
   "Choose a public room or enter an invitation code.": "Escolhe uma sala pública ou introduz um código de convite.",
   "Host": "Anfitrião",
+  "Lobby music pauses during the match.": "A música da sala pausa durante a partida.",
   "Language": "Idioma",
   "Invalid recovery request.": "Pedido de recuperação inválido.",
   "Recovery expired or not authorised. Join the room again.": "A recuperação expirou ou não foi autorizada. Volta a entrar na sala.",

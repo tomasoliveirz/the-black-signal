@@ -1,5 +1,7 @@
 import { Vector3 } from 'three';
-import { BOXES, LAYOUT, MAP, MAP_ID, height, pathDist } from '../shared/layout.js';
+import { obstacle } from '../shared/sight.js';
+import { createAudioDirector } from './audio-director.js';
+import { LAYOUT, MAP, MAP_ID, height, pathDist } from '../shared/layout.js';
 
 const surfaces = ['soil', 'hard', 'metal', 'snow'];
 const samples = [
@@ -15,8 +17,9 @@ const levels = {
 const relative = (origin, target, radius) => Math.hypot(origin.x - target.x, origin.z - target.z) / radius;
 
 export function createAmbience() {
-  let context, effects, voices, environment, reverb, loaded = false, elapsed = 0;
-  const mix = { effects: .80, voices: .85, environment: .68 };
+  let context, effects, voices, environment, music, reverb, loaded = false, elapsed = 0, voiceUntil=0, criticalUntil=0;
+  const director=createAudioDirector();
+  const mix = { effects: .80, voices: .85, environment: .68, music:.35 };
   const buffers = new Map(), loops = new Map();
   const listener = new Vector3(), forward = new Vector3();
   let playing = 0;
@@ -28,10 +31,17 @@ export function createAmbience() {
       const master = context.createDynamicsCompressor();
       master.threshold.value = -13;
       master.ratio.value = 5;
-      master.connect(context.destination);
+      const limiter=context.createWaveShaper(),curve=new Float32Array(2049);
+      for(let i=0;i<curve.length;i++){
+        const x=i/(curve.length-1)*2-1,absolute=Math.abs(x);
+        curve[i]=absolute<=.76?x:Math.sign(x)*(.76+.18*Math.tanh((absolute-.76)/.18));
+      }
+      limiter.curve=curve;limiter.oversample='none';
+      master.connect(limiter).connect(context.destination);
       effects = context.createGain(); effects.gain.value = mix.effects; effects.connect(master);
       voices = context.createGain(); voices.gain.value = mix.voices; voices.connect(master);
       environment = context.createGain(); environment.gain.value = mix.environment; environment.connect(master);
+      music=context.createGain();music.gain.value=mix.music;music.connect(master);
       reverb = context.createConvolver();
       const impulse = context.createBuffer(2, Math.round(context.sampleRate * .6), context.sampleRate);
       for (let i = 0; i < impulse.numberOfChannels; i++) {
@@ -58,32 +68,16 @@ export function createAmbience() {
   }
 
   function level(bus, value) {
-    mix[bus] = value;
+    if(!Object.hasOwn(mix,bus))return;
+    value=Math.max(0,Math.min(1,Number(value)||0));mix[bus] = value;
     if (!context) return;
-    const node = { effects, voices, environment }[bus];
+    const node = { effects, voices, environment, music }[bus];
     node.gain.setTargetAtTime(value, context.currentTime, .035);
   }
 
-  function obscured(point) {
-    const dx = point.x - listener.x, dz = point.z - listener.z;
-    for (const b of BOXES) {
-      let enter = .045, exit = .955;
-      for (const [start, delta, low, high] of [
-        [listener.x, dx, b.x - b.w / 2, b.x + b.w / 2],
-        [listener.z, dz, b.z - b.d / 2, b.z + b.d / 2],
-      ]) {
-        if (Math.abs(delta) < 1e-5) {
-          if (start < low || start > high) { enter = 1; break; }
-        } else {
-          const a = (low - start) / delta, c = (high - start) / delta;
-          enter = Math.max(enter, Math.min(a, c));
-          exit = Math.min(exit, Math.max(a, c));
-        }
-      }
-      if (enter < exit && listener.y + (point.y - listener.y) * enter < b.gy + b.h) return true;
-    }
-    return false;
-  }
+  function obscured(point) {return obstacle(listener,point,true,true)<.955;}
+
+  function voiceActivity(rms){if(context&&rms>.012)voiceUntil=context.currentTime+.24;}
 
   function emitter(bus, spatial = true, wet = false) {
     const input = context.createGain();
@@ -96,7 +90,7 @@ export function createAmbience() {
     if (wet) output.connect(reverb);
     return {
       input,
-      update(point, radius, volume, initial = false) {
+      update(point, radius, volume, initial = false, fade = .035) {
         if (panner && point) {
           const time = context.currentTime;
           for (const [param, value] of [[panner.positionX, point.x], [panner.positionY, point.y], [panner.positionZ, point.z]]) {
@@ -110,7 +104,7 @@ export function createAmbience() {
           else filter.frequency.setTargetAtTime(blocked ? 850 : 15500, time, .045);
         }
         if (initial) input.gain.value = volume;
-        else input.gain.setTargetAtTime(volume, context.currentTime, .035);
+        else input.gain.setTargetAtTime(volume, context.currentTime, fade);
       },
       disconnect() { input.disconnect(); filter.disconnect(); panner?.disconnect(); },
     };
@@ -123,6 +117,7 @@ export function createAmbience() {
     const distance = radius ?? range;
     const spatial = Boolean(point && distance);
     if (spatial && relative(listener, point, distance) >= 1) return;
+    if(name==='shot'||name.startsWith('growl-')||/^(soil|hard|metal|snow)-/.test(name)||name==='impact')criticalUntil=context.currentTime+.45;
     const routed = emitter(effects, spatial, spatial && (MAP.kind === 'factory' || MAP.kind === 'mesh'));
     routed.update(point, distance, volume * gain, true);
     const source = context.createBufferSource();
@@ -143,31 +138,36 @@ export function createAmbience() {
     cue(`${surface}-${sample + 1}`, local ? null : { x, y: y + .08, z }, volume, pitch, [13, 22, 29, 18][gait]);
   }
 
-  function loop(key, name, volume, point, radius) {
+  function loop(key, name, volume, point, radius, bus=environment, rate=1) {
     const buffer = buffers.get(name);
     let track = loops.get(key);
     if (!track && volume > 0 && buffer) {
-      const node = emitter(environment, Boolean(point));
+      const node = emitter(bus, Boolean(point));
       const source = context.createBufferSource();
-      source.buffer = buffer; source.loop = true;
+      source.buffer = buffer; source.loop = true;source.playbackRate.value=rate;
       source.connect(node.input);
       node.update(point, radius, 0, true);
       source.start(0, buffer.duration * .13);
       track = { node, source };
       loops.set(key, track);
     }
-    track?.node.update(point, radius, volume);
+    track?.node.update(point, radius, volume, false, key==='score'?.7:.035);
+    track?.source.playbackRate.setTargetAtTime(rate,context.currentTime,.3);
+  }
+
+  function stopLoop({node,source}){
+    const time=context.currentTime;
+    node.input.gain.cancelScheduledValues(time);node.input.gain.setTargetAtTime(0,time,.035);
+    source.stop(time+.25);source.onended=()=>{source.disconnect();node.disconnect();};
   }
 
   function reset() {
-    for (const { node, source } of loops.values()) {
-      source.stop(); source.disconnect(); node.disconnect();
-    }
+    for (const track of loops.values()) stopLoop(track);
     loops.clear();
-    elapsed = .1;
+    elapsed = .1;voiceUntil=criticalUntil=0;director.reset();
   }
 
-  function update(dt, live, night, focus, camera, state) {
+  function update(dt, live, night, focus, camera, state, me) {
     if (!context || context.state !== 'running') return;
     listener.set(focus.x, focus.y + 1.55, focus.z);
     camera.getWorldDirection(forward);
@@ -179,14 +179,18 @@ export function createAmbience() {
     ear.forwardY.setValueAtTime(forward.y, time);
     ear.forwardZ.setValueAtTime(forward.z, time);
 
+    const talking=context.currentTime<voiceUntil,critical=context.currentTime<criticalUntil;
+    music.gain.setTargetAtTime(mix.music*(talking?.28:critical?.55:1),time,(talking||critical)?.08:.45);
+    environment.gain.setTargetAtTime(mix.environment*(talking?.65:1),time,talking?.08:.4);
     elapsed += dt;
     if (elapsed < .10) return;
-    elapsed = 0;
+    const stepTime=elapsed;elapsed = 0;
     if (!live) { if (loops.size) reset(); return; }
     const indoor = MAP.kind === 'factory' || MAP.kind === 'mesh';
     const wind = { frost: [.24, .17], ashfall: [.14, .13], foundry: [.024, .016], mall: [.018, .013] }[MAP_ID] ?? [.09, .12];
     loop('wind', 'wind', wind[Number(night)]);
-    loop('dread', 'dread', night ? .115 : 0);
+    const plan=director.update(stepTime,{state,focus,me,night});
+    loop('score','dread',plan.volume,null,0,music,plan.rate);
     loop('forest', 'forest', MAP_ID === 'amberwood' && !night ? .17 : 0);
     loop('mire', 'mire', MAP_ID === 'hollow' ? night ? .047 : .105 : 0);
     for (const tx of LAYOUT.tx) {
@@ -196,9 +200,9 @@ export function createAmbience() {
     const flares = state?.flares ?? [];
     flares.forEach(([x, z]) => loop(`f${x},${z}`, 'flare', .11, { x, y: height(x, z) + .15, z }, 9));
     for (const [key, { node, source }] of loops) if (key.startsWith('f') && !flares.some(([x, z]) => key === `f${x},${z}`)) {
-      source.stop(); source.disconnect(); node.disconnect(); loops.delete(key);
+      stopLoop({node,source});loops.delete(key);
     }
   }
 
-  return { wake, cue, step, level, update, reset, voiceEmitter: () => emitter(voices) };
+  return { wake, cue, step, level, update, reset, voiceActivity, event:director.event, get directorState(){return director.state}, voiceEmitter: () => emitter(voices) };
 }

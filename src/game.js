@@ -188,6 +188,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
 
   function onEvent(m) {
     const k = m.k;
+    ambience.event(m);
     if(k==='voice-position'){voicePositions.set(m.id,{x:m.x,y:m.y,z:m.z,heard:performance.now()});return;}
     if(k==='sound'){ambience.cue(m.sound,{x:m.x,y:m.y,z:m.z});return;}
     const source=views.get(m.id);

@@ -41,3 +41,4 @@ jobs:
           npm run test:worlds
           npm run test:menu
           npm run test:figures
+          npm run test:audio
