@@ -257,7 +257,7 @@ export function buildWorld(parent) {
   // ---------- buildings, wrecks and props (rust-to-riches models), baked once they have loaded
   const placements = [
     ...STRUCTS.filter((b) => b.key).map((b) => ({ key: b.key, x: b.x, y: b.gy - 0.05, z: b.z, rot: b.rot, big: b.key !== 'env_derelict_car', center: true })),
-    ...(MAP.kind === 'mesh' ? [{ url: MAP.data.model, x: MAP.data.offset.x, y: MAP.data.offset.y, z: MAP.data.offset.z, scale: 1, big: true, skip: /^CEIL_/, keepY: true }] : []),
+    ...(MAP.kind === 'mesh' ? [{ url: MAP.data.model, x: MAP.data.offset.x, y: MAP.data.offset.y, z: MAP.data.offset.z, scale: 1, big: true, keepY: true }] : []),
     ...LAYOUT.props.map((p) => ({ ...p, y: p.y - 0.03, big: p.key === 'env_water_tower' })),
     ...LAYOUT.tx.flatMap((t) => [{ key: 'portable_generator', x: t.x, y: t.y - 0.03, z: t.z, rot: t.id * 1.3 }, { key: 'portable_radio', x: t.x - 0.08, y: t.y + 0.69, z: t.z, rot: t.id * 1.3 + 0.3, s: 0.9 }]),
   ];

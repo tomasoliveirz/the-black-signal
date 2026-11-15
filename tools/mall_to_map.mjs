@@ -4,10 +4,37 @@ import fs from 'node:fs';
 const d = JSON.parse(fs.readFileSync('shared/maps/mall.json', 'utf8'));
 const cx = (d.bounds.minX + d.bounds.maxX) / 2, cz = (d.bounds.minZ + d.bounds.maxZ) / 2, r = (v) => Math.round(v * 100) / 100;
 const pt = (p) => ({ x: r(p.x - cx), z: r(p.z - cz) });
+const glb = fs.readFileSync('assets/maps/mall.glb');
+const jsonLength = glb.readUInt32LE(12);
+const model = JSON.parse(glb.subarray(20, 20 + jsonLength));
+const binary = glb.subarray(28 + jsonLength);
+const ceilingTriangles = [];
+const structuralMaterials = new Set(['ceiling', 'night_sky_glass', 'dark_void', 'wall_cream']);
+function accessor(index) {
+  const a = model.accessors[index], v = model.bufferViews[a.bufferView];
+  const read = {5123: ['readUInt16LE', 2], 5125: ['readUInt32LE', 4], 5126: ['readFloatLE', 4]}[a.componentType];
+  if (!read || a.sparse) throw Error('Unsupported ceiling accessor');
+  const components = a.type === 'VEC3' ? 3 : 1, stride = v.byteStride || components * read[1];
+  return Array.from({length:a.count}, (_, i) => Array.from({length:components}, (_, c) => binary[read[0]]((v.byteOffset || 0) + (a.byteOffset || 0) + i * stride + c * read[1])));
+}
+for (const node of model.nodes.filter(n => /^CEIL_/.test(n.name || ''))) {
+  if (node.matrix || node.translation || node.rotation || node.scale) throw Error('Ceiling exporter needs world transforms for transformed nodes');
+  for (const primitive of model.meshes[node.mesh].primitives) {
+    if (!structuralMaterials.has(model.materials[primitive.material].name)) continue;
+    if ((primitive.mode ?? 4) !== 4) throw Error('Expected ceiling triangles');
+    const positions = accessor(primitive.attributes.POSITION), indices = primitive.indices === undefined ? positions.map((_, i) => i) : accessor(primitive.indices).flat();
+    for (let i = 0; i < indices.length; i += 3) {
+      ceilingTriangles.push(indices.slice(i, i + 3).flatMap(index => {
+        const [x, y, z] = positions[index]; return [r(x - cx), r(y - d.floorY), r(z - cz)];
+      }));
+    }
+  }
+}
 const data = {
   model: './assets/maps/mall.glb', offset: { x: r(-cx), y: r(-d.floorY), z: r(-cz) },
   bounds: { minX: r(d.bounds.minX - cx), maxX: r(d.bounds.maxX - cx), minZ: r(d.bounds.minZ - cz), maxZ: r(d.bounds.maxZ - cz) },
   boxes: d.boxes.map((b) => ({ ...pt(b), w: r(b.w), d: r(b.d), h: r(b.h) })),
+  ceilingTriangles,
   spawn: pt(d.spawn), goal: pt(d.goal), route: d.route.map(pt), open: d.open.map(pt),
 };
 const theme = { minNight: 0.38, fog: [8, 58], tuft: 0, litter: 0, mountains: false, fogDay: '#8f8894', fogNight: '#0b0b10', zenith: '#4c4a58', grass: '#8a867e', path: '#9c968c' };
