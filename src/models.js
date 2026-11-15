@@ -4,9 +4,10 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { DabSet, FLAG, dabMaterial, underMaterial, paletteFor, toDisplay, registerStyled } from './paint.js';
 
-const loader = new GLTFLoader(), cache = new Map();
+const loader = new GLTFLoader(), cache = new Map(), modelGeometries=new WeakSet();
+export const isModelGeometry=geometry=>modelGeometries.has(geometry);
 export const loadModel = (url) => {
-  if (!cache.has(url)) cache.set(url, loader.loadAsync(url).then((g) => { g.scene.updateMatrixWorld(true); return g.scene; }));
+  if (!cache.has(url)) cache.set(url, loader.loadAsync(url).then((g) => { g.scene.updateMatrixWorld(true);g.scene.traverse(o=>{if(o.geometry)modelGeometries.add(o.geometry)}); return g.scene; }));
   return cache.get(url);
 };
 export const R2R = (key) => loadModel(`./assets/r2r/${key}.gltf`);
@@ -177,4 +178,5 @@ export function boneDabs(meshes, total, palFn, size) {
   }
   const mat = dabMaterial();
   for (const [bone, s] of sets) skinned.skeleton.bones[bone].add(s.build(mat));
+  return mat;
 }

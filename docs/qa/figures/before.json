@@ -1,0 +1,33 @@
+{
+  "samples": [
+    {
+      "cycle": 0,
+      "geometries": 162,
+      "textures": 16
+    },
+    {
+      "cycle": 1,
+      "geometries": 166,
+      "textures": 26
+    },
+    {
+      "cycle": 2,
+      "geometries": 170,
+      "textures": 36
+    },
+    {
+      "cycle": 3,
+      "geometries": 174,
+      "textures": 46
+    },
+    {
+      "cycle": 4,
+      "geometries": 178,
+      "textures": 56
+    }
+  ],
+  "sourceGeometryDisposals": 0,
+  "survivorStillAttached": true,
+  "prematureDisposed": false,
+  "disposalAPI": false
+}

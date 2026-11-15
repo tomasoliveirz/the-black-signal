@@ -11,7 +11,8 @@
     "check:assets": "node tools/validate-assets.mjs",
     "test:assets": "node --test tools/asset-manifest.test.mjs",
     "test:worlds": "node tools/world-contract.test.mjs",
-    "test:menu": "node tools/menu-flow.test.mjs"
+    "test:menu": "node tools/menu-flow.test.mjs",
+    "test:figures": "node tools/figure-lifecycle.test.mjs"
   },
   "dependencies": {
     "ws": "^8.18.0"
