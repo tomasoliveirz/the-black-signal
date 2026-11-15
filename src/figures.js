@@ -1,8 +1,16 @@
 // Figures in both styles: dabs are pinned to each bone (paint), lit meshes cast shadows (normal).
 import * as THREE from 'three';
 import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
-import { DabSet, FLAG, dabMaterial, underMaterial, stdMaterial, styledMesh, registerStyled, toDisplay } from './paint.js';
-import { loadModel, litMaterial, palOf, rigOf, boneDabs } from './models.js';
+import { DabSet, FLAG, dabMaterial, underMaterial, stdMaterial, styledMesh, registerStyled, toDisplay, pruneDetached } from './paint.js';
+import { loadModel, litMaterial, palOf, rigOf, boneDabs, isModelGeometry } from './models.js';
+
+function disposeParts(root){
+  const geometries=new Set(),skeletons=new Set();
+  root.traverse(o=>{if(o.geometry&&!isModelGeometry(o.geometry))geometries.add(o.geometry);if(o.skeleton)skeletons.add(o.skeleton)});
+  for(const skeleton of skeletons)skeleton.dispose();
+  for(const geometry of geometries)geometry.dispose();
+  root.removeFromParent();root.clear();pruneDetached();
+}
 
 let mat;
 function part(parent, geo, pal, count, size, at = [0, 0, 0], flag = FLAG.SOLID) {
@@ -21,11 +29,12 @@ export function buildPlayer(scene, slot = 0) {
   const root = new THREE.Object3D(); scene.add(root);
   const lampPos = new THREE.Vector3();
   const fallback = proceduralPlayer(root, slot, lampPos);
-  let anim = fallback.update;
+  let anim = fallback.update, disposed=false;
   loadModel(`./assets/chars/${CHARS[slot % CHARS.length]}.glb`).then((src) => {
+    if(disposed)return;
     mat ??= dabMaterial();
-    const model = src.clone(true), holder = new THREE.Object3D();
-    holder.add(model); root.add(holder); root.remove(fallback.group);
+    const model = cloneSkinned(src), holder = new THREE.Object3D();
+    holder.add(model); root.add(holder);disposeParts(fallback.group);
     const meshes = []; model.traverse((o) => { if (o.isMesh) meshes.push(o); });
     for (const o of meshes) {
       const pal = palOf(o.material);
@@ -65,7 +74,7 @@ export function buildPlayer(scene, slot = 0) {
       lamp.getWorldPosition(lampPos); lampPos.y -= 0.3;
     };
   }).catch((e) => console.warn('personagem não carregou; a usar a figura procedural', e));
-  return { root, update: (...a) => anim(...a), lampPos };
+  return { root, update: (...a) => anim(...a), lampPos,dispose(){if(disposed)return;disposed=true;anim=()=>{};disposeParts(root);} };
 }
 
 // stand-in used until the character model has loaded (or if it fails to load)
@@ -164,19 +173,20 @@ const knockerPal = (m) => { const n = m.name; return /tooth|nail/.test(n) ? 11 :
 export function buildEcho(scene) {
   const root = new THREE.Object3D(); scene.add(root);
   const fallback = proceduralEcho(root);
-  let anim = fallback.update;
+  let anim = fallback.update,disposed=false,boneMaterial=null;
   const attach = () => {
+    if(disposed)return;
     const model = cloneSkinned(knockerSrc), holder = new THREE.Object3D();
     holder.scale.setScalar(knockerSrc.userData.scale);
     model.position.copy(knockerSrc.userData.offset);
-    holder.add(model); root.add(holder); fallback.group.visible = false;
+    holder.add(model); root.add(holder);disposeParts(fallback.group);
     const meshes = []; model.traverse((o) => { if (o.isSkinnedMesh) meshes.push(o); });
     for (const o of meshes) {
       o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false;
       const pal = knockerPal(o.material);
       registerStyled(o, underMaterial(pal, pal === 14 ? 0 : 2, pal === 13 ? 0.8 : 0.9), o.material);
     }
-    if (meshes.length) boneDabs(meshes, 1500, knockerPal, [0.05, 0.1]);
+    if (meshes.length) boneMaterial=boneDabs(meshes, 1500, knockerPal, [0.05, 0.1]);
     const rig = rigOf(model);
     let t = 0;
     anim = (dt, speed, attack = 0) => {
@@ -196,7 +206,7 @@ export function buildEcho(scene) {
     };
   };
   if (knockerSrc) attach(); else waiting.push(attach);
-  return { root, update: (dt, speed, attack) => anim(dt, speed, attack) };
+  return { root, update: (dt, speed, attack) => anim(dt, speed, attack),dispose(){if(disposed)return;disposed=true;const index=waiting.indexOf(attach);if(index>=0)waiting.splice(index,1);anim=()=>{};disposeParts(root);boneMaterial?.dispose();} };
 }
 
 // simple stand-in used until the Knocker model has loaded (or if it fails to load)

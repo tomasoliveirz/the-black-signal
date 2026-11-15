@@ -40,3 +40,4 @@ jobs:
           npm run test:models
           npm run test:worlds
           npm run test:menu
+          npm run test:figures

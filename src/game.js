@@ -112,7 +112,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
   function setSlot(slot) {
     if (me.slot !== slot) {
       me.slot = slot;
-      scene.remove(localView.fig.root);
+      localView.fig.dispose();
       localView.fig = buildPlayer(scene, slot);
     }
     resetPosition();
@@ -154,7 +154,7 @@ export function createGame({ scene, world, view, keys, changeMap, menu, ambience
     } else if (m.t === 'snap') onSnap(m);
     else if (m.t === 'ev') onEvent(m);
   }
-  function resetViews() { for (const [id, v] of views) if (id !== 'local') { scene.remove(v.fig.root); if (v.mon) scene.remove(v.mon.root); views.delete(id); } }
+  function resetViews() { for (const [id, v] of views) if (id !== 'local') { v.fig.dispose();v.mon?.dispose();views.delete(id); } }
 
   function clearMatch() {
     state = null;
