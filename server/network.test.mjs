@@ -43,7 +43,8 @@ function request(base, pathname, options = {}) {
 }
 async function connect(base, cookie) {
   const socket = new WebSocket(base.replace('http:', 'ws:') + '/ws', { origin: base, headers: cookie ? { Cookie: cookie } : {} });
-  const client = { socket, messages: [], frames: [] };
+  const client = { socket, messages: [], frames: [], cookies: [] };
+  socket.on('upgrade', response => {client.cookies=response.headers['set-cookie']??[];});
   socket.on('message', (data, binary) => binary ? client.frames.push(data) : client.messages.push(JSON.parse(data)));
   await new Promise((resolve, reject) => { socket.once('open', resolve); socket.once('error', reject); });
   client.send = message => socket.send(JSON.stringify(message));
@@ -199,21 +200,34 @@ Game.prototype.snapshot = function () {
       await pause(100);
       assert.equal(near.frames.length, count);
     });
-    await t.test('authenticated reconnect preserves player id, token and private role', async () => {
+    await t.test('authenticated reconnect preserves player id and private role without a bearer token', async () => {
       const original = host.messages.find(m => m.t === 'welcome');
       const role = host.messages.find(m => m.t === 'role');
       await host.close();
       await pause(70);
       const unauthorized = await open();
-      unauthorized.send({ t: 'join', room: privateCode, resume: original.resume });
-      const guest = await until(() => unauthorized.messages.find(m => m.t === 'welcome'), 'guest token rejection');
-      assert.notEqual(guest.id, original.id);
+      unauthorized.send({ t: 'join', room: privateCode, player: original.id });
+      await until(() => unauthorized.messages.find(m => m.t === 'error'), 'unauthorised recovery rejection');
+      assert.ok(!unauthorized.messages.some(m=>m.t==='welcome'));
       const resumed = await open(cookie);
-      resumed.send({ t: 'join', room: privateCode, resume: original.resume });
+      resumed.send({ t: 'join', room: privateCode, player: original.id });
       const welcome = await until(() => resumed.messages.find(m => m.t === 'welcome'), 'resumed welcome');
-      assert.equal(welcome.id, original.id); assert.equal(welcome.resume, original.resume);
+      assert.equal(welcome.id, original.id); assert.ok(!('resume' in welcome));
       const restored = await until(() => resumed.messages.find(m => m.t === 'role'), 'resumed role');
       assert.deepEqual(restored, role);
+    });
+    await t.test('guest recovery uses an HttpOnly upgrade cookie and rejects pointer replay', async () => {
+      const guest=await open();guest.send({t:'join',create:true,private:true,name:'GuestReload'});
+      const first=await until(()=>guest.messages.find(m=>m.t==='welcome'),'guest welcome');
+      const header=guest.cookies.find(value=>value.startsWith('bsignal_guest='));
+      assert.match(header,/HttpOnly/);assert.match(header,/SameSite=Strict/);assert.ok(!('resume'in first));
+      const guestCookie=header.split(';')[0];await guest.close();await pause(70);
+      const bad=await open();bad.send({t:'join',room:first.room,player:first.id});
+      await until(()=>bad.messages.find(m=>m.t==='error'),'foreign browser rejection');
+      const good=await open(guestCookie);good.send({t:'join',room:first.room,player:first.id});
+      assert.equal((await until(()=>good.messages.find(m=>m.t==='welcome'),'protected guest recovery')).id,first.id);
+      const replay=await open(guestCookie);replay.send({t:'join',room:first.room,player:first.id});
+      assert.equal((await until(()=>replay.messages.find(m=>m.t==='error'),'active replay rejection')).code,'resume-active');
     });
     await t.test('logout invalidates the persisted session cookie', async () => {
       const response = await post('/api/logout', {}, cookie);
@@ -234,15 +248,16 @@ test('a disconnected player keeps the same role before grace expires and is remo
   const send = () => {};
   const rooms = new Rooms(send);
   const socket = { readyState: 1, bufferedAmount: 0, send() {} };
-  const member = rooms.join(socket, { create: true, private: true, name: 'Grace player' }, null);
+  const guestHash='a'.repeat(64);
+  const member = rooms.join(socket, { create: true, private: true, name: 'Grace player' }, null, guestHash);
   const { room, player } = member;
   room.game.start();
-  const id = player.id, role = player.role, resume = player.resume;
+  const id = player.id, role = player.role;
   rooms.disconnect(room, player);
   player.disconnectAt = Date.now() - 44900;
   rooms.tick(TICK);
   assert.equal(room.game.players.get(id).role, role);
-  const back = rooms.join(socket, { room: room.code, resume }, null);
+  const back = rooms.join(socket, { room: room.code, player:id }, null, guestHash);
   assert.equal(back.player.id, id);
   assert.equal(back.player.role, role);
   rooms.disconnect(room, back.player);
